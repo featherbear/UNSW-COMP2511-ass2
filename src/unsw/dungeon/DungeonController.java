@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import unsw.dungeon.entity.Player;
 
 /**
  * A JavaFX controller for the dungeon.

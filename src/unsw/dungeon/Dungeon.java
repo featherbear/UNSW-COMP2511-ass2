@@ -6,6 +6,9 @@ package unsw.dungeon;
 import java.util.ArrayList;
 import java.util.List;
 
+import unsw.dungeon.entity.Entity;
+import unsw.dungeon.entity.Player;
+
 /**
  * A dungeon in the interactive dungeon player.
  *
