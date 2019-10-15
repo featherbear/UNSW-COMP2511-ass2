@@ -12,10 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.DungeonLoader;
 import unsw.dungeon.LoaderHook;
-import unsw.dungeon.entity.Entity;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Wall;
+import unsw.dungeon.entity.meta.Entity;
 
 /**
  * A DungeonLoader that also creates the necessary ImageViews for the UI,
