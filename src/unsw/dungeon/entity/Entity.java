@@ -15,6 +15,8 @@ public abstract class Entity {
 	// externally observed.
 	private IntegerProperty x, y;
 
+	protected EntityLevel entityLevel;
+
 	/**
 	 * Create an entity positioned in square (x,y)
 	 * 
@@ -40,5 +42,9 @@ public abstract class Entity {
 
 	public int getX() {
 		return x().get();
+	}
+
+	public EntityLevel getEntityLevel() {
+		return this.entityLevel;
 	}
 }

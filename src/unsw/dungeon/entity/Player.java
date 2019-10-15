@@ -21,6 +21,7 @@ public class Player extends Entity {
 	public Player(Dungeon dungeon, int x, int y) {
 		super(x, y);
 		this.dungeon = dungeon;
+		this.entityLevel = EntityLevel.OBJECT;
 	}
 
 	public void moveUp() {
