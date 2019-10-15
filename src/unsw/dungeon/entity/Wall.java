@@ -1,10 +1,11 @@
 package unsw.dungeon.entity;
 
+import unsw.dungeon.Dungeon;
+
 public class Wall extends Entity {
 
-	public Wall(int x, int y) {
-		super(x, y);
-		this.entityLevel = EntityLevel.OBJECT;
+	public Wall(Dungeon dungeon, int x, int y) {
+		super(dungeon, EntityLevel.OBJECT, x, y);
 	}
 
 }

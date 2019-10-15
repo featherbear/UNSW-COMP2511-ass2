@@ -2,6 +2,7 @@ package unsw.dungeon.entity;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import unsw.dungeon.Dungeon;
 
 /**
  * An entity in the dungeon.
@@ -16,6 +17,7 @@ public abstract class Entity {
 	private IntegerProperty x, y;
 
 	protected EntityLevel entityLevel;
+	protected Dungeon dungeon;
 
 	/**
 	 * Create an entity positioned in square (x,y)
@@ -23,7 +25,9 @@ public abstract class Entity {
 	 * @param x
 	 * @param y
 	 */
-	public Entity(int x, int y) {
+	public Entity(Dungeon dungeon, EntityLevel entityLevel, int x, int y) {
+		this.dungeon = dungeon;
+		this.entityLevel = entityLevel;
 		this.x = new SimpleIntegerProperty(x);
 		this.y = new SimpleIntegerProperty(y);
 	}
@@ -46,5 +50,9 @@ public abstract class Entity {
 
 	public EntityLevel getEntityLevel() {
 		return this.entityLevel;
+	}
+
+	public Dungeon getDungeon() {
+		return this.dungeon;
 	}
 }

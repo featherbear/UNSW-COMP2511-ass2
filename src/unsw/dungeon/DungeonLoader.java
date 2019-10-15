@@ -2,6 +2,7 @@ package unsw.dungeon;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,13 +16,13 @@ import unsw.dungeon.entity.Wall;
 /**
  * Loads a dungeon from a .json file.
  *
- * By extending this class, a subclass can hook into entity creation. This is
- * useful for creating UI elements with corresponding entities.
+ * By passing implementations of LoaderHook, entity creation can be hooked onto.
+ * This is useful for creating UI elements with corresponding entities.
  *
  * @author Robert Clifton-Everest
  *
  */
-public abstract class DungeonLoader {
+public class DungeonLoader {
 
 	private JSONObject json;
 
@@ -34,7 +35,7 @@ public abstract class DungeonLoader {
 	 * 
 	 * @return
 	 */
-	public Dungeon load() {
+	public Dungeon load(LoaderHook... hooks) {
 		int width = json.getInt("width");
 		int height = json.getInt("height");
 
@@ -42,50 +43,94 @@ public abstract class DungeonLoader {
 
 		JSONArray jsonEntities = json.getJSONArray("entities");
 
+		LoaderComposite loaders = new LoaderComposite(hooks);
+		loaders.addHook(new GameHooks());
+
 		for (int i = 0; i < jsonEntities.length(); i++) {
-			loadEntity(dungeon, jsonEntities.getJSONObject(i));
+			try {
+				Entity entity = this.loadEntity(dungeon, jsonEntities.getJSONObject(i), loaders);
+				dungeon.addEntity(entity);
+			} catch (Error e) {
+				System.out.println(e);
+			}
 		}
+
+		loaders.postLoad(dungeon);
 		return dungeon;
 	}
 
-	private void loadEntity(Dungeon dungeon, JSONObject json) {
+	private Entity loadEntity(Dungeon dungeon, JSONObject json, LoaderHook loaders) {
 		String type = json.getString("type");
 		int x = json.getInt("x");
 		int y = json.getInt("y");
 
-		Entity entity = null;
 		switch (type) {
+
 		case "player":
 			Player player = new Player(dungeon, x, y);
 			dungeon.setPlayer(player);
-			onLoad(player);
-			entity = player;
-			break;
+			loaders.onLoad(player);
+			return player;
+
 		case "wall":
-			Wall wall = new Wall(x, y);
-			onLoad(wall);
-			entity = wall;
-			break;
+			Wall wall = new Wall(dungeon, x, y);
+			loaders.onLoad(wall);
+			return wall;
+
 		case "exit":
-			Exit exit = new Exit(x, y);
-			onLoad(exit);
-			entity = exit;
-			break;
-		// TODO Handle other possible entities
+			Exit exit = new Exit(dungeon, x, y);
+			loaders.onLoad(exit);
+			return exit;
+
+		default:
+			throw new Error("Could not load JSON for object type " + type);
 		}
-		if (entity == null) {
-			System.out.println("Did not load " + type);
-			return;
+
+	}
+};
+
+class LoaderComposite implements LoaderHook {
+	private ArrayList<LoaderHook> hooks;
+
+	public LoaderComposite(LoaderHook... hooks) {
+		this.hooks = new ArrayList<LoaderHook>();
+		for (LoaderHook hook : hooks) {
+			this.hooks.add(hook);
 		}
-		dungeon.addEntity(entity);
 	}
 
-	public abstract void onLoad(Player player);
+	public void addHook(LoaderHook hook) {
+		if (this.hooks.contains(hook)) {
+			return;
+		}
+		this.hooks.add(hook);
+	}
 
-	public abstract void onLoad(Wall wall);
+	@Override
+	public void onLoad(Player player) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(player);
+		}
+	}
 
-	public abstract void onLoad(Exit exit);
+	@Override
+	public void onLoad(Wall wall) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(wall);
+		}
+	}
 
-	// TODO Create additional abstract methods for the other entities
+	@Override
+	public void onLoad(Exit exit) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(exit);
+		}
+	}
 
-};
+	@Override
+	public void postLoad(Dungeon dungeon) {
+		for (LoaderHook hook : this.hooks) {
+			hook.postLoad(dungeon);
+		}
+	}
+}

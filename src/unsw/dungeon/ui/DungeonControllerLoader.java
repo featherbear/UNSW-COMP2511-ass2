@@ -11,9 +11,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.DungeonLoader;
+import unsw.dungeon.LoaderHook;
 import unsw.dungeon.entity.Entity;
-import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Wall;
 
 /**
@@ -23,7 +24,7 @@ import unsw.dungeon.entity.Wall;
  * @author Robert Clifton-Everest
  *
  */
-public class DungeonControllerLoader extends DungeonLoader {
+public class DungeonControllerLoader extends DungeonLoader implements LoaderHook {
 
 	private List<ImageView> entities;
 
@@ -99,7 +100,7 @@ public class DungeonControllerLoader extends DungeonLoader {
 	 * @throws FileNotFoundException
 	 */
 	public DungeonController loadController() throws FileNotFoundException {
-		return new DungeonController(load(), entities);
+		return new DungeonController(load(this), entities);
 	}
 
 }
