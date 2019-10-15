@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.entity.Entity;
+import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Wall;
 
 /**
@@ -36,7 +37,7 @@ public class DungeonControllerLoader extends DungeonLoader {
 	}
 
 	@Override
-	public void onLoad(Entity player) {
+	public void onLoad(Player player) {
 		ImageView view = new ImageView(playerImage);
 		addEntity(player, view);
 	}

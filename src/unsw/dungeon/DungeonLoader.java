@@ -67,13 +67,17 @@ public abstract class DungeonLoader {
 			break;
 		// TODO Handle other possible entities
 		}
+		if (entity == null) {
+			System.out.println("Did not load " + type);
+			return;
+		}
 		dungeon.addEntity(entity);
 	}
 
-	public abstract void onLoad(Entity player);
+	public abstract void onLoad(Player player);
 
 	public abstract void onLoad(Wall wall);
 
 	// TODO Create additional abstract methods for the other entities
 
-}
+};
