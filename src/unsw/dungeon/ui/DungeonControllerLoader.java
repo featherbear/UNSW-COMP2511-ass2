@@ -1,4 +1,4 @@
-package unsw.dungeon;
+package unsw.dungeon.ui;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import unsw.dungeon.DungeonLoader;
 import unsw.dungeon.entity.Entity;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Exit;
