@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import unsw.dungeon.entity.Entity;
+import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Wall;
 
@@ -65,6 +66,11 @@ public abstract class DungeonLoader {
 			onLoad(wall);
 			entity = wall;
 			break;
+		case "exit":
+			Exit exit = new Exit(x, y);
+			onLoad(exit);
+			entity = exit;
+			break;
 		// TODO Handle other possible entities
 		}
 		if (entity == null) {
@@ -77,6 +83,8 @@ public abstract class DungeonLoader {
 	public abstract void onLoad(Player player);
 
 	public abstract void onLoad(Wall wall);
+
+	public abstract void onLoad(Exit exit);
 
 	// TODO Create additional abstract methods for the other entities
 
