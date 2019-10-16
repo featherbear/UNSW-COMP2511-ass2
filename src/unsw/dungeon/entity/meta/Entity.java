@@ -1,4 +1,4 @@
-package unsw.dungeon.entity;
+package unsw.dungeon.entity.meta;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -17,7 +17,7 @@ public abstract class Entity {
 	private IntegerProperty x, y;
 
 	protected EntityLevel entityLevel;
-	protected Dungeon dungeon;
+	private Dungeon dungeon;
 
 	/**
 	 * Create an entity positioned in square (x,y)

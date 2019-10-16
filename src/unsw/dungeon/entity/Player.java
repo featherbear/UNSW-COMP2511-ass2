@@ -1,6 +1,9 @@
 package unsw.dungeon.entity;
 
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.entity.meta.EntityLevel;
+import unsw.dungeon.entity.meta.MovableEntity;
+import unsw.dungeon.events.LocationChanged;
 
 /**
  * The player entity
@@ -8,7 +11,7 @@ import unsw.dungeon.Dungeon;
  * @author Robert Clifton-Everest
  *
  */
-public class Player extends Entity {
+public class Player extends MovableEntity<Player> {
 
 	/**
 	 * Create a player positioned in square (x,y)
@@ -21,50 +24,54 @@ public class Player extends Entity {
 	}
 
 	private boolean isPositionBlocked(int x, int y) {
-		return this.dungeon.hasEntitiesAt(EntityLevel.OBJECT, x, y);
+		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
+	}
+
+	private void move(int xDirection, int yDirection) {
+		int oldX = getX();
+		int oldY = getY();
+
+		int newX = oldX + xDirection;
+		int newY = oldY + yDirection;
+
+		if (!this.getDungeon().positionIsValid(newX, newY)) {
+			return;
+		}
+
+		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
+
+		if (!this.moveIntent.emit(e)) {
+			return;
+		}
+
+		if (isPositionBlocked(newX, newY)) {
+			return;
+		}
+
+		if (oldX != newX) {
+			x().set(newX);
+		}
+		if (oldY != newY) {
+			y().set(newY);
+		}
+
+		this.moveEvent.emit(e);
 	}
 
 	public void moveUp() {
-		if (!(getY() > 0)) {
-			return;
-		}
-		int newY = getY() - 1;
-		if (isPositionBlocked(getX(), newY)) {
-			return;
-		}
-		y().set(newY);
+		move(0, -1);
 	}
 
 	public void moveDown() {
-		if (!(getY() < this.dungeon.getHeight() - 1)) {
-			return;
-		}
-		int newY = getY() + 1;
-		if (isPositionBlocked(getX(), newY)) {
-			return;
-		}
-		y().set(newY);
+		move(0, 1);
 	}
 
 	public void moveLeft() {
-		if (!(getX() > 0)) {
-			return;
-		}
-		int newX = getX() - 1;
-		if (isPositionBlocked(newX, getY())) {
-			return;
-		}
-		x().set(newX);
+		move(-1, 0);
 	}
 
 	public void moveRight() {
-		if (!(getX() < this.dungeon.getWidth() - 1)) {
-			return;
-		}
-		int newX = getX() + 1;
-		if (isPositionBlocked(newX, getY())) {
-			return;
-		}
-		x().set(newX);
+		move(1, 0);
 	}
+
 }
