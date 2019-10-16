@@ -22,6 +22,10 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
+		// TODO Auto-generated method stub
+
+	}
+
 	@Override
 	public void onLoad(Treasure treasure) {
 		// TODO Auto-generated method stub

@@ -43,14 +43,14 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 
 	public DungeonControllerLoader(String filename) throws FileNotFoundException {
 		super(filename);
-		entities = new ArrayList<>();
-		playerImage = new Image("/human_new.png");
-		wallImage = new Image("/brick_brown_0.png");
-		exitImage = new Image("/exit.png");
-		treasureImage = new Image("/gold_pile.png");
-		keyImage = new Image("/key.png");
-		swordImage = new Image("/greatsword_1_new.png");
-		invincibilityPotionImage = new Image("/brilliant_blue_new.png");
+		this.entities = new ArrayList<>();
+		this.playerImage = new Image("/human_new.png");
+		this.wallImage = new Image("/brick_brown_0.png");
+		this.exitImage = new Image("/exit.png");
+		this.treasureImage = new Image("/gold_pile.png");
+		this.keyImage = new Image("/key.png");
+		this.swordImage = new Image("/greatsword_1_new.png");
+		this.invincibilityPotionImage = new Image("/brilliant_blue_new.png");
 	}
 
 	@Override
