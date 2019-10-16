@@ -28,16 +28,16 @@ public class Player extends MovableEntity<Player> {
 	}
 
 	private void move(int xDirection, int yDirection) {
-		// TODO: Simplify
-		if (yDirection == -1 && !(getY() > 0)) {
+		int oldX = getX();
+		int oldY = getY();
 			return;
 		}
 		if (yDirection == 1 && !(getY() < this.dungeon.getHeight() - 1)) {
 			return;
 		}
 
-		if (xDirection == -1 && !(getX() > 0)) {
-			return;
+		int newX = oldX + xDirection;
+		int newY = oldY + yDirection;
 		}
 
 		if (!this.getDungeon().positionIsValid(newX, newY)) {
@@ -57,12 +57,14 @@ public class Player extends MovableEntity<Player> {
 			return;
 		}
 
-		if (curX != newX)
+		if (oldX != newX) {
 			x().set(newX);
-		if (curY != newY)
+		}
+		if (oldY != newY) {
 			y().set(newY);
-	}
+		}
 
+	}
 	public void moveUp() {
 		move(0, -1);
 	}
