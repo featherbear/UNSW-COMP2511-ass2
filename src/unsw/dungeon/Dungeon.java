@@ -40,6 +40,10 @@ public class Dungeon {
 		return height;
 	}
 
+	public boolean positionIsValid(int x, int y) {
+		return !(y < 0 || y >= this.height || x < 0 || x >= this.width);
+	}
+
 	public Player getPlayer() {
 		return player;
 	}

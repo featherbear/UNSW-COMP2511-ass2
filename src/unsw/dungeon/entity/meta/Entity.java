@@ -17,7 +17,7 @@ public abstract class Entity {
 	private IntegerProperty x, y;
 
 	protected EntityLevel entityLevel;
-	protected Dungeon dungeon;
+	private Dungeon dungeon;
 
 	/**
 	 * Create an entity positioned in square (x,y)

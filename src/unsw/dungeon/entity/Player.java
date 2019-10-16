@@ -24,7 +24,7 @@ public class Player extends MovableEntity<Player> {
 	}
 
 	private boolean isPositionBlocked(int x, int y) {
-		return this.dungeon.hasEntitiesAt(EntityLevel.OBJECT, x, y);
+		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
 
 	private void move(int xDirection, int yDirection) {
@@ -40,7 +40,7 @@ public class Player extends MovableEntity<Player> {
 			return;
 		}
 
-		if (xDirection == 1 && !(getX() < this.dungeon.getWidth() - 1)) {
+		if (!this.getDungeon().positionIsValid(newX, newY)) {
 			return;
 		}
 
