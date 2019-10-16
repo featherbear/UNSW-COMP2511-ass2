@@ -3,7 +3,7 @@ package unsw.dungeon.entity;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.MovableEntity;
-import unsw.dungeon.util.SAM;
+import unsw.dungeon.events.LocationChanged;
 
 /**
  * The player entity
@@ -30,26 +30,17 @@ public class Player extends MovableEntity<Player> {
 	private void move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
-			return;
-		}
-		if (yDirection == 1 && !(getY() < this.dungeon.getHeight() - 1)) {
-			return;
-		}
 
 		int newX = oldX + xDirection;
 		int newY = oldY + yDirection;
-		}
 
 		if (!this.getDungeon().positionIsValid(newX, newY)) {
 			return;
 		}
 
-		int curX = getX();
-		int curY = getY();
-		int newX = curX + xDirection;
-		int newY = curY + yDirection;
+		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
 
-		if (!this.checkMoveIntent(newX, newY)) {
+		if (!this.moveIntent.emit(e)) {
 			return;
 		}
 
@@ -64,7 +55,9 @@ public class Player extends MovableEntity<Player> {
 			y().set(newY);
 		}
 
+		this.moveEvent.emit(e);
 	}
+
 	public void moveUp() {
 		move(0, -1);
 	}
@@ -79,16 +72,6 @@ public class Player extends MovableEntity<Player> {
 
 	public void moveRight() {
 		move(1, 0);
-	}
-
-	@Override
-	public boolean checkMoveIntent(int newX, int newY) {
-		for (SAM<Player> function : this.moveIntentChecks) {
-			if (!function.check(this, newX, newY)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 }
