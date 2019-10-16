@@ -9,12 +9,9 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Player player) {
-		player.addMoveIntentCheck((Player p, int newX, int newY) -> {
-
-			System.out.println("Move intent!");
-			return true;
-
-		});
+//		player.moveIntent.register((Player p, LocationChanged data) -> {
+//
+//		});
 	}
 
 	@Override

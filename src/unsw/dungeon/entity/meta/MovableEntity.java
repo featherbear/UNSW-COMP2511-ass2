@@ -1,30 +1,21 @@
 package unsw.dungeon.entity.meta;
 
-import java.util.ArrayList;
-
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.util.SAM;
+import unsw.dungeon.events.LocationChanged;
+import unsw.dungeon.util.emitter.EventEmitter;
+import unsw.dungeon.util.emitter.IntentEmitter;
 
-public abstract class MovableEntity<T> extends Entity implements Movable<T> {
+public abstract class MovableEntity<T> extends Entity {
 
-	protected ArrayList<SAM<T>> moveIntentChecks;
+	public final IntentEmitter<T, LocationChanged> moveIntent;
+	public final EventEmitter<T, LocationChanged> moveEvent;
 
+	@SuppressWarnings("unchecked")
 	public MovableEntity(Dungeon dungeon, EntityLevel entityLevel, int x, int y) {
 		super(dungeon, entityLevel, x, y);
-		this.moveIntentChecks = new ArrayList<SAM<T>>();
-	}
 
-	@Override
-	public void addMoveIntentCheck(SAM<T> function) {
-		if (this.moveIntentChecks.contains(function)) {
-			return;
-		}
-		this.moveIntentChecks.add(function);
-	}
-
-	@Override
-	public void removeMoveIntentCheck(SAM<T> function) {
-		this.moveIntentChecks.remove(function);
+		this.moveIntent = new IntentEmitter<T, LocationChanged>((T) this);
+		this.moveEvent = new EventEmitter<T, LocationChanged>((T) this);
 	}
 
 }
