@@ -1,7 +1,7 @@
 package unsw.dungeon.util.emitter;
 
 public class EventEmitter<BaseType, DataType extends EmitterData>
-		extends Emitter<Event<BaseType, DataType>, DataType, BaseType> {
+		extends Emitter<Event<BaseType, DataType>, BaseType, DataType> {
 
 	public EventEmitter(BaseType reference) {
 		super(reference);

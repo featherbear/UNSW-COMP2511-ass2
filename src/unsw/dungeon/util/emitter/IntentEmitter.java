@@ -1,7 +1,7 @@
 package unsw.dungeon.util.emitter;
 
 public class IntentEmitter<BaseType, DataType extends EmitterData>
-		extends Emitter<Intent<BaseType, DataType>, DataType, BaseType> {
+		extends Emitter<Intent<BaseType, DataType>, BaseType, DataType> {
 
 	public IntentEmitter(BaseType reference) {
 		super(reference);

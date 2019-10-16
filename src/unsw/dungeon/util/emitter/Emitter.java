@@ -2,7 +2,7 @@ package unsw.dungeon.util.emitter;
 
 import java.util.ArrayList;
 
-public abstract class Emitter<SAMType, DataType extends EmitterData, ReferenceType> {
+public abstract class Emitter<SAMType, ReferenceType, DataType extends EmitterData> {
 	protected ArrayList<SAMType> subscribers;
 	protected ReferenceType reference;
 
