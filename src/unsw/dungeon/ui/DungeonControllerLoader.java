@@ -13,7 +13,11 @@ import javafx.scene.layout.GridPane;
 import unsw.dungeon.DungeonLoader;
 import unsw.dungeon.LoaderHook;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.InvincibilityPotion;
+import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Sword;
+import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
 
@@ -32,6 +36,10 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	private Image playerImage;
 	private Image wallImage;
 	private Image exitImage;
+	private Image treasureImage;
+	private Image keyImage;
+	private Image swordImage;
+	private Image invincibilityPotionImage;
 
 	public DungeonControllerLoader(String filename) throws FileNotFoundException {
 		super(filename);
@@ -39,6 +47,10 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 		playerImage = new Image("/human_new.png");
 		wallImage = new Image("/brick_brown_0.png");
 		exitImage = new Image("/exit.png");
+		treasureImage = new Image("/gold_pile.png");
+		keyImage = new Image("/key.png");
+		swordImage = new Image("/greatsword_1_new.png");
+		invincibilityPotionImage = new Image("/brilliant_blue_new.png");
 	}
 
 	@Override
@@ -57,6 +69,30 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	public void onLoad(Exit exit) {
 		ImageView view = new ImageView(exitImage);
 		addEntity(exit, view);
+	}
+
+	@Override
+	public void onLoad(Treasure treasure) {
+		ImageView view = new ImageView(treasureImage);
+		addEntity(treasure, view);
+	}
+
+	@Override
+	public void onLoad(Key key) {
+		ImageView view = new ImageView(keyImage);
+		addEntity(key, view);
+	}
+
+	@Override
+	public void onLoad(Sword sword) {
+		ImageView view = new ImageView(swordImage);
+		addEntity(sword, view);
+	}
+
+	@Override
+	public void onLoad(InvincibilityPotion potion) {
+		ImageView view = new ImageView(invincibilityPotionImage);
+		addEntity(potion, view);
 	}
 
 	private void addEntity(Entity entity, ImageView view) {

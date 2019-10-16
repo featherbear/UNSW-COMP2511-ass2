@@ -1,17 +1,18 @@
 package unsw.dungeon;
 
-import javafx.beans.value.ObservableValue;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.InvincibilityPotion;
+import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Sword;
+import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 
 public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Player player) {
-//		player.moveIntent.register((Player p, LocationChanged data) -> {
-//
-//		});
+
 	}
 
 	@Override
@@ -21,20 +22,28 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-		Dungeon dungeon = exit.getDungeon();
-		Player player = dungeon.getPlayer();
+	@Override
+	public void onLoad(Treasure treasure) {
+		// TODO Auto-generated method stub
 
-		player.x().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-			if (exit.getX() == newValue.intValue() && exit.getY() == player.getY()) {
-				System.out.println("Step!");
-			}
-		});
+	}
 
-		player.y().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-			if (exit.getX() == player.getX() && exit.getY() == newValue.intValue()) {
-				System.out.println("Step!");
-			}
-		});
+	@Override
+	public void onLoad(Key key) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onLoad(Sword sword) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onLoad(InvincibilityPotion potion) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
