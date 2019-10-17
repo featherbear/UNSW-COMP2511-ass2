@@ -26,7 +26,7 @@ import unsw.dungeon.entity.meta.Entity;
  */
 public class DungeonControllerLoader extends DungeonLoader implements LoaderHook {
 
-	private List<ImageView> entities;
+	private List<EntityImagePair> entities;
 
 	// Images
 	private Image playerImage;
@@ -35,7 +35,7 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 
 	public DungeonControllerLoader(String filename) throws FileNotFoundException {
 		super(filename);
-		entities = new ArrayList<>();
+		entities = new ArrayList<EntityImagePair>();
 		playerImage = new Image("/human_new.png");
 		wallImage = new Image("/brick_brown_0.png");
 		exitImage = new Image("/exit.png");
@@ -61,7 +61,7 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 
 	private void addEntity(Entity entity, ImageView view) {
 		trackPosition(entity, view);
-		entities.add(view);
+		entities.add(new EntityImagePair(entity, view));
 	}
 
 	/**

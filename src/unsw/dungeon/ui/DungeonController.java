@@ -24,16 +24,16 @@ public class DungeonController {
 	@FXML
 	private GridPane squares;
 
-	private List<ImageView> initialEntities;
+	private List<EntityImagePair> entities;
 
 	private Player player;
 
 	private Dungeon dungeon;
 
-	public DungeonController(Dungeon dungeon, List<ImageView> initialEntities) {
+	public DungeonController(Dungeon dungeon, List<EntityImagePair> entities) {
 		this.dungeon = dungeon;
 		this.player = dungeon.getPlayer();
-		this.initialEntities = new ArrayList<>(initialEntities);
+		this.entities = new ArrayList<EntityImagePair>(entities);
 	}
 
 	@FXML
@@ -48,9 +48,11 @@ public class DungeonController {
 		}
 
 		ObservableList<Node> children = squares.getChildren();
-		for (ImageView entity : initialEntities)
-			children.add(entity);
+		entities.sort((e, f) -> f.getEntity().getEntityLevel().ordinal() - e.getEntity().getEntityLevel().ordinal());
 
+		for (EntityImagePair entity : entities) {
+			children.add(entity.getImageView());
+		}
 	}
 
 	@FXML
