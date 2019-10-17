@@ -30,7 +30,7 @@ import unsw.dungeon.entity.meta.Entity;
  */
 public class DungeonControllerLoader extends DungeonLoader implements LoaderHook {
 
-	private List<ImageView> entities;
+	private List<EntityImagePair> entities;
 
 	// Images
 	private Image playerImage;
@@ -97,7 +97,7 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 
 	private void addEntity(Entity entity, ImageView view) {
 		trackPosition(entity, view);
-		entities.add(view);
+		entities.add(new EntityImagePair(entity, view));
 	}
 
 	/**
