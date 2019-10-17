@@ -9,7 +9,11 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.InvincibilityPotion;
+import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Sword;
+import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
 
@@ -82,6 +86,26 @@ public class DungeonLoader {
 			loaders.onLoad(exit);
 			return exit;
 
+		case "treasure":
+			Treasure treasure = new Treasure(dungeon, x, y);
+			loaders.onLoad(treasure);
+			return treasure;
+
+		case "key":
+			Key key = new Key(dungeon, x, y);
+			loaders.onLoad(key);
+			return key;
+
+		case "sword":
+			Sword sword = new Sword(dungeon, x, y);
+			loaders.onLoad(sword);
+			return sword;
+
+		case "invincibility":
+			InvincibilityPotion potion = new InvincibilityPotion(dungeon, x, y);
+			loaders.onLoad(potion);
+			return potion;
+
 		default:
 			throw new Error("Could not load JSON for object type " + type);
 		}
@@ -89,6 +113,7 @@ public class DungeonLoader {
 	}
 };
 
+// TODO: change into array, a bit cluttered having to implement the same thing each time
 class LoaderComposite implements LoaderHook {
 	private ArrayList<LoaderHook> hooks;
 
@@ -124,6 +149,34 @@ class LoaderComposite implements LoaderHook {
 	public void onLoad(Exit exit) {
 		for (LoaderHook hook : this.hooks) {
 			hook.onLoad(exit);
+		}
+	}
+
+	@Override
+	public void onLoad(Treasure treasure) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(treasure);
+		}
+	}
+
+	@Override
+	public void onLoad(Key key) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(key);
+		}
+	}
+
+	@Override
+	public void onLoad(Sword sword) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(sword);
+		}
+	}
+
+	@Override
+	public void onLoad(InvincibilityPotion potion) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(potion);
 		}
 	}
 

@@ -1,6 +1,8 @@
 package unsw.dungeon.entity.meta;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import unsw.dungeon.Dungeon;
 
@@ -15,6 +17,7 @@ public abstract class Entity {
 	// IntegerProperty is used so that changes to the entities position can be
 	// externally observed.
 	private IntegerProperty x, y;
+	private BooleanProperty visible;
 
 	protected EntityLevel entityLevel;
 	private Dungeon dungeon;
@@ -30,6 +33,7 @@ public abstract class Entity {
 		this.entityLevel = entityLevel;
 		this.x = new SimpleIntegerProperty(x);
 		this.y = new SimpleIntegerProperty(y);
+		this.visible = new SimpleBooleanProperty(true);
 	}
 
 	public IntegerProperty x() {
@@ -54,5 +58,22 @@ public abstract class Entity {
 
 	public Dungeon getDungeon() {
 		return this.dungeon;
+	}
+
+	public void hide() {
+		visibility().set(false);
+	}
+
+	public void show() {
+		visibility().set(true);
+
+	}
+
+	public BooleanProperty visibility() {
+		return visible;
+	}
+
+	public boolean getVisibility() {
+		return visibility().get();
 	}
 }

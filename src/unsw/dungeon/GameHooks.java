@@ -1,17 +1,18 @@
 package unsw.dungeon;
 
-import javafx.beans.value.ObservableValue;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.InvincibilityPotion;
+import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Sword;
+import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 
 public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Player player) {
-//		player.moveIntent.register((Player p, LocationChanged data) -> {
-//
-//		});
+
 	}
 
 	@Override
@@ -21,20 +22,35 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-		Dungeon dungeon = exit.getDungeon();
-		Player player = dungeon.getPlayer();
 
-		player.x().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-			if (exit.getX() == newValue.intValue() && exit.getY() == player.getY()) {
-				System.out.println("Step!");
-			}
-		});
+	}
 
-		player.y().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-			if (exit.getX() == player.getX() && exit.getY() == newValue.intValue()) {
-				System.out.println("Step!");
-			}
-		});
+	@Override
+	public void onLoad(Treasure treasure) {
+		Dungeon d = treasure.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(treasure::LocationChangedHandler);
+	}
+
+	@Override
+	public void onLoad(Key key) {
+		Dungeon d = key.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(key::LocationChangedHandler);
+	}
+
+	@Override
+	public void onLoad(Sword sword) {
+		Dungeon d = sword.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(sword::LocationChangedHandler);
+	}
+
+	@Override
+	public void onLoad(InvincibilityPotion potion) {
+		Dungeon d = potion.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(potion::LocationChangedHandler);
 	}
 
 	@Override

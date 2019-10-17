@@ -1,7 +1,11 @@
 package unsw.dungeon;
 
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.InvincibilityPotion;
+import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Sword;
+import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 
 public interface LoaderHook {
@@ -10,6 +14,14 @@ public interface LoaderHook {
 	public void onLoad(Wall wall);
 
 	public void onLoad(Exit exit);
+
+	public void onLoad(Treasure treasure);
+
+	public void onLoad(Key key);
+
+	public void onLoad(Sword sword);
+
+	public void onLoad(InvincibilityPotion potion);
 
 	default public void postLoad(Dungeon dungeon) {
 	}
