@@ -117,13 +117,29 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 		entity.x().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				GridPane.setColumnIndex(node, newValue.intValue());
+				int newPosition = newValue.intValue();
+
+				if (newPosition == -1) {
+					node.setVisible(false);
+				} else if (oldValue.intValue() == -1) {
+					node.setVisible(true);
+				} else {
+					GridPane.setColumnIndex(node, newPosition);
+				}
 			}
 		});
 		entity.y().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				GridPane.setRowIndex(node, newValue.intValue());
+				int newPosition = newValue.intValue();
+
+				if (newPosition == -1) {
+					node.setVisible(false);
+				} else if (oldValue.intValue() == -1) {
+					node.setVisible(true);
+				} else {
+					GridPane.setRowIndex(node, newPosition);
+				}
 			}
 		});
 	}

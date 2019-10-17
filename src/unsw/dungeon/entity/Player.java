@@ -2,6 +2,7 @@ package unsw.dungeon.entity;
 
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.EntityLevel;
+import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
 import unsw.dungeon.events.LocationChanged;
 
@@ -74,4 +75,7 @@ public class Player extends MovableEntity<Player> {
 		move(1, 0);
 	}
 
+	public void pickUp(ItemEntity item) {
+		this.getDungeon().removeEntity(item);
+	}
 }

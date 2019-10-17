@@ -22,32 +22,35 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onLoad(Treasure treasure) {
-		// TODO Auto-generated method stub
-
+		Dungeon d = treasure.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(treasure::LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(Key key) {
-		// TODO Auto-generated method stub
-
+		Dungeon d = key.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(key::LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(Sword sword) {
-		// TODO Auto-generated method stub
-
+		Dungeon d = sword.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(sword::LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(InvincibilityPotion potion) {
-		// TODO Auto-generated method stub
-
+		Dungeon d = potion.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(potion::LocationChangedHandler);
 	}
 
 	@Override
