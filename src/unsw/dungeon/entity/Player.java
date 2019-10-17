@@ -76,6 +76,8 @@ public class Player extends MovableEntity<Player> {
 	}
 
 	public void pickUp(ItemEntity item) {
-		this.getDungeon().removeEntity(item);
+		// Check if the player can pickup the item
+
+		item.visibility().set(false);
 	}
 }

@@ -114,32 +114,22 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	private void trackPosition(Entity entity, Node node) {
 		GridPane.setColumnIndex(node, entity.getX());
 		GridPane.setRowIndex(node, entity.getY());
+
+		entity.visibility().addListener((observable, oldValue, newValue) -> {
+			node.setVisible(newValue.booleanValue());
+		});
+
 		entity.x().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				int newPosition = newValue.intValue();
+				GridPane.setColumnIndex(node, newValue.intValue());
 
-				if (newPosition == -1) {
-					node.setVisible(false);
-				} else if (oldValue.intValue() == -1) {
-					node.setVisible(true);
-				} else {
-					GridPane.setColumnIndex(node, newPosition);
-				}
 			}
 		});
 		entity.y().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				int newPosition = newValue.intValue();
-
-				if (newPosition == -1) {
-					node.setVisible(false);
-				} else if (oldValue.intValue() == -1) {
-					node.setVisible(true);
-				} else {
-					GridPane.setRowIndex(node, newPosition);
-				}
+				GridPane.setRowIndex(node, newValue.intValue());
 			}
 		});
 	}

@@ -98,8 +98,4 @@ public class Dungeon {
 //		return false;
 //	}
 
-	public void hideEntity(Entity entity) {
-		entity.x().set(-1);
-		entity.y().set(-1);
-	}
 }
