@@ -131,4 +131,9 @@ public class Player extends MovableEntity<Player> implements Interactable {
 	public ArrayList<ItemEntity> getInventory() {
 		return this.inventory;
 	}
+
+	public void removeItem(ItemEntity item) {
+		this.inventory.remove(item);
+	}
+
 }
