@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -45,6 +46,8 @@ public class DungeonLoader {
 
 		Dungeon dungeon = new Dungeon(width, height);
 
+		dungeon.setPlayer(new Player(dungeon, 0, 0));
+
 		JSONArray jsonEntities = json.getJSONArray("entities");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
@@ -53,7 +56,9 @@ public class DungeonLoader {
 		for (int i = 0; i < jsonEntities.length(); i++) {
 			try {
 				Entity entity = this.loadEntity(dungeon, jsonEntities.getJSONObject(i), loaders);
-				dungeon.addEntity(entity);
+				if (entity != null) {
+					dungeon.addEntity(entity);
+				}
 			} catch (Error e) {
 				System.out.println(e);
 			}
@@ -71,8 +76,9 @@ public class DungeonLoader {
 		switch (type) {
 
 		case "player":
-			Player player = new Player(dungeon, x, y);
-			dungeon.setPlayer(player);
+			Player player = dungeon.getPlayer();
+			player.x().set(x);
+			player.y().set(y);
 			loaders.onLoad(player);
 			return player;
 
@@ -86,6 +92,12 @@ public class DungeonLoader {
 			loaders.onLoad(exit);
 			return exit;
 
+		case "door":
+			Door door = new Door(dungeon, x, y);
+			door.setKeyID(json.getInt("id"));
+			loaders.onLoad(door);
+			return door;
+
 		case "treasure":
 			Treasure treasure = new Treasure(dungeon, x, y);
 			loaders.onLoad(treasure);
@@ -93,6 +105,7 @@ public class DungeonLoader {
 
 		case "key":
 			Key key = new Key(dungeon, x, y);
+			key.setID(json.getInt("id"));
 			loaders.onLoad(key);
 			return key;
 
@@ -149,6 +162,13 @@ class LoaderComposite implements LoaderHook {
 	public void onLoad(Exit exit) {
 		for (LoaderHook hook : this.hooks) {
 			hook.onLoad(exit);
+		}
+	}
+
+	@Override
+	public void onLoad(Door door) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(door);
 		}
 	}
 

@@ -3,6 +3,7 @@ package unsw.dungeon.entity;
 import java.util.ArrayList;
 
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
@@ -16,7 +17,7 @@ import unsw.dungeon.events.LocationChanged;
  * @author Robert Clifton-Everest
  *
  */
-public class Player extends MovableEntity<Player> {
+public class Player extends MovableEntity<Player> implements Interactable {
 
 	private ArrayList<ItemEntity> inventory;
 
@@ -82,14 +83,15 @@ public class Player extends MovableEntity<Player> {
 		move(1, 0);
 	}
 
-	public void pickUp(ItemEntity item) {
+	public boolean pickUp(ItemEntity item) {
 		// Check if the player can pickup the item
-		if (item instanceof Sword && this.hasItem(Sword.class)) {
-			return;
+		if (this.hasItem(item.getClass()) && item.maxOne()) {
+			return false;
 		}
 
 		this.inventory.add(item);
 		item.visibility().set(false);
+		return true;
 	}
 
 	public boolean hasItemUsable(Class<?> itemClass) {
@@ -116,11 +118,22 @@ public class Player extends MovableEntity<Player> {
 		return false;
 	}
 
-	public void interact(Interactable object) {
-		object.interact(this);
+	@Override
+	public boolean interact(Entity entity) {
+		if (!(entity instanceof Interactable)) {
+			return false;
+		}
+
+		return ((Interactable) entity).interact(this);
+
 	}
 
 	public ArrayList<ItemEntity> getInventory() {
 		return this.inventory;
 	}
+
+	public void removeItem(ItemEntity item) {
+		this.inventory.remove(item);
+	}
+
 }

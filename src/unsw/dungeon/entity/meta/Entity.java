@@ -76,4 +76,9 @@ public abstract class Entity {
 	public boolean getVisibility() {
 		return visibility().get();
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s<%d,%d>", this.getClass().getSimpleName(), this.getX(), this.getY());
+	}
 }
