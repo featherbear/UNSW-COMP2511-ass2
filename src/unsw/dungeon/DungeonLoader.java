@@ -105,6 +105,7 @@ public class DungeonLoader {
 
 		case "key":
 			Key key = new Key(dungeon, x, y);
+			key.setID(json.getInt("id"));
 			loaders.onLoad(key);
 			return key;
 

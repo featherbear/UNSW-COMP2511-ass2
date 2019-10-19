@@ -11,8 +11,14 @@ public class Key extends ItemEntity implements Usable {
 
 	public Key(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.ITEM, x, y);
+		this.id = -1;
+	public void setID(int id) {
+		this.id = id;
 	}
 
+	public int getID() {
+		return this.id;
+	}
 	@Override
 	public boolean use(Interactable entity) {
 		if (getUses() <= 0) {
