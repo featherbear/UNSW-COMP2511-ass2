@@ -45,6 +45,8 @@ public class DungeonLoader {
 
 		Dungeon dungeon = new Dungeon(width, height);
 
+		dungeon.setPlayer(new Player(dungeon, 0, 0));
+
 		JSONArray jsonEntities = json.getJSONArray("entities");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
@@ -53,7 +55,9 @@ public class DungeonLoader {
 		for (int i = 0; i < jsonEntities.length(); i++) {
 			try {
 				Entity entity = this.loadEntity(dungeon, jsonEntities.getJSONObject(i), loaders);
-				dungeon.addEntity(entity);
+				if (entity != null) {
+					dungeon.addEntity(entity);
+				}
 			} catch (Error e) {
 				System.out.println(e);
 			}
@@ -71,8 +75,9 @@ public class DungeonLoader {
 		switch (type) {
 
 		case "player":
-			Player player = new Player(dungeon, x, y);
-			dungeon.setPlayer(player);
+			Player player = dungeon.getPlayer();
+			player.x().set(x);
+			player.y().set(y);
 			loaders.onLoad(player);
 			return player;
 
