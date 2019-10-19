@@ -32,4 +32,11 @@ public class InvincibilityPotion extends ItemEntity implements Usable {
 	public int getUses() {
 		return this.timer;
 	}
+
+	@Override
+	public boolean maxOne() {
+		return false;
+	}
+
+	@Override
 }

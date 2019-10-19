@@ -40,4 +40,8 @@ public class Sword extends ItemEntity implements Usable {
 		return this.durability;
 	}
 
+	@Override
+	public boolean maxOne() {
+		return true;
+	}
 }
