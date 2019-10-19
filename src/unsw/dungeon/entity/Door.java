@@ -45,7 +45,6 @@ public class Door extends Entity implements Interactable {
 	}
 
 	public boolean interact(Player player) {
-		System.out.println("INTACT");
 		for (ItemEntity item : player.getInventory()) {
 			if (item instanceof Key) {
 				if (((Key) item).use(this)) {
@@ -57,7 +56,6 @@ public class Door extends Entity implements Interactable {
 	}
 
 	public boolean interact(Key key) {
-		System.out.println(key.getID() + " . " + getKeyID());
 		if (key.getID() != getKeyID()) {
 			return false;
 		}

@@ -30,7 +30,7 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Door door) {
 		Dungeon d = door.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.unregister(door::doorEnterIntentHandler);
+		p.moveIntent.register(door::doorEnterIntentHandler);
 
 	}
 
