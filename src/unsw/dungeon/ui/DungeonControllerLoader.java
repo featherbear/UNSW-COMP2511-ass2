@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.DungeonLoader;
 import unsw.dungeon.LoaderHook;
+import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -36,6 +37,8 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	private Image playerImage;
 	private Image wallImage;
 	private Image exitImage;
+	private Image doorClosedImage;
+	private Image doorOpenedImage;
 	private Image treasureImage;
 	private Image keyImage;
 	private Image swordImage;
@@ -47,6 +50,8 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 		this.playerImage = new Image("/human_new.png");
 		this.wallImage = new Image("/brick_brown_0.png");
 		this.exitImage = new Image("/exit.png");
+		this.doorClosedImage = new Image("/closed_door.png");
+		this.doorOpenedImage = new Image("/open_door.png");
 		this.treasureImage = new Image("/gold_pile.png");
 		this.keyImage = new Image("/key.png");
 		this.swordImage = new Image("/greatsword_1_new.png");
@@ -69,6 +74,15 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	public void onLoad(Exit exit) {
 		ImageView view = new ImageView(exitImage);
 		addEntity(exit, view);
+	}
+
+	@Override
+	public void onLoad(Door door) {
+		ImageView view = new ImageView(doorClosedImage);
+		door.opened().addListener((observer, oldValue, newValue) -> {
+			view.setImage(newValue ? doorOpenedImage : doorClosedImage);
+		});
+		addEntity(door, view);
 	}
 
 	@Override

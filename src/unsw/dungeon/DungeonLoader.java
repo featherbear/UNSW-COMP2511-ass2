@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -91,6 +92,12 @@ public class DungeonLoader {
 			loaders.onLoad(exit);
 			return exit;
 
+		case "door":
+			Door door = new Door(dungeon, x, y);
+			door.setKeyID(json.getInt("id"));
+			loaders.onLoad(door);
+			return door;
+
 		case "treasure":
 			Treasure treasure = new Treasure(dungeon, x, y);
 			loaders.onLoad(treasure);
@@ -154,6 +161,13 @@ class LoaderComposite implements LoaderHook {
 	public void onLoad(Exit exit) {
 		for (LoaderHook hook : this.hooks) {
 			hook.onLoad(exit);
+		}
+	}
+
+	@Override
+	public void onLoad(Door door) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(door);
 		}
 	}
 

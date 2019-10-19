@@ -1,5 +1,6 @@
 package unsw.dungeon;
 
+import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -22,6 +23,11 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
+
+	}
+
+	@Override
+	public void onLoad(Door door) {
 
 	}
 
