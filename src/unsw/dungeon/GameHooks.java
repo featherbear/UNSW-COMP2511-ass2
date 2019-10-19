@@ -28,6 +28,9 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Door door) {
+		Dungeon d = door.getDungeon();
+		Player p = d.getPlayer();
+		p.moveIntent.unregister(door::doorEnterIntentHandler);
 
 	}
 
@@ -35,33 +38,32 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Treasure treasure) {
 		Dungeon d = treasure.getDungeon();
 		Player p = d.getPlayer();
-		p.moveEvent.register(treasure::LocationChangedHandler);
+		p.moveEvent.register(treasure.LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(Key key) {
 		Dungeon d = key.getDungeon();
 		Player p = d.getPlayer();
-		p.moveEvent.register(key::LocationChangedHandler);
+		p.moveEvent.register(key.LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(Sword sword) {
 		Dungeon d = sword.getDungeon();
 		Player p = d.getPlayer();
-		p.moveEvent.register(sword::LocationChangedHandler);
+		p.moveEvent.register(sword.LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(InvincibilityPotion potion) {
 		Dungeon d = potion.getDungeon();
 		Player p = d.getPlayer();
-		p.moveEvent.register(potion::LocationChangedHandler);
+		p.moveEvent.register(potion.LocationChangedHandler);
 	}
 
 	@Override
 	public void postLoad(Dungeon dungeon) {
 		System.out.println("Dungeon load complete");
 	}
-
 }

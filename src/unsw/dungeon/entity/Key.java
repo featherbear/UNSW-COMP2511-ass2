@@ -13,8 +13,17 @@ public class Key extends ItemEntity implements Usable {
 	}
 
 	@Override
-	public void use(Entity entity) {
+	public boolean use(Interactable entity) {
+		if (getUses() <= 0) {
+			return false;
+		}
 
+		if (!entity.interact(this)) {
+			return false;
+		}
+
+		itemUsed().emit(new ItemUsed(this.uses, --this.uses));
+		return true;
 	}
 
 	@Override

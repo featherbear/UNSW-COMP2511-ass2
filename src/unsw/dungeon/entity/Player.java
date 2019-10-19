@@ -16,7 +16,7 @@ import unsw.dungeon.events.LocationChanged;
  * @author Robert Clifton-Everest
  *
  */
-public class Player extends MovableEntity<Player> {
+public class Player extends MovableEntity<Player> implements Interactable {
 
 	private ArrayList<ItemEntity> inventory;
 
@@ -116,8 +116,14 @@ public class Player extends MovableEntity<Player> {
 		return false;
 	}
 
-	public void interact(Interactable object) {
-		object.interact(this);
+	@Override
+	public boolean interact(Entity entity) {
+		if (!(entity instanceof Interactable)) {
+			return false;
+		}
+
+		return ((Interactable) entity).interact(this);
+
 	}
 
 	public ArrayList<ItemEntity> getInventory() {

@@ -3,6 +3,7 @@ package unsw.dungeon.entity;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
+import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.Usable;
 
@@ -16,9 +17,10 @@ public class Sword extends ItemEntity implements Usable {
 	}
 
 	@Override
-	public void use(Entity entity) {
-		if (this.durability <= 0) {
-			return;
+	public boolean use(Interactable entity) {
+		if (getUses() <= 0) {
+			return false;
+
 		}
 
 		this.durability--;

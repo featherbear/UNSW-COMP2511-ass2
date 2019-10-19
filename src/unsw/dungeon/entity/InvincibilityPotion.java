@@ -3,6 +3,7 @@ package unsw.dungeon.entity;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
+import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.Usable;
 
@@ -16,11 +17,15 @@ public class InvincibilityPotion extends ItemEntity implements Usable {
 	}
 
 	@Override
-	public void use(Entity entity) {
-		if (this.timer <= 0) {
-			return;
+	public boolean use(Interactable entity) {
+		if (getUses() <= 0) {
+			return false;
 		}
-		this.timer--;
+
+		//
+
+		itemUsed().emit(new ItemUsed(this.timer, --this.timer));
+		return true;
 	}
 
 	@Override

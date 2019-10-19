@@ -12,8 +12,16 @@ public class Exit extends Entity implements Interactable {
 	}
 
 	@Override
-	public void interact(Entity entity) {
+	public boolean interact(Entity entity) {
+		if (!(entity instanceof Player)) {
+			return false;
+		}
 
+		// Check activated
+
+		// Check goals
+
+		return true;
 	}
 
 }
