@@ -52,12 +52,18 @@ public class Portal extends Entity implements Interactable {
 		// Teleport the player to the destination portal
 		Portal destination = matchingPortals.get(new Random().nextInt(matchingPortals.size()));
 
-		// TODO: Check for tp-kill
-
 		// Do the teleport
-		player.setXY(destination.getX(), destination.getY());
+		int newX = destination.getX();
+		int newY = destination.getY();
 
-		// TODO: Teleport other things?
+//		ArrayList<Entity> objectEntitiesAtNewLocation = Entity.filter(Entity.filter(this.getDungeon().getEntities(), newX, newY), EntityLevel.OBJECT);
+//		for (Entity objectEntity : objectEntitiesAtNewLocation) {
+//			if (objectEntity instanceof Enemy) {
+//				((Enemy) objectEntity).kill();
+//			}
+//		}
+
+		player.setXY(newX, newY);
 
 		return true;
 	}
