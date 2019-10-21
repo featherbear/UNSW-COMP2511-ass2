@@ -33,7 +33,7 @@ public class Portal extends Entity implements Interactable {
 
 		Player player = (Player) entity;
 
-		ArrayList<Entity> portals = this.getDungeon().getEntities(Portal.class);
+		ArrayList<Entity> portals = Entity.filter(this.getDungeon().getEntities(), Portal.class);
 		ArrayList<Portal> matchingPortals = new ArrayList<Portal>();
 		for (Entity obj : portals) {
 			Portal portal = (Portal) obj;

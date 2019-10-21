@@ -59,58 +59,14 @@ public class Dungeon {
 		return this.entities;
 	}
 
-	public ArrayList<Entity> getEntities(Class<?> EntityType) {
-
-		ArrayList<Entity> results = new ArrayList<Entity>();
-		for (Entity entity : this.entities) {
-			if (EntityType.isInstance(entity)) {
-				results.add(entity);
-			}
-		}
-
-		return results;
-	}
-
-//	public ArrayList<Entity> getEntitiesAt(int x, int y) {
-//		ArrayList<Entity> result = new ArrayList<Entity>();
-//		for (Entity entity : this.entities) {
-//			if (entity.getX() == x && entity.getY() == y) {
-//				result.add(entity);
-//			}
-//		}
-//
-//		return result;
-//	}
-//
-//	public ArrayList<Entity> getEntitiesAt(EntityLevel entityLevel, int x, int y) {
-//		ArrayList<Entity> result = new ArrayList<Entity>();
-//		for (Entity entity : this.entities) {
-//			if (entity.getEntityLevel() == entityLevel && entity.getX() == x && entity.getY() == y) {
-//				result.add(entity);
-//			}
-//		}
-//
-//		return result;
-//	}
-
 	public boolean hasEntitiesAt(EntityLevel entityLevel, int x, int y) {
-		for (Entity entity : this.entities) {
-			if (entity.getEntityLevel() == entityLevel && entity.getX() == x && entity.getY() == y) {
+		for (Entity entity : Entity.filter(this.entities, x, y)) {
+			if (entity.getEntityLevel() == entityLevel) {
 				return true;
 			}
 		}
 
 		return false;
 	}
-
-//	public boolean hasEntitiesAt(EntityLevel entityLevel, ArrayList<Entity> entities) {
-//		for (Entity entity : entities) {
-//			if (entity.getEntityLevel() == entityLevel) {
-//				return true;
-//			}
-//		}
-//
-//		return false;
-//	}
 
 }

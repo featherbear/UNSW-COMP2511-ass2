@@ -1,5 +1,8 @@
 package unsw.dungeon.entity.meta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -81,4 +84,39 @@ public abstract class Entity {
 	public String toString() {
 		return String.format("%s<%d,%d>", this.getClass().getSimpleName(), this.getX(), this.getY());
 	}
+
+	public static ArrayList<Entity> filter(List<Entity> entities, Class<?> EntityType) {
+
+		ArrayList<Entity> results = new ArrayList<Entity>();
+		for (Entity entity : entities) {
+			if (EntityType.isInstance(entity)) {
+				results.add(entity);
+			}
+		}
+
+		return results;
+	}
+
+	public static ArrayList<Entity> filter(List<Entity> entities, int x, int y) {
+
+		ArrayList<Entity> results = new ArrayList<Entity>();
+		for (Entity entity : entities) {
+			if (entity.getX() == x && entity.getY() == y) {
+				results.add(entity);
+			}
+		}
+
+		return results;
+	}
+
+	public static ArrayList<Entity> filter(List<Entity> entities, EntityLevel entityLevel) {
+		ArrayList<Entity> results = new ArrayList<Entity>();
+		for (Entity entity : entities) {
+			if (entity.getEntityLevel() == entityLevel) {
+				results.add(entity);
+			}
+		}
+		return results;
+	}
+
 }
