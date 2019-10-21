@@ -12,12 +12,12 @@ import unsw.dungeon.events.LocationChanged;
 public class Door extends Entity implements Interactable {
 
 	private BooleanProperty opened;
-	private int keyID;
+	private int id;
 
 	public Door(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.FLOOR, x, y);
 		this.opened = new SimpleBooleanProperty(false);
-		this.keyID = -1;
+		this.id = -1;
 	}
 
 	public boolean getOpen() {
@@ -36,12 +36,12 @@ public class Door extends Entity implements Interactable {
 		this.opened.set(false);
 	}
 
-	public void setKeyID(int keyID) {
-		this.keyID = keyID;
+	public void setID(int id) {
+		this.id = id;
 	}
 
-	public int getKeyID() {
-		return this.keyID;
+	public int getID() {
+		return this.id;
 	}
 
 	public boolean interact(Player player) {
@@ -56,7 +56,7 @@ public class Door extends Entity implements Interactable {
 	}
 
 	public boolean interact(Key key) {
-		if (key.getID() != getKeyID()) {
+		if (key.getID() != getID()) {
 			return false;
 		}
 		this.open();

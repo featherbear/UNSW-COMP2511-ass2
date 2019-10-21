@@ -94,7 +94,7 @@ public class DungeonLoader {
 
 		case "door":
 			Door door = new Door(dungeon, x, y);
-			door.setKeyID(json.getInt("id"));
+			door.setID(json.getInt("id"));
 			loaders.onLoad(door);
 			return door;
 
