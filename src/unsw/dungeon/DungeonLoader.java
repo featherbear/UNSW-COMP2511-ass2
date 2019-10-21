@@ -122,6 +122,12 @@ public class DungeonLoader {
 
 		case "portal":
 			Portal portal = new Portal(dungeon, x, y);
+			portal.setID(json.getInt("id"));
+			if (json.optBoolean("activated", true)) {
+				portal.activate();
+			} else {
+				portal.deactivate();
+			}
 			loaders.onLoad(portal);
 			return portal;
 

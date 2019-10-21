@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -115,6 +116,16 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	@Override
 	public void onLoad(Portal portal) {
 		ImageView view = new ImageView(portalImage);
+
+		ColorAdjust disabledEffect = new ColorAdjust(0, -0.5, -0.8, -0.3);
+
+		portal.activated().addListener((observable, oldValue, newValue) -> {
+			view.setEffect(newValue ? null : disabledEffect);
+		});
+
+		// Set the effect now
+		view.setEffect(portal.getActivated() ? null : disabledEffect);
+
 		addEntity(portal, view);
 	}
 
