@@ -5,6 +5,7 @@ import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
@@ -23,6 +24,11 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
+
+	}
+
+	@Override
+	public void onLoad(Portal portal) {
 
 	}
 

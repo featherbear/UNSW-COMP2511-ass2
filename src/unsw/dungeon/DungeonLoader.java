@@ -13,6 +13,7 @@ import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
@@ -119,6 +120,11 @@ public class DungeonLoader {
 			loaders.onLoad(potion);
 			return potion;
 
+		case "portal":
+			Portal portal = new Portal(dungeon, x, y);
+			loaders.onLoad(portal);
+			return portal;
+
 		default:
 			throw new Error("Could not load JSON for object type " + type);
 		}
@@ -197,6 +203,13 @@ class LoaderComposite implements LoaderHook {
 	public void onLoad(InvincibilityPotion potion) {
 		for (LoaderHook hook : this.hooks) {
 			hook.onLoad(potion);
+		}
+	}
+
+	@Override
+	public void onLoad(Portal portal) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(portal);
 		}
 	}
 
