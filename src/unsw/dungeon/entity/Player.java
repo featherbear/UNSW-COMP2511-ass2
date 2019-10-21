@@ -43,10 +43,6 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		int newX = oldX + xDirection;
 		int newY = oldY + yDirection;
 
-		if (!this.getDungeon().positionIsValid(newX, newY)) {
-			return;
-		}
-
 		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
 
 		if (!this.moveIntent.emit(e)) {
@@ -57,6 +53,16 @@ public class Player extends MovableEntity<Player> implements Interactable {
 			return;
 		}
 
+		this.setXY(newX, newY);
+	}
+
+	public void setXY(int newX, int newY) {
+		int oldX = getX();
+		int oldY = getY();
+		if (!this.getDungeon().positionIsValid(newX, newY)) {
+			return;
+		}
+
 		if (oldX != newX) {
 			x().set(newX);
 		}
@@ -64,7 +70,8 @@ public class Player extends MovableEntity<Player> implements Interactable {
 			y().set(newY);
 		}
 
-		this.moveEvent.emit(e);
+		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
+
 	}
 
 	public void moveUp() {

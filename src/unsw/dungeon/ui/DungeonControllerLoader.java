@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -17,6 +18,7 @@ import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
@@ -43,6 +45,7 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	private Image keyImage;
 	private Image swordImage;
 	private Image invincibilityPotionImage;
+	private Image portalImage;
 
 	public DungeonControllerLoader(String filename) throws FileNotFoundException {
 		super(filename);
@@ -56,6 +59,7 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 		this.keyImage = new Image("/key.png");
 		this.swordImage = new Image("/greatsword_1_new.png");
 		this.invincibilityPotionImage = new Image("/brilliant_blue_new.png");
+		this.portalImage = new Image("/portal.png");
 	}
 
 	@Override
@@ -107,6 +111,22 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	public void onLoad(InvincibilityPotion potion) {
 		ImageView view = new ImageView(invincibilityPotionImage);
 		addEntity(potion, view);
+	}
+
+	@Override
+	public void onLoad(Portal portal) {
+		ImageView view = new ImageView(portalImage);
+
+		ColorAdjust disabledEffect = new ColorAdjust(0, -0.5, -0.8, -0.3);
+
+		portal.activated().addListener((observable, oldValue, newValue) -> {
+			view.setEffect(newValue ? null : disabledEffect);
+		});
+
+		// Set the effect now
+		view.setEffect(portal.getActivated() ? null : disabledEffect);
+
+		addEntity(portal, view);
 	}
 
 	private void addEntity(Entity entity, ImageView view) {
