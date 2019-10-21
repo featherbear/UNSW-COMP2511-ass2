@@ -4,6 +4,8 @@
 package unsw.dungeon;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
@@ -58,6 +60,11 @@ public class Dungeon {
 	public ArrayList<Entity> getEntities() {
 		return this.entities;
 	}
+
+	public List<Entity> getEntities(Class<?> EntityType) {
+		return this.entities.stream().filter(e -> EntityType.isInstance(e)).collect(Collectors.toList());
+	}
+
 //	public ArrayList<Entity> getEntitiesAt(int x, int y) {
 //		ArrayList<Entity> result = new ArrayList<Entity>();
 //		for (Entity entity : this.entities) {
