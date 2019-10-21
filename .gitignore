@@ -3,4 +3,4 @@
 hs_err_pid*
 /bin/
 /lib/jdk-jfx/
-
+.fuse_hidden*
