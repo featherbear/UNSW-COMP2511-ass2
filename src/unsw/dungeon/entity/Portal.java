@@ -52,10 +52,12 @@ public class Portal extends Entity implements Interactable {
 		// Teleport the player to the destination portal
 		Portal destination = matchingPortals.get(new Random().nextInt(matchingPortals.size()));
 
-		// Check for tp-kill
+		// TODO: Check for tp-kill
 
 		// Do the teleport
-//		player.moveTo(destination.getX(), destination.getY());
+		player.setXY(destination.getX(), destination.getY());
+
+		// TODO: Teleport other things?
 
 		return true;
 	}
@@ -86,12 +88,12 @@ public class Portal extends Entity implements Interactable {
 
 	}
 
-	public void portalEnterEventHandler(Player player, LocationChanged event) {
+	public boolean portalEnterIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
-			return;
+			return true;
 		}
 
-		player.interact(this);
+		return !player.interact(this);
 	}
 
 }

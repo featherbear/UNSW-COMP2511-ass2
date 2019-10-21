@@ -37,35 +37,41 @@ public class Player extends MovableEntity<Player> implements Interactable {
 	}
 
 	private void move(int xDirection, int yDirection) {
-		this.moveTo(getX() + xDirection, getY() + yDirection);
-	}
-
-	public void moveTo(int x, int y) {
 		int oldX = getX();
 		int oldY = getY();
 
-		if (!this.getDungeon().positionIsValid(x, y)) {
-			return;
-		}
+		int newX = oldX + xDirection;
+		int newY = oldY + yDirection;
 
-		LocationChanged e = new LocationChanged(oldX, oldY, x, y);
+		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
 
 		if (!this.moveIntent.emit(e)) {
 			return;
 		}
 
-		if (isPositionBlocked(x, y)) {
+		if (isPositionBlocked(newX, newY)) {
 			return;
 		}
 
-		if (oldX != x) {
-			x().set(x);
-		}
-		if (oldY != y) {
-			y().set(y);
+		this.setXY(newX, newY);
+	}
+
+	public void setXY(int newX, int newY) {
+		int oldX = getX();
+		int oldY = getY();
+		if (!this.getDungeon().positionIsValid(newX, newY)) {
+			return;
 		}
 
-		this.moveEvent.emit(e);
+		if (oldX != newX) {
+			x().set(newX);
+		}
+		if (oldY != newY) {
+			y().set(newY);
+		}
+
+		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
+
 	}
 
 	public void moveUp() {

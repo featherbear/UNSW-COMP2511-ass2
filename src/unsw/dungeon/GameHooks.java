@@ -31,7 +31,7 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Portal portal) {
 		Dungeon d = portal.getDungeon();
 		Player p = d.getPlayer();
-		p.moveEvent.register(portal::portalEnterEventHandler);
+		p.moveIntent.register(portal::portalEnterIntentHandler);
 	}
 
 	@Override
