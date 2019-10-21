@@ -1,11 +1,15 @@
 package unsw.dungeon.entity;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
+import unsw.dungeon.events.LocationChanged;
 
 public class Portal extends Entity implements Interactable {
 
@@ -23,7 +27,35 @@ public class Portal extends Entity implements Interactable {
 			return false;
 		}
 
-		// Check activated
+		if (!this.getActivated()) {
+			return false;
+		}
+
+		Player player = (Player) entity;
+
+		ArrayList<Entity> portals = this.getDungeon().getEntities(Portal.class);
+		ArrayList<Portal> matchingPortals = new ArrayList<Portal>();
+		for (Entity obj : portals) {
+			Portal portal = (Portal) obj;
+			if (portal == this) {
+				continue;
+			}
+			if (portal.id == this.id) {
+				matchingPortals.add(portal);
+			}
+		}
+
+		if (matchingPortals.size() == 0) {
+			return false;
+		}
+
+		// Teleport the player to the destination portal
+		Portal destination = matchingPortals.get(new Random().nextInt(matchingPortals.size()));
+
+		// Check for tp-kill
+
+		// Do the teleport
+//		player.moveTo(destination.getX(), destination.getY());
 
 		return true;
 	}
@@ -52,6 +84,14 @@ public class Portal extends Entity implements Interactable {
 	public void deactivate() {
 		this.activated.set(false);
 
+	}
+
+	public void portalEnterEventHandler(Player player, LocationChanged event) {
+		if (this.getX() != event.newX || this.getY() != event.newY) {
+			return;
+		}
+
+		player.interact(this);
 	}
 
 }
