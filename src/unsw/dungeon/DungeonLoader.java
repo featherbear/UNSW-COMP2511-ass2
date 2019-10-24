@@ -8,10 +8,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import unsw.dungeon.entity.Entity;
+import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.InvincibilityPotion;
+import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Sword;
+import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
+import unsw.dungeon.entity.meta.Entity;
 
 /**
  * Loads a dungeon from a .json file.
@@ -41,6 +47,8 @@ public class DungeonLoader {
 
 		Dungeon dungeon = new Dungeon(width, height);
 
+		dungeon.setPlayer(new Player(dungeon, 0, 0));
+
 		JSONArray jsonEntities = json.getJSONArray("entities");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
@@ -49,7 +57,9 @@ public class DungeonLoader {
 		for (int i = 0; i < jsonEntities.length(); i++) {
 			try {
 				Entity entity = this.loadEntity(dungeon, jsonEntities.getJSONObject(i), loaders);
-				dungeon.addEntity(entity);
+				if (entity != null) {
+					dungeon.addEntity(entity);
+				}
 			} catch (Error e) {
 				System.out.println(e);
 			}
@@ -67,8 +77,9 @@ public class DungeonLoader {
 		switch (type) {
 
 		case "player":
-			Player player = new Player(dungeon, x, y);
-			dungeon.setPlayer(player);
+			Player player = dungeon.getPlayer();
+			player.x().set(x);
+			player.y().set(y);
 			loaders.onLoad(player);
 			return player;
 
@@ -82,6 +93,44 @@ public class DungeonLoader {
 			loaders.onLoad(exit);
 			return exit;
 
+		case "door":
+			Door door = new Door(dungeon, x, y);
+			door.setID(json.getInt("id"));
+			loaders.onLoad(door);
+			return door;
+
+		case "treasure":
+			Treasure treasure = new Treasure(dungeon, x, y);
+			loaders.onLoad(treasure);
+			return treasure;
+
+		case "key":
+			Key key = new Key(dungeon, x, y);
+			key.setID(json.getInt("id"));
+			loaders.onLoad(key);
+			return key;
+
+		case "sword":
+			Sword sword = new Sword(dungeon, x, y);
+			loaders.onLoad(sword);
+			return sword;
+
+		case "invincibility":
+			InvincibilityPotion potion = new InvincibilityPotion(dungeon, x, y);
+			loaders.onLoad(potion);
+			return potion;
+
+		case "portal":
+			Portal portal = new Portal(dungeon, x, y);
+			portal.setID(json.getInt("id"));
+			if (json.optBoolean("activated", true)) {
+				portal.activate();
+			} else {
+				portal.deactivate();
+			}
+			loaders.onLoad(portal);
+			return portal;
+
 		default:
 			throw new Error("Could not load JSON for object type " + type);
 		}
@@ -89,6 +138,7 @@ public class DungeonLoader {
 	}
 };
 
+// TODO: change into array, a bit cluttered having to implement the same thing each time
 class LoaderComposite implements LoaderHook {
 	private ArrayList<LoaderHook> hooks;
 
@@ -124,6 +174,48 @@ class LoaderComposite implements LoaderHook {
 	public void onLoad(Exit exit) {
 		for (LoaderHook hook : this.hooks) {
 			hook.onLoad(exit);
+		}
+	}
+
+	@Override
+	public void onLoad(Door door) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(door);
+		}
+	}
+
+	@Override
+	public void onLoad(Treasure treasure) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(treasure);
+		}
+	}
+
+	@Override
+	public void onLoad(Key key) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(key);
+		}
+	}
+
+	@Override
+	public void onLoad(Sword sword) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(sword);
+		}
+	}
+
+	@Override
+	public void onLoad(InvincibilityPotion potion) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(potion);
+		}
+	}
+
+	@Override
+	public void onLoad(Portal portal) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(portal);
 		}
 	}
 

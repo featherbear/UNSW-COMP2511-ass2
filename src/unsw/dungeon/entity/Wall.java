@@ -1,6 +1,8 @@
 package unsw.dungeon.entity;
 
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.entity.meta.Entity;
+import unsw.dungeon.entity.meta.EntityLevel;
 
 public class Wall extends Entity {
 
