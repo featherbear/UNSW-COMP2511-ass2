@@ -8,9 +8,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Entity;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Wall;
 
 /**
@@ -81,7 +83,17 @@ public class DungeonLoader {
 			Exit exit = new Exit(dungeon, x, y);
 			loaders.onLoad(exit);
 			return exit;
-
+			
+		case "switch":
+			Switch sw = new Switch(dungeon, x, y);
+			loaders.onLoad(sw);
+			return sw;
+			
+		case "boulder":
+			Boulder boulder = new Boulder(dungeon, x, y);
+			loaders.onLoad(boulder);
+			return boulder;
+			
 		default:
 			throw new Error("Could not load JSON for object type " + type);
 		}
@@ -126,11 +138,26 @@ class LoaderComposite implements LoaderHook {
 			hook.onLoad(exit);
 		}
 	}
+	
+	@Override
+	public void onLoad(Boulder boulder) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(boulder);
+		}
+	}
 
+	@Override
+	public void onLoad(Switch sw) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(sw);
+		}
+	}
 	@Override
 	public void postLoad(Dungeon dungeon) {
 		for (LoaderHook hook : this.hooks) {
 			hook.postLoad(dungeon);
 		}
 	}
+	
+
 }

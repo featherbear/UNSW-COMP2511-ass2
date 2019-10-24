@@ -12,9 +12,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.DungeonLoader;
 import unsw.dungeon.LoaderHook;
+import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Entity;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Wall;
 
 /**
@@ -32,6 +34,8 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	private Image playerImage;
 	private Image wallImage;
 	private Image exitImage;
+	private Image switchImage;
+	private Image boulderImage;
 
 	public DungeonControllerLoader(String filename) throws FileNotFoundException {
 		super(filename);
@@ -39,6 +43,8 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 		playerImage = new Image("/human_new.png");
 		wallImage = new Image("/brick_brown_0.png");
 		exitImage = new Image("/exit.png");
+		switchImage = new Image("/pressure_plate.png");
+		boulderImage = new Image("/boulder.png");
 	}
 
 	@Override
@@ -57,6 +63,18 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	public void onLoad(Exit exit) {
 		ImageView view = new ImageView(exitImage);
 		addEntity(exit, view);
+	}
+	
+	@Override
+	public void onLoad(Boulder boulder) {
+		ImageView view = new ImageView(boulderImage);
+		addEntity(boulder, view);
+	}
+	
+	@Override
+	public void onLoad(Switch sw) {
+		ImageView view = new ImageView(switchImage);
+		addEntity(sw, view);
 	}
 
 	private void addEntity(Entity entity, ImageView view) {
