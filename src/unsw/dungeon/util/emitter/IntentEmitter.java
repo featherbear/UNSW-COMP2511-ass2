@@ -23,5 +23,4 @@ public class IntentEmitter<BaseType, DataType extends EmitterData>
 		}
 		return true;
 	}
-
 }

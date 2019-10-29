@@ -33,6 +33,14 @@ public class Player extends MovableEntity<Player> implements Interactable {
 	}
 
 	private boolean isPositionBlocked(int x, int y) {
+		if (this.getDungeon().hasEntitiesAt(entityLevel.OBJECT, x, y)) {
+			if (this.getDungeon().whatEntityAt(entityLevel.OBJECT, x, y) != null) {
+				Entity e = this.getDungeon().whatEntityAt(entityLevel.OBJECT, x, y);
+				if (e instanceof Boulder) {
+					return false;
+				}
+			}
+		}
 		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
 

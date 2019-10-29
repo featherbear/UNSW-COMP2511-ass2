@@ -30,8 +30,10 @@ public class GameHooks implements LoaderHook {
 	}
 	
 	@Override
-	public void onLoad(Boulder boudler) {
-		
+	public void onLoad(Boulder boulder) {
+		Dungeon d = boulder.getDungeon();
+		Player p = d.getPlayer();
+		p.moveIntent.register(boulder::boulderMoveIntentHandler);
 	}
 	
 	@Override

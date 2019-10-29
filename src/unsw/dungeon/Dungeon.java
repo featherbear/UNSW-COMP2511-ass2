@@ -58,6 +58,15 @@ public class Dungeon {
 	public ArrayList<Entity> getEntities() {
 		return this.entities;
 	}
+	
+	public Entity whatEntityAt (EntityLevel entityLevel, int x, int y){
+		for (Entity entity : Entity.filter(this.entities, x, y)) {
+			if (entity.getEntityLevel() == entityLevel) {
+				return entity;
+			}
+		}
+		return null;
+	}
 
 	public boolean hasEntitiesAt(EntityLevel entityLevel, int x, int y) {
 		for (Entity entity : Entity.filter(this.entities, x, y)) {
