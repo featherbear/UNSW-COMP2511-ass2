@@ -8,16 +8,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
+
 
 /**
  * Loads a dungeon from a .json file.
@@ -92,6 +95,16 @@ public class DungeonLoader {
 			Exit exit = new Exit(dungeon, x, y);
 			loaders.onLoad(exit);
 			return exit;
+			
+		case "switch":
+			Switch sw = new Switch(dungeon, x, y);
+			loaders.onLoad(sw);
+			return sw;
+			
+		case "boulder":
+			Boulder boulder = new Boulder(dungeon, x, y);
+			loaders.onLoad(boulder);
+			return boulder;
 
 		case "door":
 			Door door = new Door(dungeon, x, y);
@@ -176,6 +189,20 @@ class LoaderComposite implements LoaderHook {
 			hook.onLoad(exit);
 		}
 	}
+	
+	@Override
+	public void onLoad(Boulder boulder) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(boulder);
+		}
+	}
+
+	@Override
+	public void onLoad(Switch sw) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(sw);
+		}
+	}
 
 	@Override
 	public void onLoad(Door door) {
@@ -225,4 +252,6 @@ class LoaderComposite implements LoaderHook {
 			hook.postLoad(dungeon);
 		}
 	}
+	
+
 }

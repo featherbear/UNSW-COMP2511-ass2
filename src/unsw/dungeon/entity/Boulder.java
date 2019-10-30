@@ -1,37 +1,18 @@
 package unsw.dungeon.entity;
 
-import java.util.ArrayList;
-
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
-import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
-import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.LocationChanged;
 
-/**
- * The player entity
- * 
- * @author Robert Clifton-Everest
- *
- */
-public class Player extends MovableEntity<Player> implements Interactable {
+public class Boulder extends MovableEntity<Boulder> implements Interactable{
 
-	private ArrayList<ItemEntity> inventory;
-
-	/**
-	 * Create a player positioned in square (x,y)
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public Player(Dungeon dungeon, int x, int y) {
+	public Boulder(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
-		this.inventory = new ArrayList<ItemEntity>();
 	}
-
+	
 	private boolean isPositionBlocked(int x, int y) {
 		if (this.getDungeon().hasEntitiesAt(entityLevel.OBJECT, x, y)) {
 			if (this.getDungeon().whatEntityAt(entityLevel.OBJECT, x, y) != null) {
@@ -43,8 +24,8 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		}
 		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
-
-	private void move(int xDirection, int yDirection) {
+	
+	private boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
 
@@ -54,14 +35,15 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
 
 		if (!this.moveIntent.emit(e)) {
-			return;
+			return false;
 		}
 
 		if (isPositionBlocked(newX, newY)) {
-			return;
+			return false;
 		}
 
 		this.setXY(newX, newY);
+		return true;
 	}
 
 	public void setXY(int newX, int newY) {
@@ -81,7 +63,7 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
 
 	}
-
+	
 	public void moveUp() {
 		move(0, -1);
 	}
@@ -98,57 +80,20 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		move(1, 0);
 	}
 
-	public boolean pickUp(ItemEntity item) {
-		// Check if the player can pickup the item
-		if (this.hasItem(item.getClass()) && item.maxOne()) {
-			return false;
+	public boolean boulderMoveIntentHandler(Player player, LocationChanged event) {
+		if (this.getX() != event.newX || this.getY() != event.newY) {
+			return true;
 		}
-
-		this.inventory.add(item);
-		item.visibility().set(false);
-		return true;
-	}
-
-	public boolean hasItemUsable(Class<?> itemClass) {
-		for (ItemEntity invItem : this.inventory) {
-			if (!(invItem instanceof Usable)) {
-				continue;
-			}
-
-			if (itemClass.isInstance(invItem)) {
-				if (((Usable) invItem).getUses() > 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public boolean hasItem(Class<?> itemClass) {
-		for (ItemEntity invItem : this.inventory) {
-			if (itemClass.isInstance(invItem)) {
-				return true;
-			}
-		}
-		return false;
+		return player.interact(this); 
 	}
 
 	@Override
 	public boolean interact(Entity entity) {
-		if (!(entity instanceof Interactable)) {
-			return false;
+		if (entity instanceof Player) {
+			return move(this.getX() - ((Player) entity).getX(), this.getY() - ((Player) entity).getY());
 		}
-
-		return ((Interactable) entity).interact(this);
-
+		return false;
 	}
-
-	public ArrayList<ItemEntity> getInventory() {
-		return this.inventory;
-	}
-
-	public void removeItem(ItemEntity item) {
-		this.inventory.remove(item);
-	}
+	
 
 }

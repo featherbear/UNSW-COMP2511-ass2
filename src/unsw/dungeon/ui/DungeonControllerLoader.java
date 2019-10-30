@@ -13,16 +13,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.DungeonLoader;
 import unsw.dungeon.LoaderHook;
+import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
+
 
 /**
  * A DungeonLoader that also creates the necessary ImageViews for the UI,
@@ -46,7 +49,9 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	private Image swordImage;
 	private Image invincibilityPotionImage;
 	private Image portalImage;
-
+	private Image switchImage;
+	private Image boulderImage;
+	
 	public DungeonControllerLoader(String filename) throws FileNotFoundException {
 		super(filename);
 		this.entities = new ArrayList<>();
@@ -60,6 +65,9 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 		this.swordImage = new Image("/greatsword_1_new.png");
 		this.invincibilityPotionImage = new Image("/brilliant_blue_new.png");
 		this.portalImage = new Image("/portal.png");
+		this.switchImage = new Image("/pressure_plate.png");
+		this.boulderImage = new Image("/boulder.png");
+
 	}
 
 	@Override
@@ -78,6 +86,18 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	public void onLoad(Exit exit) {
 		ImageView view = new ImageView(exitImage);
 		addEntity(exit, view);
+	}
+	
+	@Override
+	public void onLoad(Boulder boulder) {
+		ImageView view = new ImageView(boulderImage);
+		addEntity(boulder, view);
+	}
+	
+	@Override
+	public void onLoad(Switch sw) {
+		ImageView view = new ImageView(switchImage);
+		addEntity(sw, view);
 	}
 
 	@Override
