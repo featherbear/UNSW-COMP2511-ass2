@@ -16,8 +16,13 @@
          </font>
       </Label>
       <ListView fx:id="levels" focusTraversable="false" onKeyPressed="#handleKeyPress" prefHeight="300.0" prefWidth="600.0" />
-      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" spacing="50.0">
          <children>
+            <Button fx:id="btnRandom" alignment="CENTER" mnemonicParsing="false" onAction="#random" text="RANDOM">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
             <Button fx:id="btnPlay" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#submit" text="PLAY">
                <font>
                   <Font name="System Bold" size="18.0" />

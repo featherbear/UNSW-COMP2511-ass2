@@ -3,6 +3,7 @@ package unsw.dungeon.ui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
@@ -18,6 +19,8 @@ public class LevelSelectController {
 
 	@FXML
 	private ListView<String> levels;
+
+	private List<String> levelNames; // Does not contain the extension
 
 	@FXML
 	private Button btnPlay;
@@ -39,8 +42,16 @@ public class LevelSelectController {
 
 	@FXML
 	public void initialize() {
-		List<String> levelFilenames = LevelSelectController.getLevels();
-		List<String> levelNames = levelFilenames.stream().map(s -> s.substring(0, s.length() - levelSuffix.length()))
+
+		File f = new File("dungeons");
+		File[] matchingFiles = f.listFiles((dir, name) -> name.endsWith(levelSuffix));
+
+		ArrayList<String> filenames = new ArrayList<String>();
+		for (File file : matchingFiles) {
+			filenames.add(file.getName());
+		}
+
+		this.levelNames = filenames.stream().map(s -> s.substring(0, s.length() - levelSuffix.length()))
 				.collect(Collectors.toList());
 		levels.getItems().setAll(levelNames);
 
@@ -60,21 +71,15 @@ public class LevelSelectController {
 	}
 
 	@FXML
-	private void submit() {
-		this.onLevelSelected.execute(this.selectedLevel + levelSuffix);
+	private void random() {
+		Random rand = new Random();
+		this.selectedLevel = this.levelNames.get(rand.nextInt(this.levelNames.size()));
+		this.submit();
 	}
 
-	public static List<String> getLevels() {
-
-		File f = new File("dungeons");
-		File[] matchingFiles = f.listFiles((dir, name) -> name.endsWith(levelSuffix));
-
-		ArrayList<String> levelFiles = new ArrayList<String>();
-		for (File file : matchingFiles) {
-			levelFiles.add(file.getName());
-		}
-
-		return levelFiles;
+	@FXML
+	private void submit() {
+		this.onLevelSelected.execute(this.selectedLevel + levelSuffix);
 	}
 
 }
