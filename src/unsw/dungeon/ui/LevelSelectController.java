@@ -79,6 +79,10 @@ public class LevelSelectController {
 
 	@FXML
 	private void submit() {
+		if (this.selectedLevel == null) {
+			return;
+		}
+
 		this.onLevelSelected.execute(this.selectedLevel + levelSuffix);
 	}
 
