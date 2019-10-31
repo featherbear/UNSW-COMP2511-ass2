@@ -2,6 +2,7 @@ package unsw.dungeon;
 
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
+import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -18,7 +19,15 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Player player) {
 
 	}
-
+	
+	@Override
+	public void onLoad(Enemy enemy) {
+		Dungeon d = enemy.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(enemy::enemyMoveEventHandler);
+	}
+	
+	
 	@Override
 	public void onLoad(Wall wall) {
 
@@ -40,7 +49,7 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Switch sw) {
 		Dungeon d = sw.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(sw::switchEnterIntentHandler);
+		p.moveEvent.register(sw::switchEnterEventHandler);
 	}
 
 	@Override
