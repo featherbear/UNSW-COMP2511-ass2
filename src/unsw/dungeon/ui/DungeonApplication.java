@@ -12,18 +12,39 @@ public class DungeonApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		primaryStage.setTitle("Dungeon");
 
-		DungeonControllerLoader dungeonLoader = new DungeonControllerLoader("boulders.json");
+		LevelSelectController levelSelectController = new LevelSelectController();
 
-		DungeonController controller = dungeonLoader.loadController();
+		FXMLLoader levelSelectLoader = new FXMLLoader(getClass().getResource("LevelSelect.fxml"));
+		levelSelectLoader.setController(levelSelectController);
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("DungeonView.fxml"));
-		loader.setController(controller);
-		Parent root = loader.load();
-		Scene scene = new Scene(root);
+		levelSelectController.onSelected((level) -> {
+			try {
+				DungeonController dungeonController = new DungeonControllerLoader(level).loadController();
+
+				FXMLLoader dungeonLoader = new FXMLLoader(getClass().getResource("DungeonView.fxml"));
+				dungeonLoader.setController(dungeonController);
+
+				Parent root = dungeonLoader.load();
+				Scene scene = new Scene(root);
+
+				root.requestFocus();
+				primaryStage.setScene(scene);
+				primaryStage.setTitle("Dungeon");
+
+			} catch (IOException e) {
+				// FileNotFoundExceptions _shouldn't_ happen, but other exceptions may happen
+				e.printStackTrace();
+			}
+
+		});
+
+		Parent root = levelSelectLoader.load();
+		Scene levelScene = new Scene(root);
 		root.requestFocus();
-		primaryStage.setScene(scene);
+		primaryStage.setScene(levelScene);
+
+		primaryStage.setTitle("Level Select | Dungeon");
 		primaryStage.show();
 
 	}
