@@ -24,7 +24,7 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Enemy enemy) {
 		Dungeon d = enemy.getDungeon();
 		Player p = d.getPlayer();
-		p.moveEvent.register(enemy::enemyMoveEventHandler);
+		p.moveIntent.register(enemy::enemyMoveIntentHandler);
 	}
 	
 	

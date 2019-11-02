@@ -17,18 +17,14 @@ public class Enemy extends MovableEntity implements Interactable{
 	}
 
 	private boolean isPositionBlocked(int x, int y) {
-		if (this.getDungeon().hasEntitiesAt(entityLevel.OBJECT, x, y)) {
-			if (this.getDungeon().whatEntityAt(entityLevel.OBJECT, x, y) != null) {
-				Entity e = this.getDungeon().whatEntityAt(entityLevel.OBJECT, x, y);
-				if (e instanceof Boulder) {
-					return false;
-				}
-			}
-		}
 		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
+	
+	private Entity whatsAt(int x, int y) {
+		return this.getDungeon().whatEntityAt(entityLevel.OBJECT, x, y);
+	}
 
-	private void move(int xDirection, int yDirection) {
+	private boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
 
@@ -38,14 +34,15 @@ public class Enemy extends MovableEntity implements Interactable{
 		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
 
 		if (!this.moveIntent.emit(e)) {
-			return;
+			return false;
 		}
 
 		if (isPositionBlocked(newX, newY)) {
-			return;
+			return false;
 		}
 
 		this.setXY(newX, newY);
+		return true;
 	}
 
 	public void setXY(int newX, int newY) {
@@ -66,20 +63,20 @@ public class Enemy extends MovableEntity implements Interactable{
 
 	}
 
-	public void moveUp() {
-		move(0, -1);
+	public boolean moveUp() {
+		return move(0, -1);
 	}
 
-	public void moveDown() {
-		move(0, 1);
+	public boolean moveDown() {
+		return move(0, 1);
 	}
 
-	public void moveLeft() {
-		move(-1, 0);
+	public boolean moveLeft() {
+		return move(-1, 0);
 	}
 
-	public void moveRight() {
-		move(1, 0);
+	public boolean moveRight() {
+		return move(1, 0);
 	}
 	
 	public void kill() {
@@ -87,10 +84,70 @@ public class Enemy extends MovableEntity implements Interactable{
 		this.getDungeon().removeEntity(this);
 	}
 	
+	public boolean roam(Player p) {
+		int X = p.getX() - this.getX();
+		int Y = p.getY() - this.getY();
+		boolean moveSuccess = false;
+		if (X > 0 && moveSuccess == false) {
+			moveSuccess = moveRight();
+		} 
+		
+		if (X < 0 && moveSuccess == false) {
+			moveSuccess = moveLeft();
+		}
+		
+		if (Y > 0 && moveSuccess == false) { 
+			moveSuccess = moveDown();
+		}
+		
+		if (Y < 0 && moveSuccess == false) {
+			moveSuccess = moveUp();
+		}
+		
+		return moveSuccess;
+	}
 	
+	public boolean flee(Player p) {
+		int X = p.getX() - this.getX();
+		int Y = p.getY() - this.getY();
+		boolean moveSuccess = false;
+		if (X > 0 && moveSuccess == false) {
+			moveSuccess = moveLeft();
+		} 
+		
+		if (X < 0 && moveSuccess == false) {
+			moveSuccess = moveRight();
+		}
+		
+		if (Y > 0 && moveSuccess == false) { 
+			moveSuccess = moveUp();
+		}
+		
+		if (Y < 0 && moveSuccess == false) {
+			moveSuccess = moveDown();
+		}
+		
+		return moveSuccess;
+	}
 	
-	public boolean enemyMoveEventHandler(Player player, LocationChanged event) {
-		return player.interact(this);
+
+	
+	public boolean enemyMoveIntentHandler(Player player, LocationChanged event) {
+		if (player.hasItemUsable(InvincibilityPotion.class)) {
+			flee(player);
+		} else {
+			roam(player);
+		}
+		
+		if (whatsAt(event.newX + 1, event.newY) instanceof Enemy || 
+			whatsAt(event.newX - 1, event.newY) instanceof Enemy ||
+			whatsAt(event.newX , event.newY + 1) instanceof Enemy || 
+			whatsAt(event.newX , event.newY - 1) instanceof Enemy) {
+			player.interact(this);
+		}
+		
+
+		return true;
 	}
 
 	@Override
@@ -104,6 +161,9 @@ public class Enemy extends MovableEntity implements Interactable{
 						((Sword) item).use(this);
 					}
 				}
+			} else {
+				// restart level when player is killed
+				//p.kill();
 			}
 		}
 		return true;
