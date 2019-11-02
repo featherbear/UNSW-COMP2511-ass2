@@ -6,6 +6,7 @@ import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
@@ -91,4 +92,14 @@ public class TestUtils {
 
 		return door;
 	}
+
+	Key Key(int x, int y) {
+		Key key = new Key(this.dungeon, x, y);
+
+		this.gameHooks.onLoad(key);
+		dungeon.addEntity(key);
+
+		return key;
+	}
+
 }
