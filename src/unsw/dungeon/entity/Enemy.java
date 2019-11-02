@@ -10,7 +10,7 @@ import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
 import unsw.dungeon.events.LocationChanged;
 
-public class Enemy extends MovableEntity implements Interactable {
+public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
 	public Enemy(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
