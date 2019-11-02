@@ -2,6 +2,7 @@ package unsw.dungeon.tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,11 @@ class US7Test {
 		Create = new TestUtils(dungeon);
 	}
 
-	// TODO: Goals
+	@Test
+	void goalUpdate() {
+		// TODO: Goals
+		fail();
+	}
 
 	@Test
 	void treasureRemovedOnPickup() {

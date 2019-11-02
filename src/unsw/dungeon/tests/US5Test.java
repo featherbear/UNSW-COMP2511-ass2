@@ -3,6 +3,7 @@ package unsw.dungeon.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,6 @@ class US5Test {
 		assertEquals(boulder.getX(), 3);
 		assertEquals(boulder.getY(), 1);
 
-		// TODO Switch event
 	}
 
 	@Test
@@ -63,6 +63,9 @@ class US5Test {
 
 		assertEquals(switchEntity.getX(), 3);
 		assertEquals(switchEntity.getY(), 1);
+
+		// TODO Switch event
+		fail();
 	}
 
 	@Test
