@@ -95,6 +95,10 @@ public class GameHooks implements LoaderHook {
 		Dungeon d = potion.getDungeon();
 		Player p = d.getPlayer();
 		p.moveEvent.register(potion.LocationChangedHandler);
+
+		potion.pickupEvent.register(() -> {
+			p.moveEvent.register(potion.playerMoveEventHandler);
+		});
 	}
 
 	@Override

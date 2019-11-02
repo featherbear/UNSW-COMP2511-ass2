@@ -8,16 +8,21 @@ import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.ItemUsed;
 import unsw.dungeon.events.LocationChanged;
 import unsw.dungeon.util.emitter.EventEmitter;
+import unsw.dungeon.util.emitter.EventSAM;
 
 public class InvincibilityPotion extends ItemEntity implements Usable {
 
 	private int timer;
 	private EventEmitter<InvincibilityPotion, ItemUsed> itemUsed;
+	public final EventSAM<Player, LocationChanged> playerMoveEventHandler;
 
 	public InvincibilityPotion(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.ITEM, x, y);
 		this.timer = 10;
 		this.itemUsed = new EventEmitter<InvincibilityPotion, ItemUsed>(this);
+		this.playerMoveEventHandler = (player, event) -> {
+			itemUsed().emit(new ItemUsed(this.timer, --this.timer));
+		};
 	}
 
 	@Override
@@ -48,7 +53,4 @@ public class InvincibilityPotion extends ItemEntity implements Usable {
 		return this.itemUsed;
 	}
 
-	public void playerMoveEvent(Player p, LocationChanged event) {
-		itemUsed().emit(new ItemUsed(this.timer, --this.timer));
-	}
 }
