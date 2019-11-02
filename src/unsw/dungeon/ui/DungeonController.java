@@ -87,6 +87,10 @@ public class DungeonController {
 		}
 	}
 
+	public Dungeon getDungeon() {
+		return this.dungeon;
+	}
+
 	public void onRestart(GenericSAM event) {
 		this.onRestart = event;
 	}

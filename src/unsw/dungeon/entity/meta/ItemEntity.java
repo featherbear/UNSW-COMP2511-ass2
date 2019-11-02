@@ -3,11 +3,11 @@ package unsw.dungeon.entity.meta;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.events.LocationChanged;
-import unsw.dungeon.util.emitter.Event;
+import unsw.dungeon.util.emitter.EventSAM;
 
 public abstract class ItemEntity extends Entity {
 
-	public Event<Player, LocationChanged> LocationChangedHandler;
+	public EventSAM<Player, LocationChanged> LocationChangedHandler;
 
 	public ItemEntity(Dungeon dungeon, EntityLevel entityLevel, int x, int y) {
 		super(dungeon, entityLevel, x, y);
