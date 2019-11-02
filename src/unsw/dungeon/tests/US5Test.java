@@ -1,7 +1,8 @@
 package unsw.dungeon.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Wall;
-import unsw.dungeon.entity.meta.Entity;
 
 class US5Test {
 
@@ -110,11 +110,7 @@ class US5Test {
 		assertEquals(boulder.getY(), 1);
 
 		// Enemy should die
-		for (Entity e : dungeon.getEntities()) {
-			if (e == enemy) {
-				fail();
-			}
-		}
+		assertFalse(dungeon.getEntities().contains(enemy));
 	}
 
 	@Test
@@ -130,13 +126,7 @@ class US5Test {
 		assertEquals(boulder.getX(), 3);
 		assertEquals(boulder.getY(), 1);
 
-		for (Entity e : dungeon.getEntities()) {
-			if (e == sword) {
-				return;
-			}
-		}
-
-		fail();
+		assertTrue(dungeon.getEntities().contains(sword));
 	}
 
 	@Test

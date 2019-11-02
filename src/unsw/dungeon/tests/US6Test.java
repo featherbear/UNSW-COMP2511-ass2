@@ -3,7 +3,6 @@ package unsw.dungeon.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
-import unsw.dungeon.entity.meta.ItemEntity;
 
 class US6Test {
 
@@ -99,12 +97,6 @@ class US6Test {
 		assertEquals(player.getX(), 3);
 		assertEquals(player.getY(), 1);
 
-		// Enemy should die
-		for (ItemEntity e : player.getInventory()) {
-			if (e == key) {
-				fail();
-			}
-		}
 	}
 
 	@Test
@@ -115,31 +107,13 @@ class US6Test {
 		Key key = Create.Key(3, 3);
 		key.setID(1);
 
-		for (ItemEntity e : player.getInventory()) {
-			if (e == key) {
-				fail();
-			}
-		}
-
+		assertFalse(player.getInventory().contains(key));
 		player.pickUp(key);
-
-		boolean hasKey = false;
-		for (ItemEntity e : player.getInventory()) {
-			if (e == key) {
-				hasKey = true;
-			}
-		}
-		assertTrue(hasKey);
+		assertTrue(player.getInventory().contains(key));
 
 		player.interact(door);
-
 		assertTrue(door.getOpen());
-
-		for (ItemEntity e : player.getInventory()) {
-			if (e == key) {
-				fail();
-			}
-		}
+		assertFalse(player.getInventory().contains(key));
 
 	}
 
@@ -152,20 +126,10 @@ class US6Test {
 		key2.setID(2);
 
 		player.moveRight();
-		boolean hasKey = false;
-		for (ItemEntity e : player.getInventory()) {
-			if (e == key1) {
-				hasKey = true;
-			}
-		}
-		assertTrue(hasKey);
+		assertTrue(player.getInventory().contains(key1));
 
 		player.moveRight();
-		for (ItemEntity e : player.getInventory()) {
-			if (e == key2) {
-				fail();
-			}
-		}
+		assertFalse(player.getInventory().contains(key2));
 
 	}
 
@@ -175,7 +139,6 @@ class US6Test {
 		assertTrue(key.getVisibility());
 		player.pickUp(key);
 		assertFalse(key.getVisibility());
-
 	}
 
 }
