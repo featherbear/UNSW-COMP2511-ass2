@@ -8,16 +8,13 @@ import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
+import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.LocationChanged;
 
-public class Enemy extends MovableEntity implements Interactable {
+public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
 	public Enemy(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
-	}
-
-	private boolean isPositionBlocked(int x, int y) {
-		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
 
 	private boolean move(int xDirection, int yDirection) {
@@ -126,7 +123,28 @@ public class Enemy extends MovableEntity implements Interactable {
 		return true;
 	}
 
-	public void enemyMoveEventHandler(Player player, LocationChanged event) {
+	@Override
+	public boolean interact(Entity entity) {
+		if (entity instanceof Player) {
+			Player p = (Player) entity;
+
+			List<ItemEntity> inv = p.getInventory();
+			for (ItemEntity item : inv) {
+				if (item instanceof Usable) {
+					boolean result = ((Usable) item).use(this);
+					if (result) {
+						return true;
+					}
+				}
+			}
+
+			p.kill();
+		}
+
+		return false;
+	}
+
+	public void playerMoveEventHandler(Player player, LocationChanged event) {
 		if (player.hasItemUsable(InvincibilityPotion.class)) {
 			flee(player);
 		} else {
@@ -134,29 +152,10 @@ public class Enemy extends MovableEntity implements Interactable {
 		}
 	}
 
-	public boolean enemyMoveIntentHandler(Player player, LocationChanged event) {
+	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
 		return player.interact(this);
 	}
-
-	@Override
-	public boolean interact(Entity entity) {
-		if (entity instanceof Player) {
-			Player p = (Player) entity;
-			if (p.hasItemUsable(Sword.class)) {
-				List<ItemEntity> inv = p.getInventory();
-				for (ItemEntity item : inv) {
-					if (item instanceof Sword) {
-						((Sword) item).use(this);
-					}
-				}
-			} else {
-				p.kill();
-			}
-		}
-		return true;
-	}
-
 }

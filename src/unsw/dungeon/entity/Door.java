@@ -19,35 +19,62 @@ public class Door extends Entity implements Interactable {
 		this.opened = new SimpleBooleanProperty(false);
 		this.id = -1;
 
+		// Change entityLevel to FLOOR when opened, or OBJECT when closed
 		this.opened.addListener((observer, oldValue, newValue) -> {
 			this.entityLevel = newValue ? EntityLevel.FLOOR : EntityLevel.OBJECT;
 		});
 	}
 
+	/**
+	 * @return Door's open status
+	 */
 	public boolean getOpen() {
 		return this.opened.get();
 	}
 
+	/**
+	 * @return BooleanProperty for the door's open status
+	 */
 	public BooleanProperty opened() {
 		return this.opened;
 	}
 
+	/**
+	 * Open/unlock the door
+	 */
 	public void open() {
 		this.opened.set(true);
 	}
 
+	/**
+	 * Close/lock the door
+	 */
 	public void close() {
 		this.opened.set(false);
 	}
 
+	/**
+	 * Set the ID for the door
+	 * 
+	 * @param id
+	 */
 	public void setID(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return ID of the door
+	 */
 	public int getID() {
 		return this.id;
 	}
 
+	/**
+	 * Interact with the player
+	 * 
+	 * @param player
+	 * @return result
+	 */
 	public boolean interact(Player player) {
 		for (ItemEntity item : player.getInventory()) {
 			if (item instanceof Key) {
@@ -59,10 +86,17 @@ public class Door extends Entity implements Interactable {
 		return false;
 	}
 
+	/**
+	 * Unlock the door if the right key is given
+	 * 
+	 * @param key
+	 * @return result
+	 */
 	public boolean interact(Key key) {
 		if (key.getID() != getID()) {
 			return false;
 		}
+
 		this.open();
 		return true;
 	}
@@ -87,11 +121,12 @@ public class Door extends Entity implements Interactable {
 
 	}
 
-	public boolean doorEnterIntentHandler(Player player, LocationChanged event) {
+	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
 
+		// Return true if the door is already opened
 		if (this.getOpen()) {
 			return true;
 		}

@@ -33,7 +33,7 @@ public class Switch extends Entity {
 		this.activated.set(false);
 	}
 
-	public void switchEnterEventHandler(Player player, LocationChanged event) {
+	public void playerMoveEventHandler(Player player, LocationChanged event) {
 		Entity e = this.getDungeon().getEntityAt(EntityLevel.OBJECT, this.getX(), this.getY());
 		if (e != null) {
 			if (e instanceof Boulder || e instanceof Player) {
