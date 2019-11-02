@@ -20,10 +20,6 @@ public class Enemy extends MovableEntity implements Interactable {
 		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
 
-	private Entity whatsAt(int x, int y) {
-		return this.getDungeon().getEntityAt(entityLevel.OBJECT, x, y);
-	}
-
 	private boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
@@ -130,19 +126,19 @@ public class Enemy extends MovableEntity implements Interactable {
 		return true;
 	}
 
-	public boolean enemyMoveIntentHandler(Player player, LocationChanged event) {
+	public void enemyMoveEventHandler(Player player, LocationChanged event) {
 		if (player.hasItemUsable(InvincibilityPotion.class)) {
-			System.out.println("Enemy will flee");
-			return flee(player);
+			flee(player);
+		} else {
+			roam(player);
 		}
+	}
 
-		if (whatsAt(event.newX + 1, event.newY) instanceof Enemy || whatsAt(event.newX - 1, event.newY) instanceof Enemy
-				|| whatsAt(event.newX, event.newY + 1) instanceof Enemy
-				|| whatsAt(event.newX, event.newY - 1) instanceof Enemy) {
-			player.interact(this);
+	public boolean enemyMoveIntentHandler(Player player, LocationChanged event) {
+		if (this.getX() != event.newX || this.getY() != event.newY) {
+			return true;
 		}
-
-		return roam(player);
+		return player.interact(this);
 	}
 
 	@Override
