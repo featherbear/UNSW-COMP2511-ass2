@@ -13,10 +13,13 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 	}
 
-	private boolean isPositionBlocked(int x, int y) {
-		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
-	}
-
+	/**
+	 * Attempt to move the Boulder by the given offsets
+	 * 
+	 * @param xDirection
+	 * @param yDirection
+	 * @return result
+	 */
 	private boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
@@ -30,11 +33,15 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 			return false;
 		}
 
+		// If there is an entity blocking the path...
 		if (isPositionBlocked(newX, newY)) {
 			Entity obstruction = this.getDungeon().getEntityAt(EntityLevel.OBJECT, newX, newY);
+
+			// Kill the enemy if they are in the way
 			if (obstruction instanceof Enemy) {
 				((Enemy) obstruction).kill();
 			} else {
+				// Otherwise, prevent movement
 				return false;
 			}
 		}
@@ -43,6 +50,12 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 		return true;
 	}
 
+	/**
+	 * Set the X and Y positions of the Boulder
+	 * 
+	 * @param newX
+	 * @param newY
+	 */
 	public void setXY(int newX, int newY) {
 		int oldX = getX();
 		int oldY = getY();
@@ -61,20 +74,44 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 
 	}
 
+	/**
+	 * Move the boulder up
+	 */
 	public void moveUp() {
 		move(0, -1);
 	}
 
+	/**
+	 * Move the boulder down
+	 */
 	public void moveDown() {
 		move(0, 1);
 	}
 
+	/**
+	 * Move the boulder left
+	 */
 	public void moveLeft() {
 		move(-1, 0);
 	}
 
+	/**
+	 * Move the boulder right
+	 */
 	public void moveRight() {
 		move(1, 0);
+	}
+
+	/**
+	 * Interact with the Player
+	 */
+	@Override
+	public boolean interact(Entity entity) {
+		if (!(entity instanceof Player)) {
+			return false;
+		}
+
+		return move(this.getX() - ((Player) entity).getX(), this.getY() - ((Player) entity).getY());
 	}
 
 	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
@@ -82,14 +119,6 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 			return true;
 		}
 		return player.interact(this);
-	}
-
-	@Override
-	public boolean interact(Entity entity) {
-		if (entity instanceof Player) {
-			return move(this.getX() - ((Player) entity).getX(), this.getY() - ((Player) entity).getY());
-		}
-		return false;
 	}
 
 }
