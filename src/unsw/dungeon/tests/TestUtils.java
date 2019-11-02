@@ -10,6 +10,7 @@ import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
+import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 
 public class TestUtils {
@@ -100,6 +101,15 @@ public class TestUtils {
 		dungeon.addEntity(key);
 
 		return key;
+	}
+
+	Treasure Treasure(int x, int y) {
+		Treasure treasure = new Treasure(this.dungeon, x, y);
+
+		this.gameHooks.onLoad(treasure);
+		dungeon.addEntity(treasure);
+
+		return treasure;
 	}
 
 }
