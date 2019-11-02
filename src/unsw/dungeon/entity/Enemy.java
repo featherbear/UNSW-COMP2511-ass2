@@ -104,7 +104,7 @@ public class Enemy extends MovableEntity implements Interactable{
 			moveSuccess = moveUp();
 		}
 		
-		return moveSuccess;
+		return true;
 	}
 	
 	public boolean flee(Player p) {
@@ -127,7 +127,7 @@ public class Enemy extends MovableEntity implements Interactable{
 			moveSuccess = moveDown();
 		}
 		
-		return moveSuccess;
+		return true;
 	}
 	
 
@@ -135,8 +135,6 @@ public class Enemy extends MovableEntity implements Interactable{
 	public boolean enemyMoveIntentHandler(Player player, LocationChanged event) {
 		if (player.hasItemUsable(InvincibilityPotion.class)) {
 			flee(player);
-		} else {
-			roam(player);
 		}
 		
 		if (whatsAt(event.newX + 1, event.newY) instanceof Enemy || 
@@ -147,7 +145,7 @@ public class Enemy extends MovableEntity implements Interactable{
 		}
 		
 
-		return true;
+		return roam(player);
 	}
 
 	@Override
@@ -162,8 +160,7 @@ public class Enemy extends MovableEntity implements Interactable{
 					}
 				}
 			} else {
-				// restart level when player is killed
-				//p.kill();
+				p.kill();
 			}
 		}
 		return true;

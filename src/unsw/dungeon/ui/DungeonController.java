@@ -60,6 +60,9 @@ public class DungeonController {
 
 	@FXML
 	public void handleKeyPress(KeyEvent event) {
+		if (!player.getVisibility()) {
+			this.restart();
+		}
 		switch (event.getCode()) {
 		case UP:
 			player.moveUp();
