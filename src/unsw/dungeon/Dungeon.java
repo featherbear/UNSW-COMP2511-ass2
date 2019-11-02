@@ -5,6 +5,7 @@ package unsw.dungeon;
 
 import java.util.ArrayList;
 
+import unsw.dungeon.entity.Goals;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
@@ -26,14 +27,15 @@ public class Dungeon {
 	private int width, height;
 	private ArrayList<Entity> entities;
 	private Player player;
+	private Goals goal;
 
 	public Dungeon(int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.entities = new ArrayList<>();
 		this.player = null;
-
 		this.finishEvent = new GenericEmitter();
+		this.goal = null;
 	}
 
 	/**
@@ -113,6 +115,9 @@ public class Dungeon {
 	 * @return Entity
 	 */
 	public Entity getEntityAt(EntityLevel entityLevel, int x, int y) {
+	public void addGoal(Goals goal) {
+		this.goal = goal;
+	}
 		for (Entity entity : Entity.filter(this.entities, x, y)) {
 			if (entity.getEntityLevel() == entityLevel) {
 				return entity;

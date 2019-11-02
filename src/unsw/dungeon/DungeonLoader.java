@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -12,6 +13,7 @@ import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.Goals;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
@@ -21,6 +23,7 @@ import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
+import unsw.dungeon.entity.meta.GoalCondition;
 
 
 /**
@@ -54,6 +57,7 @@ public class DungeonLoader {
 		dungeon.setPlayer(new Player(dungeon, 0, 0));
 
 		JSONArray jsonEntities = json.getJSONArray("entities");
+		JSONObject jsonGoals = (JSONObject) json.get("goal-condition");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
 		loaders.addHook(new GameHooks());
@@ -67,6 +71,32 @@ public class DungeonLoader {
 			} catch (Error e) {
 				System.out.println(e);
 			}
+		}
+		GoalCondition cond = null;
+		JSONArray subgoals = null;
+		String type;
+		ArrayList<Class> objectives = new ArrayList<Class>();
+		try {
+			subgoals = jsonGoals.getJSONArray("subgoals");
+			type = jsonGoals.getString("goal");
+			switch (type) {
+			case "AND":
+				cond = GoalCondition.COMPOSITE;
+			default: //OR
+				cond = GoalCondition.OR;
+			}
+			
+			for (int i = 0; i < subgoals.length(); i++) {
+				try {
+					objectives = loadGoals(subgoals.getJSONObject(i));
+				} catch (Error e) {
+					System.out.println(e);
+				}
+			}
+			dungeon.addGoal(new Goals(dungeon, cond, objectives));
+			
+		} catch (JSONException e) {
+			dungeon.addGoal(loadGoals(dungeon, jsonGoals, loaders));
 		}
 
 		loaders.postLoad(dungeon);
@@ -154,6 +184,64 @@ public class DungeonLoader {
 			throw new Error("Could not load JSON for object type " + type);
 		}
 
+	}
+	
+	private Goals loadGoals(Dungeon dungeon, JSONObject json, LoaderHook loaders) {
+		GoalCondition c = null;
+		ArrayList<Class> subgoals = new ArrayList<Class>();
+		String goals = json.getString("goal");
+		
+		switch(goals) {
+		case "AND":
+			c = GoalCondition.COMPOSITE;
+			break;
+		case "OR":
+			c = GoalCondition.OR;
+			break;
+		
+		case "enemies":
+			subgoals.add(Enemy.class);
+			break;
+			
+		case "treasure":
+			subgoals.add(Treasure.class);
+			break;
+		
+		case "exit":
+			subgoals.add(Exit.class);
+			break;
+			
+		default:
+			break;
+		}
+		
+		Goals g = new Goals(dungeon, c, subgoals);
+		return g;
+	}
+	
+	private ArrayList<Class> loadGoals(JSONObject json){
+		ArrayList<Class> subgoals = new ArrayList<Class>();
+		String goals = json.getString("goal");
+		switch("goal") {
+		
+		case "enemies":
+			subgoals.add(Enemy.class);
+			break;
+			
+		case "treasure":
+			subgoals.add(Treasure.class);
+			break;
+		
+		case "exit":
+			subgoals.add(Exit.class);
+			break;
+			
+		default:
+			break;
+			
+		}
+		
+		return subgoals;
 	}
 };
 
@@ -265,4 +353,5 @@ class LoaderComposite implements LoaderHook {
 			hook.postLoad(dungeon);
 		}
 	}
+
 }
