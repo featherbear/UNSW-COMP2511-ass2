@@ -32,9 +32,9 @@ public class Switch extends Entity {
 	public void deactivate() {
 		this.activated.set(false);
 	}
-	
-	public boolean switchEnterEventHandler(Player player, LocationChanged event) {
-		Entity e = this.getDungeon().whatEntityAt(entityLevel.OBJECT, this.getX(), this.getY());
+
+	public void switchEnterEventHandler(Player player, LocationChanged event) {
+		Entity e = this.getDungeon().whatEntityAt(EntityLevel.OBJECT, this.getX(), this.getY());
 		if (e != null) {
 			if (e instanceof Boulder || e instanceof Player) {
 				activate();
