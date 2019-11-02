@@ -1,7 +1,6 @@
 package unsw.dungeon.entity;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -34,34 +33,30 @@ public class Portal extends Entity implements Interactable {
 		Player player = (Player) entity;
 
 		ArrayList<Entity> portals = Entity.filter(this.getDungeon().getEntities(), Portal.class);
-		ArrayList<Portal> matchingPortals = new ArrayList<Portal>();
+
+		Portal matchingPortal = null;
+
 		for (Entity obj : portals) {
 			Portal portal = (Portal) obj;
-			if (portal == this) {
-				continue;
-			}
-			if (portal.id == this.id) {
-				matchingPortals.add(portal);
+			if (portal.id == this.id && portal != this) {
+				matchingPortal = portal;
+				break;
 			}
 		}
 
-		if (matchingPortals.size() == 0) {
+		if (matchingPortal == null) {
+			System.out.println(String.format("No other portals with ID %d exist!", this.id));
 			return false;
 		}
 
 		// Teleport the player to the destination portal
-		Portal destination = matchingPortals.get(new Random().nextInt(matchingPortals.size()));
+		int newX = matchingPortal.getX();
+		int newY = matchingPortal.getY();
 
-		// Do the teleport
-		int newX = destination.getX();
-		int newY = destination.getY();
-
-//		ArrayList<Entity> objectEntitiesAtNewLocation = Entity.filter(Entity.filter(this.getDungeon().getEntities(), newX, newY), EntityLevel.OBJECT);
-//		for (Entity objectEntity : objectEntitiesAtNewLocation) {
-//			if (objectEntity instanceof Enemy) {
-//				((Enemy) objectEntity).kill();
-//			}
-//		}
+		Entity obstruction = this.getDungeon().whatEntityAt(EntityLevel.OBJECT, newX, newY);
+		if (obstruction instanceof Enemy) {
+			((Enemy) obstruction).kill();
+		}
 
 		player.setXY(newX, newY);
 

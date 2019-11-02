@@ -36,6 +36,11 @@ public class DungeonController {
 	public DungeonController(Dungeon dungeon, List<EntityImagePair> entities) {
 		this.dungeon = dungeon;
 		this.player = dungeon.getPlayer();
+		this.player.alive().addListener((observable, oldValue, newValue) -> {
+			if (newValue == false) {
+				this.restart();
+			}
+		});
 		this.entities = new ArrayList<EntityImagePair>(entities);
 	}
 
@@ -85,6 +90,10 @@ public class DungeonController {
 		if (this.onRestart != null) {
 			this.onRestart.execute();
 		}
+	}
+
+	public Dungeon getDungeon() {
+		return this.dungeon;
 	}
 
 	public void onRestart(GenericSAM event) {

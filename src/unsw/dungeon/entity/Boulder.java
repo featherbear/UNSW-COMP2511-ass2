@@ -7,16 +7,16 @@ import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.MovableEntity;
 import unsw.dungeon.events.LocationChanged;
 
-public class Boulder extends MovableEntity<Boulder> implements Interactable{
+public class Boulder extends MovableEntity<Boulder> implements Interactable {
 
 	public Boulder(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 	}
-	
+
 	private boolean isPositionBlocked(int x, int y) {
 		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
-	
+
 	private boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
@@ -31,7 +31,12 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable{
 		}
 
 		if (isPositionBlocked(newX, newY)) {
-			return false;
+			Entity obstruction = this.getDungeon().whatEntityAt(EntityLevel.OBJECT, newX, newY);
+			if (obstruction instanceof Enemy) {
+				((Enemy) obstruction).kill();
+			} else {
+				return false;
+			}
 		}
 
 		this.setXY(newX, newY);
@@ -55,7 +60,7 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable{
 		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
 
 	}
-	
+
 	public void moveUp() {
 		move(0, -1);
 	}
@@ -76,7 +81,7 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable{
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
-		return player.interact(this); 
+		return player.interact(this);
 	}
 
 	@Override
@@ -86,6 +91,5 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable{
 		}
 		return false;
 	}
-	
 
 }

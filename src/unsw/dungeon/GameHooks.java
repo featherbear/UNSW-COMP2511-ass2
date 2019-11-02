@@ -2,6 +2,7 @@ package unsw.dungeon;
 
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
+import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -18,7 +19,15 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Player player) {
 
 	}
-
+	
+	@Override
+	public void onLoad(Enemy enemy) {
+		Dungeon d = enemy.getDungeon();
+		Player p = d.getPlayer();
+		p.moveIntent.register(enemy::enemyMoveIntentHandler);
+	}
+	
+	
 	@Override
 	public void onLoad(Wall wall) {
 
@@ -26,21 +35,23 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-
+		Dungeon d = exit.getDungeon();
+		Player p = d.getPlayer();
+		p.moveIntent.register(exit::exitMoveIntentHandler);
 	}
-	
+
 	@Override
 	public void onLoad(Boulder boulder) {
 		Dungeon d = boulder.getDungeon();
 		Player p = d.getPlayer();
 		p.moveIntent.register(boulder::boulderMoveIntentHandler);
 	}
-	
+
 	@Override
 	public void onLoad(Switch sw) {
 		Dungeon d = sw.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(sw::switchEnterIntentHandler);
+		p.moveEvent.register(sw::switchEnterEventHandler);
 	}
 
 	@Override
@@ -89,5 +100,8 @@ public class GameHooks implements LoaderHook {
 	@Override
 	public void postLoad(Dungeon dungeon) {
 		System.out.println("Dungeon load complete");
+		dungeon.finishEvent.register(() -> {
+			System.out.println("Player has won!");
+		});
 	}
 }
