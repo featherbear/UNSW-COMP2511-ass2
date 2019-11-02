@@ -1,5 +1,6 @@
 package unsw.dungeon.ui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -10,22 +11,59 @@ import javafx.stage.Stage;
 
 public class DungeonApplication extends Application {
 
+	private DungeonControllerLoader dungeonControllerLoader;
+
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		primaryStage.setTitle("Dungeon");
 
-		DungeonControllerLoader dungeonLoader = new DungeonControllerLoader("advanced.json");
+		LevelSelectController levelSelectController = new LevelSelectController();
 
-		DungeonController controller = dungeonLoader.loadController();
+		FXMLLoader levelSelectLoader = new FXMLLoader(getClass().getResource("LevelSelect.fxml"));
+		levelSelectLoader.setController(levelSelectController);
 
+		levelSelectController.onSelected((level) -> {
+
+			try {
+				this.dungeonControllerLoader = new DungeonControllerLoader(level);
+				setGame(primaryStage);
+				primaryStage.setTitle("Dungeon");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+		});
+
+		Parent root = levelSelectLoader.load();
+		Scene levelScene = new Scene(root);
+		root.requestFocus();
+		primaryStage.setScene(levelScene);
+
+		primaryStage.setTitle("Level Select | Dungeon");
+		primaryStage.show();
+
+	}
+
+	private DungeonController setGame(Stage primaryStage) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("DungeonView.fxml"));
+
+		DungeonController controller = dungeonControllerLoader.loadController();
 		loader.setController(controller);
-		Parent root = loader.load();
+
+		Parent root = null;
+
+		try {
+			root = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		Scene scene = new Scene(root);
 		root.requestFocus();
 		primaryStage.setScene(scene);
-		primaryStage.show();
 
+		controller.onRestart(() -> setGame(primaryStage));
+
+		return controller;
 	}
 
 	public static void main(String[] args) {
