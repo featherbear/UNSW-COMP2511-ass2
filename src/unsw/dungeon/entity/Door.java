@@ -15,7 +15,7 @@ public class Door extends Entity implements Interactable {
 	private int id;
 
 	public Door(Dungeon dungeon, int x, int y) {
-		super(dungeon, EntityLevel.FLOOR, x, y);
+		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.opened = new SimpleBooleanProperty(false);
 		this.id = -1;
 	}
@@ -30,10 +30,12 @@ public class Door extends Entity implements Interactable {
 
 	public void open() {
 		this.opened.set(true);
+		this.entityLevel = EntityLevel.FLOOR;
 	}
 
 	public void close() {
 		this.opened.set(false);
+		this.entityLevel = EntityLevel.OBJECT;
 	}
 
 	public void setID(int id) {
