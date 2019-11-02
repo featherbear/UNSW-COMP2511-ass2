@@ -6,6 +6,7 @@ import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Switch;
@@ -112,4 +113,12 @@ public class TestUtils {
 		return treasure;
 	}
 
+	InvincibilityPotion InvincibilityPotion(int x, int y) {
+		InvincibilityPotion invincibilityPotion = new InvincibilityPotion(this.dungeon, x, y);
+
+		this.gameHooks.onLoad(invincibilityPotion);
+		dungeon.addEntity(invincibilityPotion);
+
+		return invincibilityPotion;
+	}
 }
