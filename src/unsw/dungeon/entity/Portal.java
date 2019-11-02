@@ -89,7 +89,7 @@ public class Portal extends Entity implements Interactable {
 
 	}
 
-	public boolean portalEnterIntentHandler(Player player, LocationChanged event) {
+	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}

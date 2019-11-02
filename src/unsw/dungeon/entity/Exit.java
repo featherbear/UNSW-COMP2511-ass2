@@ -29,7 +29,7 @@ public class Exit extends Entity implements Interactable {
 		return true;
 	}
 
-	public boolean exitMoveIntentHandler(Player player, LocationChanged event) {
+	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
