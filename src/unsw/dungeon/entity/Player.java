@@ -110,6 +110,16 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		}
 
 		this.inventory.add(item);
+
+		// Register Usable items
+		if (item instanceof Usable) {
+			((Usable) item).itemUsed().register((itemObj, evt) -> {
+				if (evt.newValue == 0) {
+					this.removeItem(item);
+				}
+			});
+		}
+
 		item.visibility().set(false);
 		return true;
 	}
