@@ -62,6 +62,7 @@ public class DungeonApplication extends Application {
 		primaryStage.setScene(scene);
 
 		controller.onRestart(() -> setGame(primaryStage));
+		controller.restartEvent.register(() -> setGame(primaryStage));
 		controller.getDungeon().finishEvent.register(() -> {
 
 			try {
