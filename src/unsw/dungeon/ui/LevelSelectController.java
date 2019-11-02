@@ -65,9 +65,9 @@ public class LevelSelectController {
 	private void handleKeyPress(KeyEvent event) {
 		if (event.getCode() == KeyCode.ENTER) {
 			if (this.getSelectedLevel() != null) {
-				submit();
-			}
+			submit();
 		}
+	}
 	}
 
 	@FXML
