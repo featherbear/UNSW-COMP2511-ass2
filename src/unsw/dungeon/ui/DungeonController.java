@@ -36,6 +36,11 @@ public class DungeonController {
 	public DungeonController(Dungeon dungeon, List<EntityImagePair> entities) {
 		this.dungeon = dungeon;
 		this.player = dungeon.getPlayer();
+		this.player.alive().addListener((observable, oldValue, newValue) -> {
+			if (newValue == false) {
+				this.restart();
+			}
+		});
 		this.entities = new ArrayList<EntityImagePair>(entities);
 	}
 
@@ -60,9 +65,6 @@ public class DungeonController {
 
 	@FXML
 	public void handleKeyPress(KeyEvent event) {
-		if (!player.getVisibility()) {
-			this.restart();
-		}
 		switch (event.getCode()) {
 		case UP:
 			player.moveUp();
