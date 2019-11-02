@@ -20,16 +20,6 @@ public abstract class ItemEntity extends Entity {
 			if (this.getX() == event.newX && this.getY() == event.newY) {
 				if (player.pickUp(this)) {
 
-					// Register Usable items
-					if (this instanceof Usable) {
-						((Usable) this).itemUsed().register((item, evt) -> {
-							System.out.println("Item used! " + evt.newValue);
-							if (evt.newValue == 0) {
-								player.removeItem(this);
-							}
-						});
-					}
-
 					// Unregister the pickup event after it has been picked up
 					player.moveEvent.unregister(this.LocationChangedHandler);
 				}
