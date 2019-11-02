@@ -26,21 +26,23 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-
+		Dungeon d = exit.getDungeon();
+		Player p = d.getPlayer();
+		p.moveIntent.register(exit::exitMoveIntentHandler);
 	}
-	
+
 	@Override
 	public void onLoad(Boulder boulder) {
 		Dungeon d = boulder.getDungeon();
 		Player p = d.getPlayer();
 		p.moveIntent.register(boulder::boulderMoveIntentHandler);
 	}
-	
+
 	@Override
 	public void onLoad(Switch sw) {
 		Dungeon d = sw.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(sw::switchEnterIntentHandler);
+		p.moveEvent.register(sw::switchEnterEventHandler);
 	}
 
 	@Override
@@ -89,5 +91,8 @@ public class GameHooks implements LoaderHook {
 	@Override
 	public void postLoad(Dungeon dungeon) {
 		System.out.println("Dungeon load complete");
+		dungeon.finishEvent.register(() -> {
+			System.out.println("Player has won!");
+		});
 	}
 }

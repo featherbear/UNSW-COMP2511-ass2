@@ -193,10 +193,11 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	 * loaded entities.
 	 * 
 	 * @return
-	 * @throws FileNotFoundException
 	 */
-	public DungeonController loadController() throws FileNotFoundException {
-		return new DungeonController(load(this), entities);
+	public DungeonController loadController() {
+		DungeonController controller = new DungeonController(load(this), entities);
+		this.entities = new ArrayList<>();
+		return controller;
 	}
 
 }
