@@ -36,39 +36,82 @@ public class Dungeon {
 		this.finishEvent = new GenericEmitter();
 	}
 
+	/**
+	 * @return Dungeon width
+	 */
 	public int getWidth() {
 		return width;
 	}
 
+	/**
+	 * @return Dungeon height
+	 */
 	public int getHeight() {
 		return height;
 	}
 
+	/**
+	 * Check if a position is valid within the dungeon
+	 * 
+	 * @param x
+	 * @param y
+	 * @return boolean
+	 */
 	public boolean positionIsValid(int x, int y) {
 		return !(y < 0 || y >= this.height || x < 0 || x >= this.width);
 	}
 
+	/**
+	 * @return The player object in the dungeon
+	 */
 	public Player getPlayer() {
 		return player;
 	}
 
+	/**
+	 * Set the player object in the dungeon
+	 * 
+	 * @param player
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
+	/**
+	 * Add an entity into the dungeon
+	 * 
+	 * @param entity
+	 */
 	public void addEntity(Entity entity) {
 		entities.add(entity);
 	}
-	
+
+	/**
+	 * Remove an entity from the dungeon
+	 * 
+	 * @param entity
+	 */
 	public void removeEntity(Entity entity) {
 		entities.remove(entity);
 	}
 
+	/**
+	 * Get the entities in the dungeon
+	 * 
+	 * @return
+	 */
 	public ArrayList<Entity> getEntities() {
 		return this.entities;
 	}
-	
-	public Entity whatEntityAt (EntityLevel entityLevel, int x, int y){
+
+	/**
+	 * Get the first entity of a given level in the given coordinates
+	 * 
+	 * @param entityLevel
+	 * @param x
+	 * @param y
+	 * @return Entity
+	 */
 	public Entity getEntityAt(EntityLevel entityLevel, int x, int y) {
 		for (Entity entity : Entity.filter(this.entities, x, y)) {
 			if (entity.getEntityLevel() == entityLevel) {
@@ -78,14 +121,16 @@ public class Dungeon {
 		return null;
 	}
 
+	/**
+	 * Check if there is an entity of a given level in the given coordinates
+	 * 
+	 * @param entityLevel
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean hasEntitiesAt(EntityLevel entityLevel, int x, int y) {
 		return this.getEntityAt(entityLevel, x, y) != null;
-			if (entity.getEntityLevel() == entityLevel) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 }
