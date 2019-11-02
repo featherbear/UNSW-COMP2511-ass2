@@ -123,21 +123,6 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		return true;
 	}
 
-	public void playerMoveEventHandler(Player player, LocationChanged event) {
-		if (player.hasItemUsable(InvincibilityPotion.class)) {
-			flee(player);
-		} else {
-			roam(player);
-		}
-	}
-
-	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
-		if (this.getX() != event.newX || this.getY() != event.newY) {
-			return true;
-		}
-		return player.interact(this);
-	}
-
 	@Override
 	public boolean interact(Entity entity) {
 		if (entity instanceof Player) {
@@ -159,4 +144,18 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		return false;
 	}
 
+	public void playerMoveEventHandler(Player player, LocationChanged event) {
+		if (player.hasItemUsable(InvincibilityPotion.class)) {
+			flee(player);
+		} else {
+			roam(player);
+		}
+	}
+
+	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
+		if (this.getX() != event.newX || this.getY() != event.newY) {
+			return true;
+		}
+		return player.interact(this);
+	}
 }
