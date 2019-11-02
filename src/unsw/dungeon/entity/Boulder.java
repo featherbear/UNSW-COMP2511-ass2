@@ -77,7 +77,7 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 		move(1, 0);
 	}
 
-	public boolean boulderMoveIntentHandler(Player player, LocationChanged event) {
+	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
