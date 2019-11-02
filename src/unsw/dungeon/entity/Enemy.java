@@ -145,18 +145,20 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 	public boolean interact(Entity entity) {
 		if (entity instanceof Player) {
 			Player p = (Player) entity;
-			if (p.hasItemUsable(Sword.class)) {
-				List<ItemEntity> inv = p.getInventory();
-				for (ItemEntity item : inv) {
-					if (item instanceof Sword) {
-						((Sword) item).use(this);
-					}
+
+			List<ItemEntity> inv = p.getInventory();
+			for (ItemEntity item : inv) {
+				if (item instanceof Sword) {
+					return ((Sword) item).use(this);
+				} else if (item instanceof InvincibilityPotion) {
+					return ((InvincibilityPotion) item).use(this);
 				}
-			} else {
-				p.kill();
 			}
+
+			p.kill();
 		}
-		return true;
+
+		return false;
 	}
 
 }
