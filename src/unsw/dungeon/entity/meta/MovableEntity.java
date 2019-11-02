@@ -15,6 +15,10 @@ public abstract class MovableEntity<T> extends Entity {
 	public final IntentEmitter<T, LocationChanged> moveIntent;
 	public final EventEmitter<T, LocationChanged> moveEvent;
 
+	protected boolean isPositionBlocked(int x, int y) {
+		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
+	}
+
 	@SuppressWarnings("unchecked")
 	public MovableEntity(Dungeon dungeon, EntityLevel entityLevel, int x, int y) {
 		super(dungeon, entityLevel, x, y);

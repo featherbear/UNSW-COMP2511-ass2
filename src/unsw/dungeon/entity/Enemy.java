@@ -16,10 +16,6 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 	}
 
-	private boolean isPositionBlocked(int x, int y) {
-		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
-	}
-
 	private boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
