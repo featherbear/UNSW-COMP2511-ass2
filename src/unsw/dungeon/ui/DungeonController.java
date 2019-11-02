@@ -12,6 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.util.emitter.GenericSAM;
 
 /**
  * A JavaFX controller for the dungeon.
@@ -29,6 +30,8 @@ public class DungeonController {
 	private Player player;
 
 	private Dungeon dungeon;
+
+	private GenericSAM onRestart;
 
 	public DungeonController(Dungeon dungeon, List<EntityImagePair> entities) {
 		this.dungeon = dungeon;
@@ -70,9 +73,22 @@ public class DungeonController {
 		case RIGHT:
 			player.moveRight();
 			break;
+		case R:
+			this.restart();
+			break;
 		default:
 			break;
 		}
+	}
+
+	public void restart() {
+		if (this.onRestart != null) {
+			this.onRestart.execute();
+		}
+	}
+
+	public void onRestart(GenericSAM event) {
+		this.onRestart = event;
 	}
 
 }

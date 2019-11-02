@@ -1,5 +1,6 @@
 package unsw.dungeon.ui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -10,6 +11,8 @@ import javafx.stage.Stage;
 
 public class DungeonApplication extends Application {
 
+	private DungeonControllerLoader dungeonControllerLoader;
+
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 
@@ -19,21 +22,12 @@ public class DungeonApplication extends Application {
 		levelSelectLoader.setController(levelSelectController);
 
 		levelSelectController.onSelected((level) -> {
+
 			try {
-				DungeonController dungeonController = new DungeonControllerLoader(level).loadController();
-
-				FXMLLoader dungeonLoader = new FXMLLoader(getClass().getResource("DungeonView.fxml"));
-				dungeonLoader.setController(dungeonController);
-
-				Parent root = dungeonLoader.load();
-				Scene scene = new Scene(root);
-
-				root.requestFocus();
-				primaryStage.setScene(scene);
+				this.dungeonControllerLoader = new DungeonControllerLoader(level);
+				setGame(primaryStage);
 				primaryStage.setTitle("Dungeon");
-
-			} catch (IOException e) {
-				// FileNotFoundExceptions _shouldn't_ happen, but other exceptions may happen
+			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
 
@@ -47,6 +41,29 @@ public class DungeonApplication extends Application {
 		primaryStage.setTitle("Level Select | Dungeon");
 		primaryStage.show();
 
+	}
+
+	private DungeonController setGame(Stage primaryStage) {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("DungeonView.fxml"));
+
+		DungeonController controller = dungeonControllerLoader.loadController();
+		loader.setController(controller);
+
+		Parent root = null;
+
+		try {
+			root = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Scene scene = new Scene(root);
+		root.requestFocus();
+		primaryStage.setScene(scene);
+
+		controller.onRestart(() -> setGame(primaryStage));
+
+		return controller;
 	}
 
 	public static void main(String[] args) {
