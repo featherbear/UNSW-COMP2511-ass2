@@ -17,8 +17,6 @@ import unsw.dungeon.util.emitter.GenericEmitter;
 /**
  * A JavaFX controller for the dungeon.
  * 
- * @author Robert Clifton-Everest
- *
  */
 public class DungeonController {
 
@@ -36,13 +34,16 @@ public class DungeonController {
 	public DungeonController(Dungeon dungeon, List<EntityImagePair> entities) {
 		this.dungeon = dungeon;
 		this.player = dungeon.getPlayer();
+		this.entities = new ArrayList<EntityImagePair>(entities);
 		this.restartEvent = new GenericEmitter();
+
+		// When the player dies, call the restart event
 		this.player.alive().addListener((observable, oldValue, newValue) -> {
 			if (newValue == false) {
 				this.restart();
 			}
 		});
-		this.entities = new ArrayList<EntityImagePair>(entities);
+
 	}
 
 	@FXML
@@ -56,17 +57,22 @@ public class DungeonController {
 			}
 		}
 
+		// Sort entities by their EntityLevel order
 		ObservableList<Node> children = squares.getChildren();
-		entities.sort((e, f) -> f.getEntity().getEntityLevel().ordinal() - e.getEntity().getEntityLevel().ordinal());
+		entities.sort((e, f) -> f.entity.getEntityLevel().ordinal() - e.entity.getEntityLevel().ordinal());
 
+		// Add items to the GridPane
 		for (EntityImagePair entity : entities) {
-			children.add(entity.getImageView());
+			children.add(entity.imageView);
 		}
 	}
 
 	@FXML
 	public void handleKeyPress(KeyEvent event) {
 		switch (event.getCode()) {
+		/*
+		 * PLAYER MOVEMENT
+		 */
 		case UP:
 			player.moveUp();
 			break;
@@ -79,6 +85,9 @@ public class DungeonController {
 		case RIGHT:
 			player.moveRight();
 			break;
+		/*
+		 * UTILITIES
+		 */
 		case R:
 			this.restart();
 			break;
@@ -87,18 +96,18 @@ public class DungeonController {
 		}
 	}
 
+	/**
+	 * Call the restart event
+	 */
 	public void restart() {
 		this.restartEvent.emit();
-			this.onRestart.execute();
-		}
 	}
 
+	/**
+	 * @return Dungeon instance
+	 */
 	public Dungeon getDungeon() {
 		return this.dungeon;
-	}
-
-	public void onRestart(GenericSAM event) {
-		this.onRestart = event;
 	}
 
 }
