@@ -15,6 +15,7 @@ import unsw.dungeon.DungeonLoader;
 import unsw.dungeon.LoaderHook;
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
+import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -51,11 +52,13 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	private Image portalImage;
 	private Image switchImage;
 	private Image boulderImage;
+	private Image enemyImage;
 	
 	public DungeonControllerLoader(String filename) throws FileNotFoundException {
 		super(filename);
 		this.entities = new ArrayList<>();
 		this.playerImage = new Image("/human_new.png");
+		this.enemyImage = new Image("/deep_elf_master_archer.png");
 		this.wallImage = new Image("/brick_brown_0.png");
 		this.exitImage = new Image("/exit.png");
 		this.doorClosedImage = new Image("/closed_door.png");
@@ -74,6 +77,12 @@ public class DungeonControllerLoader extends DungeonLoader implements LoaderHook
 	public void onLoad(Player player) {
 		ImageView view = new ImageView(playerImage);
 		addEntity(player, view);
+	}
+	
+	@Override
+	public void onLoad(Enemy enemy) {
+		ImageView view = new ImageView(enemyImage);
+		addEntity(enemy, view);
 	}
 
 	@Override

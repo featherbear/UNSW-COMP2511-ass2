@@ -25,9 +25,9 @@ public class InvincibilityPotion extends ItemEntity implements Usable {
 			return false;
 		}
 
-//		if (entity instanceof Enemy) {
-//			(Enemy) entity.kill()
-//		}
+		if (entity instanceof Enemy) {
+			((Enemy) entity).kill();
+		}
 
 		itemUsed().emit(new ItemUsed(this.timer, --this.timer));
 		return true;
