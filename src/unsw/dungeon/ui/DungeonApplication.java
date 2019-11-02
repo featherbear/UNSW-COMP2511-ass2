@@ -63,11 +63,9 @@ public class DungeonApplication extends Application {
 
 		controller.onRestart(() -> setGame(primaryStage));
 		controller.getDungeon().finishEvent.register(() -> {
-			FXMLLoader winLoader = new FXMLLoader(getClass().getResource("WinScreen.fxml"));
 
-			WinScreenController winController = new WinScreenController();
-			winLoader.setController(winController);
 			try {
+				FXMLLoader winLoader = new FXMLLoader(getClass().getResource("WinScreen.fxml"));
 				primaryStage.setScene(new Scene(winLoader.load()));
 			} catch (IOException e) {
 
