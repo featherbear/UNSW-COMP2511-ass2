@@ -43,18 +43,22 @@ public class LevelSelectController {
 	@FXML
 	public void initialize() {
 
+		// Find level files
 		File f = new File("dungeons");
 		File[] matchingFiles = f.listFiles((dir, name) -> name.endsWith(levelSuffix));
-
 		ArrayList<String> filenames = new ArrayList<String>();
 		for (File file : matchingFiles) {
 			filenames.add(file.getName());
 		}
 
+		// Strip the filename extensions
 		this.levelNames = filenames.stream().map(s -> s.substring(0, s.length() - levelSuffix.length()))
 				.collect(Collectors.toList());
+
+		// Populate the ListView
 		levels.getItems().setAll(levelNames);
 
+		// Register level selection event
 		levels.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			btnPlay.setDisable(false);
 			this.selectedLevel = newValue;
@@ -63,13 +67,15 @@ public class LevelSelectController {
 
 	@FXML
 	private void handleKeyPress(KeyEvent event) {
+		// If ENTER is pressed, submit the level
 		if (event.getCode() == KeyCode.ENTER) {
-			if (this.getSelectedLevel() != null) {
-				submit();
-			}
+			submit();
 		}
 	}
 
+	/**
+	 * Choose a random level
+	 */
 	@FXML
 	private void random() {
 		Random rand = new Random();
@@ -77,8 +83,12 @@ public class LevelSelectController {
 		this.submit();
 	}
 
+	/**
+	 * Submit the level selection choice
+	 */
 	@FXML
 	private void submit() {
+		// Abort if no level has been selected
 		if (this.selectedLevel == null) {
 			return;
 		}
