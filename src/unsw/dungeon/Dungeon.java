@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
-import unsw.dungeon.util.emitter.GenericEventEmitter;
+import unsw.dungeon.util.emitter.GenericEmitter;
 
 /**
  * A dungeon in the interactive dungeon player.
@@ -21,7 +21,7 @@ import unsw.dungeon.util.emitter.GenericEventEmitter;
  */
 public class Dungeon {
 
-	public final GenericEventEmitter finishEvent;
+	public final GenericEmitter finishEvent;
 
 	private int width, height;
 	private ArrayList<Entity> entities;
@@ -33,7 +33,7 @@ public class Dungeon {
 		this.entities = new ArrayList<>();
 		this.player = null;
 
-		this.finishEvent = new GenericEventEmitter();
+		this.finishEvent = new GenericEmitter();
 	}
 
 	public int getWidth() {
