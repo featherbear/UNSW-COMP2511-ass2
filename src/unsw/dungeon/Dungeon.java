@@ -5,11 +5,11 @@ package unsw.dungeon;
 
 import java.util.ArrayList;
 
-import unsw.dungeon.entity.Goals;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.util.emitter.GenericEmitter;
+import unsw.dungeon.goals.Goal;
 
 /**
  * A dungeon in the interactive dungeon player.
@@ -27,7 +27,7 @@ public class Dungeon {
 	private int width, height;
 	private ArrayList<Entity> entities;
 	private Player player;
-	private Goals goal;
+	private Goal goal;
 
 	public Dungeon(int width, int height) {
 		this.width = width;
@@ -116,6 +116,11 @@ public class Dungeon {
 	 */
 	public Entity getEntityAt(EntityLevel entityLevel, int x, int y) {
 	public void addGoal(Goals goal) {
+
+	// TODO: Should this add to the children if it exists?
+	// Or is it created in the Loader
+	// In that case should it be setGoal() ...
+	public void addGoal(Goal goal) {
 		this.goal = goal;
 	}
 		for (Entity entity : Entity.filter(this.entities, x, y)) {

@@ -13,7 +13,6 @@ import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
-import unsw.dungeon.entity.Goals;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
@@ -23,8 +22,8 @@ import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
-import unsw.dungeon.entity.meta.GoalCondition;
-
+import unsw.dungeon.goals.Goal;
+import unsw.dungeon.goals.GoalCondition;
 
 /**
  * Loads a dungeon from a .json file.
@@ -82,10 +81,10 @@ public class DungeonLoader {
 			switch (type) {
 			case "AND":
 				cond = GoalCondition.COMPOSITE;
-			default: //OR
+			default: // OR
 				cond = GoalCondition.OR;
 			}
-			
+
 			for (int i = 0; i < subgoals.length(); i++) {
 				try {
 					objectives = loadGoals(subgoals.getJSONObject(i));
@@ -93,8 +92,8 @@ public class DungeonLoader {
 					System.out.println(e);
 				}
 			}
-			dungeon.addGoal(new Goals(dungeon, cond, objectives));
-			
+			dungeon.addGoal(new Goal(dungeon, cond, objectives));
+
 		} catch (JSONException e) {
 			dungeon.addGoal(loadGoals(dungeon, jsonGoals, loaders));
 		}
@@ -116,7 +115,7 @@ public class DungeonLoader {
 			player.y().set(y);
 			loaders.onLoad(player);
 			return player;
-			
+
 		case "enemy":
 			Enemy enemy = new Enemy(dungeon, x, y);
 			loaders.onLoad(enemy);
@@ -131,12 +130,12 @@ public class DungeonLoader {
 			Exit exit = new Exit(dungeon, x, y);
 			loaders.onLoad(exit);
 			return exit;
-			
+
 		case "switch":
 			Switch sw = new Switch(dungeon, x, y);
 			loaders.onLoad(sw);
 			return sw;
-			
+
 		case "boulder":
 			Boulder boulder = new Boulder(dungeon, x, y);
 			loaders.onLoad(boulder);
@@ -185,62 +184,62 @@ public class DungeonLoader {
 		}
 
 	}
-	
-	private Goals loadGoals(Dungeon dungeon, JSONObject json, LoaderHook loaders) {
+
+	private Goal loadGoals(Dungeon dungeon, JSONObject json, LoaderHook loaders) {
 		GoalCondition c = null;
 		ArrayList<Class> subgoals = new ArrayList<Class>();
 		String goals = json.getString("goal");
-		
-		switch(goals) {
+
+		switch (goals) {
 		case "AND":
 			c = GoalCondition.COMPOSITE;
 			break;
 		case "OR":
 			c = GoalCondition.OR;
 			break;
-		
+
 		case "enemies":
 			subgoals.add(Enemy.class);
 			break;
-			
+
 		case "treasure":
 			subgoals.add(Treasure.class);
 			break;
-		
+
 		case "exit":
 			subgoals.add(Exit.class);
 			break;
-			
+
 		default:
 			break;
 		}
-		
-		Goals g = new Goals(dungeon, c, subgoals);
+
+		Goal g = new Goal(dungeon, c, subgoals);
 		return g;
 	}
-	
-	private ArrayList<Class> loadGoals(JSONObject json){
+
+	private ArrayList<Class> loadGoals(JSONObject json) {
 		ArrayList<Class> subgoals = new ArrayList<Class>();
 		String goals = json.getString("goal");
-		switch("goal") {
-		
+		switch ("goal") {
+
 		case "enemies":
 			subgoals.add(Enemy.class);
 			break;
-			
+
 		case "treasure":
 			subgoals.add(Treasure.class);
 			break;
-		
+
 		case "exit":
 			subgoals.add(Exit.class);
 			break;
-			
+
 		default:
 			break;
-			
+
 		}
-		
+
 		return subgoals;
 	}
 };
@@ -283,7 +282,7 @@ class LoaderComposite implements LoaderHook {
 			hook.onLoad(exit);
 		}
 	}
-	
+
 	@Override
 	public void onLoad(Boulder boulder) {
 		for (LoaderHook hook : this.hooks) {

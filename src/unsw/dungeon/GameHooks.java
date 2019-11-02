@@ -4,7 +4,6 @@ import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
-import unsw.dungeon.entity.Goals;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
@@ -36,9 +35,7 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-		Dungeon d = exit.getDungeon();
-		Player p = d.getPlayer();
-		p.moveIntent.register(exit::playerMoveIntentHandler);
+
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
-import unsw.dungeon.entity.Goals;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
@@ -34,17 +33,12 @@ public interface LoaderHook {
 	public void onLoad(Portal portal);
 
 	public void onLoad(Boulder boudler);
-	
+
 	public void onLoad(Switch sw);
-	
+
 	public void onLoad(Enemy enemy);
-	
+
 	default public void postLoad(Dungeon dungeon) {
 	}
-
-
-
-
-
 
 }
