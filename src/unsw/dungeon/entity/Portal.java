@@ -53,7 +53,7 @@ public class Portal extends Entity implements Interactable {
 		int newX = matchingPortal.getX();
 		int newY = matchingPortal.getY();
 
-		Entity obstruction = this.getDungeon().whatEntityAt(EntityLevel.OBJECT, newX, newY);
+		Entity obstruction = this.getDungeon().getEntityAt(EntityLevel.OBJECT, newX, newY);
 		if (obstruction instanceof Enemy) {
 			((Enemy) obstruction).kill();
 		}
