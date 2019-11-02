@@ -37,12 +37,12 @@ public class GameHooks implements LoaderHook {
 		Player p = d.getPlayer();
 		p.moveIntent.register(boulder::boulderMoveIntentHandler);
 	}
-	
+
 	@Override
 	public void onLoad(Switch sw) {
 		Dungeon d = sw.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(sw::switchEnterIntentHandler);
+		p.moveEvent.register(sw::switchEnterEventHandler);
 	}
 
 	@Override
