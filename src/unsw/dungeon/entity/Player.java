@@ -2,6 +2,7 @@ package unsw.dungeon.entity;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.BooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
@@ -30,6 +31,7 @@ public class Player extends MovableEntity<Player> implements Interactable {
 	public Player(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.inventory = new ArrayList<ItemEntity>();
+		
 	}
 
 	private boolean isPositionBlocked(int x, int y) {
@@ -149,6 +151,11 @@ public class Player extends MovableEntity<Player> implements Interactable {
 
 	public void removeItem(ItemEntity item) {
 		this.inventory.remove(item);
+	}
+
+	public void kill() {
+		this.hide();
+		this.getDungeon().removeEntity(this);
 	}
 
 }

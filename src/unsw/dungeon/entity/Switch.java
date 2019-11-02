@@ -1,17 +1,13 @@
 package unsw.dungeon.entity;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
-import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.events.LocationChanged;
 
-public class Switch extends Entity implements Interactable {
+public class Switch extends Entity {
 
 	private BooleanProperty activated;
 	
@@ -36,27 +32,8 @@ public class Switch extends Entity implements Interactable {
 	public void deactivate() {
 		this.activated.set(false);
 	}
-
 	
-	@Override
-	public boolean interact(Entity entity) {
-		if (!(entity instanceof Player)) {
-			return false;
-		}
-		Entity e = this.getDungeon().whatEntityAt(entityLevel.OBJECT, this.getX(), this.getY());
-		if (e instanceof Boulder || e instanceof Player) {
-			activate();
-			System.out.println("Switched Activated");
-		} else {
-			deactivate();
-			System.out.println("Switched Deactivated");
-		}
-		
-
-		return true;
-	}
-	
-	public boolean switchEnterIntentHandler(Player player, LocationChanged event) {
+	public boolean switchEnterEventHandler(Player player, LocationChanged event) {
 		Entity e = this.getDungeon().whatEntityAt(entityLevel.OBJECT, this.getX(), this.getY());
 		if (e != null) {
 			if (e instanceof Boulder || e instanceof Player) {
