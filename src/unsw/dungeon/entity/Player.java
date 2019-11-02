@@ -2,7 +2,10 @@ package unsw.dungeon.entity;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
@@ -16,9 +19,10 @@ import unsw.dungeon.events.LocationChanged;
  * @author Robert Clifton-Everest
  *
  */
-public class Player extends MovableEntity<Player> {
+public class Player extends MovableEntity<Player> implements Interactable {
 
 	private ArrayList<ItemEntity> inventory;
+	private BooleanProperty isAlive;
 
 	/**
 	 * Create a player positioned in square (x,y)
@@ -29,9 +33,19 @@ public class Player extends MovableEntity<Player> {
 	public Player(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.inventory = new ArrayList<ItemEntity>();
+		this.isAlive = new SimpleBooleanProperty(true);
+
 	}
 
 	private boolean isPositionBlocked(int x, int y) {
+		if (this.getDungeon().hasEntitiesAt(entityLevel.OBJECT, x, y)) {
+			if (this.getDungeon().getEntityAt(entityLevel.OBJECT, x, y) != null) {
+				Entity e = this.getDungeon().getEntityAt(entityLevel.OBJECT, x, y);
+				if (e instanceof Boulder) {
+					return false;
+				}
+			}
+		}
 		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
 
@@ -41,10 +55,6 @@ public class Player extends MovableEntity<Player> {
 
 		int newX = oldX + xDirection;
 		int newY = oldY + yDirection;
-
-		if (!this.getDungeon().positionIsValid(newX, newY)) {
-			return;
-		}
 
 		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
 
@@ -56,6 +66,16 @@ public class Player extends MovableEntity<Player> {
 			return;
 		}
 
+		this.setXY(newX, newY);
+	}
+
+	public void setXY(int newX, int newY) {
+		int oldX = getX();
+		int oldY = getY();
+		if (!this.getDungeon().positionIsValid(newX, newY)) {
+			return;
+		}
+
 		if (oldX != newX) {
 			x().set(newX);
 		}
@@ -63,7 +83,8 @@ public class Player extends MovableEntity<Player> {
 			y().set(newY);
 		}
 
-		this.moveEvent.emit(e);
+		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
+
 	}
 
 	public void moveUp() {
@@ -82,14 +103,15 @@ public class Player extends MovableEntity<Player> {
 		move(1, 0);
 	}
 
-	public void pickUp(ItemEntity item) {
+	public boolean pickUp(ItemEntity item) {
 		// Check if the player can pickup the item
-		if (item instanceof Sword && this.hasItem(Sword.class)) {
-			return;
+		if (this.hasItem(item.getClass()) && item.maxOne()) {
+			return false;
 		}
 
 		this.inventory.add(item);
 		item.visibility().set(false);
+		return true;
 	}
 
 	public boolean hasItemUsable(Class<?> itemClass) {
@@ -116,11 +138,33 @@ public class Player extends MovableEntity<Player> {
 		return false;
 	}
 
-	public void interact(Interactable object) {
-		object.interact(this);
+	@Override
+	public boolean interact(Entity entity) {
+		if (!(entity instanceof Interactable)) {
+			return false;
+		}
+
+		return ((Interactable) entity).interact(this);
+
 	}
 
 	public ArrayList<ItemEntity> getInventory() {
 		return this.inventory;
+	}
+
+	public void removeItem(ItemEntity item) {
+		this.inventory.remove(item);
+	}
+
+	public void kill() {
+		this.isAlive.set(false);
+	}
+
+	public BooleanProperty alive() {
+		return this.isAlive;
+	}
+
+	public boolean isAlive() {
+		return alive().get();
 	}
 }
