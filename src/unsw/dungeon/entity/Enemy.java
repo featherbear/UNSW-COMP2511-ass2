@@ -8,6 +8,7 @@ import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
+import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.LocationChanged;
 
 public class Enemy extends MovableEntity<Enemy> implements Interactable {
@@ -144,10 +145,11 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
 			List<ItemEntity> inv = p.getInventory();
 			for (ItemEntity item : inv) {
-				if (item instanceof Sword) {
-					return ((Sword) item).use(this);
-				} else if (item instanceof InvincibilityPotion) {
-					return ((InvincibilityPotion) item).use(this);
+				if (item instanceof Usable) {
+					boolean result = ((Usable) item).use(this);
+					if (result) {
+						return true;
+					}
 				}
 			}
 
