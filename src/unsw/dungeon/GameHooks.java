@@ -19,15 +19,15 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Player player) {
 
 	}
-	
+
 	@Override
 	public void onLoad(Enemy enemy) {
 		Dungeon d = enemy.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(enemy::enemyMoveIntentHandler);
+		p.moveEvent.register(enemy::playerMoveEventHandler);
+		p.moveIntent.register(enemy::playerMoveIntentHandler);
 	}
-	
-	
+
 	@Override
 	public void onLoad(Wall wall) {
 
@@ -37,35 +37,35 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Exit exit) {
 		Dungeon d = exit.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(exit::exitMoveIntentHandler);
+		p.moveIntent.register(exit::playerMoveIntentHandler);
 	}
 
 	@Override
 	public void onLoad(Boulder boulder) {
 		Dungeon d = boulder.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(boulder::boulderMoveIntentHandler);
+		p.moveIntent.register(boulder::playerMoveIntentHandler);
 	}
-	
+
 	@Override
 	public void onLoad(Switch sw) {
 		Dungeon d = sw.getDungeon();
 		Player p = d.getPlayer();
-		p.moveEvent.register(sw::switchEnterEventHandler);
+		p.moveEvent.register(sw::playerMoveEventHandler);
 	}
 
 	@Override
 	public void onLoad(Portal portal) {
 		Dungeon d = portal.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(portal::portalEnterIntentHandler);
+		p.moveIntent.register(portal::playerMoveIntentHandler);
 	}
 
 	@Override
 	public void onLoad(Door door) {
 		Dungeon d = door.getDungeon();
 		Player p = d.getPlayer();
-		p.moveIntent.register(door::doorEnterIntentHandler);
+		p.moveIntent.register(door::playerMoveIntentHandler);
 
 	}
 

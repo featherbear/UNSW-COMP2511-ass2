@@ -10,12 +10,12 @@ import unsw.dungeon.events.LocationChanged;
 public class Switch extends Entity {
 
 	private BooleanProperty activated;
-	
+
 	public Switch(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.FLOOR, x, y);
 		this.activated = new SimpleBooleanProperty(false);
 	}
-	
+
 	public BooleanProperty activated() {
 		return this.activated;
 	}
@@ -32,9 +32,9 @@ public class Switch extends Entity {
 	public void deactivate() {
 		this.activated.set(false);
 	}
-	
-	public boolean switchEnterEventHandler(Player player, LocationChanged event) {
-		Entity e = this.getDungeon().whatEntityAt(entityLevel.OBJECT, this.getX(), this.getY());
+
+	public void playerMoveEventHandler(Player player, LocationChanged event) {
+		Entity e = this.getDungeon().getEntityAt(EntityLevel.OBJECT, this.getX(), this.getY());
 		if (e != null) {
 			if (e instanceof Boulder || e instanceof Player) {
 				activate();
@@ -44,7 +44,6 @@ public class Switch extends Entity {
 			deactivate();
 			System.out.println("Switched Deactivated");
 		}
-		return true;
 	}
 
 }

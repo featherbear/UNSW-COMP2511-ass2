@@ -53,7 +53,7 @@ public class Portal extends Entity implements Interactable {
 		int newX = matchingPortal.getX();
 		int newY = matchingPortal.getY();
 
-		Entity obstruction = this.getDungeon().whatEntityAt(EntityLevel.OBJECT, newX, newY);
+		Entity obstruction = this.getDungeon().getEntityAt(EntityLevel.OBJECT, newX, newY);
 		if (obstruction instanceof Enemy) {
 			((Enemy) obstruction).kill();
 		}
@@ -89,7 +89,7 @@ public class Portal extends Entity implements Interactable {
 
 	}
 
-	public boolean portalEnterIntentHandler(Player player, LocationChanged event) {
+	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
