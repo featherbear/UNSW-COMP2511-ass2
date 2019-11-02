@@ -6,6 +6,7 @@ import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.ItemUsed;
+import unsw.dungeon.events.LocationChanged;
 import unsw.dungeon.util.emitter.EventEmitter;
 
 public class InvincibilityPotion extends ItemEntity implements Usable {
@@ -29,7 +30,6 @@ public class InvincibilityPotion extends ItemEntity implements Usable {
 			((Enemy) entity).kill();
 		}
 
-		itemUsed().emit(new ItemUsed(this.timer, --this.timer));
 		return true;
 	}
 
@@ -46,5 +46,9 @@ public class InvincibilityPotion extends ItemEntity implements Usable {
 	@Override
 	public EventEmitter<InvincibilityPotion, ItemUsed> itemUsed() {
 		return this.itemUsed;
+	}
+
+	public void playerMoveEvent(Player p, LocationChanged event) {
+		itemUsed().emit(new ItemUsed(this.timer, --this.timer));
 	}
 }
