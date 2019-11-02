@@ -43,9 +43,13 @@ public class InvincibilityPotion extends ItemEntity implements Usable {
 		return this.timer;
 	}
 
+	public void setUses(int remainingMoves) {
+		this.timer = remainingMoves;
+	}
+
 	@Override
 	public boolean maxOne() {
-		return false;
+		return true;
 	}
 
 	@Override
