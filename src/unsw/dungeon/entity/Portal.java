@@ -1,6 +1,7 @@
 package unsw.dungeon.entity;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -34,24 +35,27 @@ public class Portal extends Entity implements Interactable {
 
 		ArrayList<Entity> portals = Entity.filter(this.getDungeon().getEntities(), Portal.class);
 
-		Portal matchingPortal = null;
-
+		ArrayList<Portal> matchingPortals = new ArrayList<Portal>();
 		for (Entity obj : portals) {
 			Portal portal = (Portal) obj;
-			if (portal.id == this.id && portal != this) {
-				matchingPortal = portal;
-				break;
+			if (portal == this) {
+				continue;
+			}
+			if (portal.id == this.id) {
+				matchingPortals.add(portal);
 			}
 		}
 
-		if (matchingPortal == null) {
+		if (matchingPortals.size() == 0) {
 			System.out.println(String.format("No other portals with ID %d exist!", this.id));
 			return false;
 		}
 
+		Portal destination = matchingPortals.get(new Random().nextInt(matchingPortals.size()));
+
 		// Teleport the player to the destination portal
-		int newX = matchingPortal.getX();
-		int newY = matchingPortal.getY();
+		int newX = destination.getX();
+		int newY = destination.getY();
 
 		player.setXY(newX, newY);
 
