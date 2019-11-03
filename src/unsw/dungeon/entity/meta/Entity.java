@@ -119,7 +119,7 @@ public abstract class Entity {
 	 * @param EntityType
 	 * @return List of entities that match the given class
 	 */
-	public static ArrayList<Entity> filter(List<Entity> entities, Class<? extends Entity> EntityType) {
+	public static ArrayList<Entity> filter(List<? extends Entity> entities, Class<? extends Entity> EntityType) {
 
 		ArrayList<Entity> results = new ArrayList<Entity>();
 		for (Entity entity : entities) {
@@ -139,7 +139,7 @@ public abstract class Entity {
 	 * @param y
 	 * @return List of entities that match the given position
 	 */
-	public static ArrayList<Entity> filter(List<Entity> entities, int x, int y) {
+	public static ArrayList<Entity> filter(List<? extends Entity> entities, int x, int y) {
 
 		ArrayList<Entity> results = new ArrayList<Entity>();
 		for (Entity entity : entities) {
@@ -158,7 +158,7 @@ public abstract class Entity {
 	 * @param entityLevel
 	 * @return List of entities that match the given EntityLevel
 	 */
-	public static ArrayList<Entity> filter(List<Entity> entities, EntityLevel entityLevel) {
+	public static ArrayList<Entity> filter(List<? extends Entity> entities, EntityLevel entityLevel) {
 		ArrayList<Entity> results = new ArrayList<Entity>();
 		for (Entity entity : entities) {
 			if (entity.getEntityLevel() == entityLevel) {

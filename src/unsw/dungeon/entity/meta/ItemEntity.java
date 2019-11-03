@@ -1,5 +1,8 @@
 package unsw.dungeon.entity.meta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.events.LocationChanged;
@@ -33,5 +36,25 @@ public abstract class ItemEntity extends Entity {
 	}
 
 	public abstract boolean maxOne();
+	
+	/**
+	 * Filter entities by class
+	 * 
+	 * @param entities
+	 * @param EntityType
+	 * @return List of entities that match the given class
+	 */
+	public static ArrayList<ItemEntity> filterItems(List<ItemEntity> entities, Class<? extends Entity> EntityType) {
+
+		ArrayList<ItemEntity> results = new ArrayList<ItemEntity>();
+		for (ItemEntity entity : entities) {
+			if (EntityType.isInstance(entity)) {
+				results.add(entity);
+			}
+		}
+
+		return results;
+	}
+
 
 }
