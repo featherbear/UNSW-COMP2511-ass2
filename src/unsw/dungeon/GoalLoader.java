@@ -1,17 +1,15 @@
 package unsw.dungeon;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
+import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Treasure;
-import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.goals.Goal;
 import unsw.dungeon.goals.GoalCondition;
 
@@ -38,7 +36,7 @@ public class GoalLoader{
 			list.add(fetchGoal(type));
 			dungeon.addGoal(new Goal(dungeon, GoalCondition.OR, list));
 		}
-		
+		System.out.println("Goals Loaded");
 		return dungeon;
 		
 	}
@@ -92,7 +90,7 @@ public class GoalLoader{
 			break;
 		
 		case "boulders":
-			goal = Boulder.class;
+			goal = Switch.class;
 			break;
 			
 		default:

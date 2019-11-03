@@ -52,7 +52,8 @@ public class DungeonLoader {
 		int height = json.getInt("height");
 
 		Dungeon dungeon = new Dungeon(width, height);
-
+		GoalLoader GL = new GoalLoader(json);
+		dungeon = GL.load(dungeon);
 		dungeon.setPlayer(new Player(dungeon, 0, 0));
 
 		JSONArray jsonEntities = json.getJSONArray("entities");
@@ -71,8 +72,7 @@ public class DungeonLoader {
 				System.out.println(e);
 			}
 		}
-		GoalLoader GL = new GoalLoader(json);
-		dungeon = GL.load(dungeon);
+
 		loaders.postLoad(dungeon);
 		return dungeon;
 	}

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
+import unsw.dungeon.goals.Goal;
 import unsw.dungeon.util.emitter.GenericEmitter;
 import unsw.dungeon.goals.Goal;
 
@@ -105,7 +106,9 @@ public class Dungeon {
 	public ArrayList<Entity> getEntities() {
 		return this.entities;
 	}
-
+	public void addGoal(Goal goal) {
+		this.goal = goal;
+	}
 	/**
 	 * Get the first entity of a given level in the given coordinates
 	 * 
@@ -144,7 +147,7 @@ public class Dungeon {
 	}
 
 	public Goal getGoal() {
-		return goal;
+		return this.goal;
 	}
 
 }
