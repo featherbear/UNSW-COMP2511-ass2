@@ -2,6 +2,8 @@ package unsw.dungeon.entity;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
@@ -20,6 +22,7 @@ import unsw.dungeon.events.LocationChanged;
 public class Player extends MovableEntity<Player> implements Interactable {
 
 	private ArrayList<ItemEntity> inventory;
+	private BooleanProperty isAlive;
 
 	/**
 	 * Create a player positioned in square (x,y)
@@ -30,10 +33,8 @@ public class Player extends MovableEntity<Player> implements Interactable {
 	public Player(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.inventory = new ArrayList<ItemEntity>();
-	}
+		this.isAlive = new SimpleBooleanProperty(true);
 
-	private boolean isPositionBlocked(int x, int y) {
-		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
 	}
 
 	private void move(int xDirection, int yDirection) {
@@ -97,6 +98,16 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		}
 
 		this.inventory.add(item);
+
+		// Register Usable items
+		if (item instanceof Usable) {
+			((Usable) item).itemUsed().register((itemObj, evt) -> {
+				if (evt.newValue == 0) {
+					this.removeItem(item);
+				}
+			});
+		}
+
 		item.visibility().set(false);
 		return true;
 	}
@@ -143,4 +154,15 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		this.inventory.remove(item);
 	}
 
+	public void kill() {
+		this.isAlive.set(false);
+	}
+
+	public BooleanProperty alive() {
+		return this.isAlive;
+	}
+
+	public boolean isAlive() {
+		return alive().get();
+	}
 }

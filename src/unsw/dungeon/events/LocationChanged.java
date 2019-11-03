@@ -2,6 +2,10 @@ package unsw.dungeon.events;
 
 import unsw.dungeon.util.emitter.EmitterData;
 
+/**
+ * Location change emitter data
+ *
+ */
 public class LocationChanged extends EmitterData {
 	public final int oldX;
 	public final int oldY;
