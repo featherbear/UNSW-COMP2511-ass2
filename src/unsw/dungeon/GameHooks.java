@@ -38,7 +38,9 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-
+		Dungeon d = exit.getDungeon();
+		Player p = d.getPlayer();
+		p.moveEvent.register(exit::playerMoveEventHandler);
 	}
 
 	@Override
