@@ -7,19 +7,17 @@ import org.junit.jupiter.api.Test;
 
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Boulder;
-import unsw.dungeon.entity.Enemy;
-import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.Switch;
 
-public class US1Test {
+public class US4Test {
 
-	private Dungeon dungeon;
-	private Player player;
-	private Exit exit;
 	private Boulder boulder;
-	private Enemy enemy;
+	private Player player;
+	private Dungeon dungeon;
+	private Switch sw;
 	private TestUtils create;
-
+	
 	@BeforeEach
 	void init() {
 		dungeon = new Dungeon(10, 10);
@@ -27,22 +25,16 @@ public class US1Test {
 		create = new TestUtils(dungeon);
 		dungeon.setPlayer(player);
 	}
-
-	/**
-	 * 
-	 */
-	@Test
-	void simpleExit() {
-		exit = create.Exit(1, 2);
-		assertEquals(false, exit.getActivated());
-		player.moveDown();
-		assertEquals(true, exit.getActivated());
-	}
 	
 	@Test
-	void failExit() {
-		exit = create.Exit(5,5);
-		player.moveRight();
-		assertEquals(exit.getActivated(), false);
+	void simpleSwitch() {
+		boulder = create.Boulder(1, 2);
+		sw = create.Switch(1, 3); 
+		assertEquals(false, sw.getActivated());
+		player.moveDown();
+		assertEquals(3, boulder.getY());
+		assertEquals(true, sw.getActivated());
+		player.moveDown();
+		assertEquals(false, sw.getActivated());
 	}
 }

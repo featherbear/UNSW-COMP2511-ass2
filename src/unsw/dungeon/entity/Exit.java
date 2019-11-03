@@ -1,6 +1,7 @@
 package unsw.dungeon.entity;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
@@ -8,10 +9,11 @@ import unsw.dungeon.events.LocationChanged;
 
 public class Exit extends Entity {
 
-	private BooleanProperty activated;
+	private SimpleBooleanProperty activated;
 
 	public Exit(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.FLOOR, x, y);
+		this.activated = new SimpleBooleanProperty(false);
 	}
 
 	public BooleanProperty activated() {
