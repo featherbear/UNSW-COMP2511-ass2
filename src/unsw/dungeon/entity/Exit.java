@@ -1,39 +1,43 @@
 package unsw.dungeon.entity;
 
+import javafx.beans.property.BooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
-import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.events.LocationChanged;
 
-public class Exit extends Entity implements Interactable {
+public class Exit extends Entity {
 
-//	private boolean activated;
+	private BooleanProperty activated;
 
 	public Exit(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.FLOOR, x, y);
 	}
 
-	@Override
-	public boolean interact(Entity entity) {
-		if (!(entity instanceof Player)) {
-			return false;
-		}
-
-		// Check activated
-
-		// Check goals
-
-		this.getDungeon().finishEvent.emit();
-
-		return true;
+	public BooleanProperty activated() {
+		return this.activated;
 	}
 
-	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
+	public boolean getActivated() {
+		return this.activated.get();
+	}
+
+	public void activate() {
+		this.activated.set(true);
+
+	}
+
+	public void deactivate() {
+		this.activated.set(false);
+	}
+
+	public void playerMoveEventHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
-			return true;
+			deactivate();
+			return;
 		}
-		return player.interact(this);
+
+		activate();
 	}
 
 }
