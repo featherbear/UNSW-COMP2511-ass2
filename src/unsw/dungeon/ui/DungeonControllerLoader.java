@@ -78,5 +78,4 @@ public class DungeonControllerLoader extends DungeonLoader {
 		this.entities = new ArrayList<>();
 		return controller;
 	}
-
 }

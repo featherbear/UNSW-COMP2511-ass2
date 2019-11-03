@@ -9,6 +9,8 @@ public class Treasure extends ItemEntity {
 	public Treasure(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.ITEM, x, y);
 	}
+	
+	
 
 	@Override
 	public boolean maxOne() {
