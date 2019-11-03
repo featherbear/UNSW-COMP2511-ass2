@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -23,7 +22,7 @@ import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.goals.Goal;
-import unsw.dungeon.goals.GoalCondition;
+import unsw.dungeon.goals.GoalFactory;
 
 /**
  * Loads a dungeon from a .json file.
@@ -52,12 +51,15 @@ public class DungeonLoader {
 		int height = json.getInt("height");
 
 		Dungeon dungeon = new Dungeon(width, height);
-		GoalLoader GL = new GoalLoader(json);
-		dungeon = GL.load(dungeon);
+
+		// Create goals
+		JSONObject jsonGoals = (JSONObject) json.get("goal-condition");
+		Goal goal = GoalFactory.create(dungeon, jsonGoals);
+		dungeon.setGoal(goal);
+
 		dungeon.setPlayer(new Player(dungeon, 0, 0));
 
 		JSONArray jsonEntities = json.getJSONArray("entities");
-		JSONObject jsonGoals = (JSONObject) json.get("goal-condition");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
 		loaders.addHook(new GameHooks());
@@ -146,11 +148,14 @@ public class DungeonLoader {
 		case "portal":
 			Portal portal = new Portal(dungeon, x, y);
 			portal.setID(json.getInt("id"));
+
+			// Level defined portal activation status
 			if (json.optBoolean("activated", true)) {
 				portal.activate();
 			} else {
 				portal.deactivate();
 			}
+
 			loaders.onLoad(portal);
 			return portal;
 
@@ -161,7 +166,6 @@ public class DungeonLoader {
 	}
 };
 
-// TODO: change into array, a bit cluttered having to implement the same thing each time
 class LoaderComposite implements LoaderHook {
 	private ArrayList<LoaderHook> hooks;
 

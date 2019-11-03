@@ -12,15 +12,11 @@ import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
-import unsw.dungeon.goals.Goal;
 
 public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Player player) {
-		Dungeon d = player.getDungeon();
-		Player p = d.getPlayer();
-		p.moveEvent.register(d.getGoal()::goalMoveEventHandler);
 	}
 
 	@Override
@@ -33,7 +29,6 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Wall wall) {
-
 	}
 
 	@Override
@@ -107,6 +102,10 @@ public class GameHooks implements LoaderHook {
 	@Override
 	public void postLoad(Dungeon dungeon) {
 		System.out.println("Dungeon load complete");
+
+		Player p = dungeon.getPlayer();
+		p.moveEvent.register(dungeon::playerMoveEventHandler);
+
 		dungeon.finishEvent.register(() -> {
 			System.out.println("Player has won!");
 		});

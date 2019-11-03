@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
+import unsw.dungeon.events.LocationChanged;
 import unsw.dungeon.goals.Goal;
 import unsw.dungeon.util.emitter.GenericEmitter;
-import unsw.dungeon.goals.Goal;
 
 /**
  * A dungeon in the interactive dungeon player.
@@ -31,11 +31,12 @@ public class Dungeon {
 	private Goal goal;
 
 	public Dungeon(int width, int height) {
+		this.finishEvent = new GenericEmitter();
+
 		this.width = width;
 		this.height = height;
 		this.entities = new ArrayList<>();
 		this.player = null;
-		this.finishEvent = new GenericEmitter();
 		this.goal = null;
 	}
 
@@ -106,9 +107,7 @@ public class Dungeon {
 	public ArrayList<Entity> getEntities() {
 		return this.entities;
 	}
-	public void addGoal(Goal goal) {
-		this.goal = goal;
-	}
+
 	/**
 	 * Get the first entity of a given level in the given coordinates
 	 * 
@@ -118,14 +117,6 @@ public class Dungeon {
 	 * @return Entity
 	 */
 	public Entity getEntityAt(EntityLevel entityLevel, int x, int y) {
-	public void addGoal(Goals goal) {
-
-	// TODO: Should this add to the children if it exists?
-	// Or is it created in the Loader
-	// In that case should it be setGoal() ...
-	public void addGoal(Goal goal) {
-		this.goal = goal;
-	}
 		for (Entity entity : Entity.filter(this.entities, x, y)) {
 			if (entity.getEntityLevel() == entityLevel) {
 				return entity;
@@ -146,8 +137,28 @@ public class Dungeon {
 		return this.getEntityAt(entityLevel, x, y) != null;
 	}
 
+	/**
+	 * Set the Goal object for the dungeon
+	 * 
+	 * @param goal
+	 */
+	public void setGoal(Goal goal) {
+		this.goal = goal;
+	}
+
+	/**
+	 * 
+	 * 
+	 * @return Goal for the dungeon
+	 */
 	public Goal getGoal() {
 		return this.goal;
+	}
+
+	public void playerMoveEventHandler(Player player, LocationChanged event) {
+		if (this.getGoal().achieved()) {
+			this.finishEvent.emit();
+		}
 	}
 
 }
