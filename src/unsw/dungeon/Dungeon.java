@@ -143,4 +143,8 @@ public class Dungeon {
 		return this.getEntityAt(entityLevel, x, y) != null;
 	}
 
+	public Goal getGoal() {
+		return goal;
+	}
+
 }

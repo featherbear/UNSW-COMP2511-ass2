@@ -71,33 +71,8 @@ public class DungeonLoader {
 				System.out.println(e);
 			}
 		}
-		GoalCondition cond = null;
-		JSONArray subgoals = null;
-		String type;
-		ArrayList<Class> objectives = new ArrayList<Class>();
-		try {
-			subgoals = jsonGoals.getJSONArray("subgoals");
-			type = jsonGoals.getString("goal");
-			switch (type) {
-			case "AND":
-				cond = GoalCondition.COMPOSITE;
-			default: // OR
-				cond = GoalCondition.OR;
-			}
-
-			for (int i = 0; i < subgoals.length(); i++) {
-				try {
-					objectives = loadGoals(subgoals.getJSONObject(i));
-				} catch (Error e) {
-					System.out.println(e);
-				}
-			}
-			dungeon.addGoal(new Goal(dungeon, cond, objectives));
-
-		} catch (JSONException e) {
-			dungeon.addGoal(loadGoals(dungeon, jsonGoals, loaders));
-		}
-
+		GoalLoader GL = new GoalLoader(json);
+		dungeon = GL.load(dungeon);
 		loaders.postLoad(dungeon);
 		return dungeon;
 	}
@@ -183,64 +158,6 @@ public class DungeonLoader {
 			throw new Error("Could not load JSON for object type " + type);
 		}
 
-	}
-
-	private Goal loadGoals(Dungeon dungeon, JSONObject json, LoaderHook loaders) {
-		GoalCondition c = null;
-		ArrayList<Class> subgoals = new ArrayList<Class>();
-		String goals = json.getString("goal");
-
-		switch (goals) {
-		case "AND":
-			c = GoalCondition.COMPOSITE;
-			break;
-		case "OR":
-			c = GoalCondition.OR;
-			break;
-
-		case "enemies":
-			subgoals.add(Enemy.class);
-			break;
-
-		case "treasure":
-			subgoals.add(Treasure.class);
-			break;
-
-		case "exit":
-			subgoals.add(Exit.class);
-			break;
-
-		default:
-			break;
-		}
-
-		Goal g = new Goal(dungeon, c, subgoals);
-		return g;
-	}
-
-	private ArrayList<Class> loadGoals(JSONObject json) {
-		ArrayList<Class> subgoals = new ArrayList<Class>();
-		String goals = json.getString("goal");
-		switch ("goal") {
-
-		case "enemies":
-			subgoals.add(Enemy.class);
-			break;
-
-		case "treasure":
-			subgoals.add(Treasure.class);
-			break;
-
-		case "exit":
-			subgoals.add(Exit.class);
-			break;
-
-		default:
-			break;
-
-		}
-
-		return subgoals;
 	}
 };
 
