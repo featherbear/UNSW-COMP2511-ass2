@@ -20,7 +20,7 @@ public class TestUtils {
 
 	public TestUtils(Dungeon dungeon) {
 		this.dungeon = dungeon;
-		this.gameHooks = new GameHooks();
+		this.gameHooks = new GameHooks(dungeon);
 	}
 
 	Boulder Boulder(int x, int y) {
