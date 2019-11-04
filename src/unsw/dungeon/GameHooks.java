@@ -1,5 +1,7 @@
 package unsw.dungeon;
 
+import java.util.ArrayList;
+
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Enemy;
@@ -12,8 +14,18 @@ import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
+import unsw.dungeon.entity.meta.Entity;
+import unsw.dungeon.util.emitter.GenericSAM;
 
 public class GameHooks implements LoaderHook {
+
+	private Dungeon dungeon;
+	private ArrayList<GenericSAM> postLoad;
+
+	public GameHooks(Dungeon dungeon) {
+		this.dungeon = dungeon;
+		this.postLoad = new ArrayList<GenericSAM>();
+	}
 
 	@Override
 	public void onLoad(Player player) {
@@ -21,8 +33,8 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Enemy enemy) {
-		Dungeon d = enemy.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
+
 		p.moveEvent.register(enemy::playerMoveEventHandler);
 		p.moveIntent.register(enemy::playerMoveIntentHandler);
 	}
@@ -33,65 +45,70 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Exit exit) {
-		Dungeon d = exit.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
+
 		p.moveEvent.register(exit::playerMoveEventHandler);
 	}
 
 	@Override
 	public void onLoad(Boulder boulder) {
-		Dungeon d = boulder.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
+
 		p.moveIntent.register(boulder::playerMoveIntentHandler);
+
 	}
 
 	@Override
 	public void onLoad(Switch sw) {
-		Dungeon d = sw.getDungeon();
-		Player p = d.getPlayer();
-		p.moveEvent.register(sw::playerMoveEventHandler);
+
+		this.postLoad.add(() -> {
+			for (Entity boulderObject : Entity.filter(this.dungeon.getEntities(), Boulder.class)) {
+				((Boulder) boulderObject).moveEvent.register(sw::boulderMoveEventHandler);
+			}
+
+			sw.checkBoulder();
+		});
+
 	}
 
 	@Override
 	public void onLoad(Portal portal) {
-		Dungeon d = portal.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
+
 		p.moveIntent.register(portal::playerMoveIntentHandler);
 	}
 
 	@Override
 	public void onLoad(Door door) {
-		Dungeon d = door.getDungeon();
-		Player p = d.getPlayer();
-		p.moveIntent.register(door::playerMoveIntentHandler);
+		Player p = this.dungeon.getPlayer();
 
+		p.moveIntent.register(door::playerMoveIntentHandler);
 	}
 
 	@Override
 	public void onLoad(Treasure treasure) {
-		Dungeon d = treasure.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
+
 		p.moveEvent.register(treasure.LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(Key key) {
-		Dungeon d = key.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
+
 		p.moveEvent.register(key.LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(Sword sword) {
-		Dungeon d = sword.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
+
 		p.moveEvent.register(sword.LocationChangedHandler);
 	}
 
 	@Override
 	public void onLoad(InvincibilityPotion potion) {
-		Dungeon d = potion.getDungeon();
-		Player p = d.getPlayer();
+		Player p = this.dungeon.getPlayer();
 		p.moveEvent.register(potion.LocationChangedHandler);
 
 		potion.pickupEvent.register(() -> {
@@ -101,13 +118,18 @@ public class GameHooks implements LoaderHook {
 
 	@Override
 	public void postLoad(Dungeon dungeon) {
-		System.out.println("Dungeon load complete");
+		Player p = this.dungeon.getPlayer();
 
-		Player p = dungeon.getPlayer();
 		p.moveEvent.register(dungeon::playerMoveEventHandler);
+
+		for (GenericSAM func : this.postLoad) {
+			func.execute();
+		}
 
 		dungeon.finishEvent.register(() -> {
 			System.out.println("Player has won!");
 		});
+
+		System.out.println("Dungeon load complete");
 	}
 }

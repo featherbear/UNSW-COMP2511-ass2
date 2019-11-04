@@ -33,13 +33,17 @@ public class Switch extends Entity {
 		this.activated.set(false);
 	}
 
-	public void playerMoveEventHandler(Player player, LocationChanged event) {
+	public void boulderMoveEventHandler(Boulder boulder, LocationChanged event) {
+		checkBoulder();
+	}
+
+	public void checkBoulder() {
 		Entity e = this.getDungeon().getEntityAt(EntityLevel.OBJECT, this.getX(), this.getY());
+
 		if (e instanceof Boulder) {
 			activate();
 		} else {
 			deactivate();
 		}
 	}
-
 }
