@@ -121,4 +121,8 @@ public class TestUtils {
 
 		return invincibilityPotion;
 	}
+
+	void PostLoad() {
+		this.gameHooks.postLoad(this.dungeon);
+	}
 }
