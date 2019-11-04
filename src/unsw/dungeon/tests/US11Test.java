@@ -36,7 +36,9 @@ class US11Test {
 
 		assertEquals(player.getX(), 2);
 		assertEquals(player.getY(), 3);
+
 		player.moveRight();
+		// Successful teleport
 		assertEquals(player.getX(), 7);
 		assertEquals(player.getY(), 7);
 	}
@@ -47,7 +49,9 @@ class US11Test {
 
 		assertEquals(player.getX(), 2);
 		assertEquals(player.getY(), 3);
+
 		player.moveRight();
+		// No matching teleport destination
 		assertEquals(player.getX(), 3);
 		assertEquals(player.getY(), 3);
 	}
@@ -60,21 +64,14 @@ class US11Test {
 		Portal portal2 = Create.Portal(7, 7);
 		portal2.setID(2);
 
+
 		assertEquals(player.getX(), 2);
 		assertEquals(player.getY(), 3);
+
 		player.moveRight();
+		// No teleport
 		assertEquals(player.getX(), 3);
 		assertEquals(player.getY(), 3);
-	}
-
-	@Test
-	void enemyStep() {
-		Portal portal1 = Create.Portal(3, 3);
-		portal1.setID(1);
-
-		Portal portal2 = Create.Portal(7, 7);
-		portal2.setID(1);
-
 	}
 
 	@Test
@@ -89,18 +86,39 @@ class US11Test {
 
 		assertEquals(player.getX(), 2);
 		assertEquals(player.getY(), 3);
+
 		player.moveRight();
 		assertEquals(player.getX(), 3);
 		assertEquals(player.getY(), 3);
+
+		assertEquals(boulder.getX(), 4);
+		assertEquals(boulder.getY(), 3);
 	}
 
 	@Test
 	void boulderPushedOnPortalAndPast() {
-		boulderPushedOnPortal();
+		Portal portal1 = Create.Portal(4, 3);
+		portal1.setID(1);
+
+		Portal portal2 = Create.Portal(7, 7);
+		portal2.setID(1);
+
+		Boulder boulder = Create.Boulder(3, 3);
+
+		assertEquals(player.getX(), 2);
+		assertEquals(player.getY(), 3);
+
+		player.moveRight();
+		assertEquals(player.getX(), 3);
+		assertEquals(player.getY(), 3);
+
+		assertEquals(boulder.getX(), 4);
+		assertEquals(boulder.getY(), 3);
 
 		player.moveRight();
 		assertEquals(player.getX(), 7);
 		assertEquals(player.getY(), 7);
+
 	}
 
 	@Test

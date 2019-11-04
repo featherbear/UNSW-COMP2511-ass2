@@ -156,7 +156,9 @@ public class Dungeon {
 	}
 
 	public void playerMoveEventHandler(Player player, LocationChanged event) {
-		if (this.getGoal().achieved()) {
+		Goal goal = this.getGoal();
+
+		if (goal != null && goal.achieved()) {
 			this.finishEvent.emit();
 		}
 	}
