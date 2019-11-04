@@ -62,7 +62,7 @@ public class DungeonLoader {
 		JSONArray jsonEntities = json.getJSONArray("entities");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
-		loaders.addHook(new GameHooks());
+		loaders.addHook(new GameHooks(dungeon));
 
 		for (int i = 0; i < jsonEntities.length(); i++) {
 			try {
