@@ -31,6 +31,7 @@ public class US4Test {
 	void boulderActivate() {
 		boulder = Create.Boulder(1, 2);
 		sw = Create.Switch(1, 3);
+		Create.PostLoad();
 
 		assertFalse(sw.getActivated());
 		player.moveDown();
@@ -41,6 +42,7 @@ public class US4Test {
 	void boulderDeactivate() {
 		boulder = Create.Boulder(1, 2);
 		sw = Create.Switch(1, 2);
+		Create.PostLoad();
 
 		assertTrue(sw.getActivated());
 		player.moveDown();
@@ -51,6 +53,7 @@ public class US4Test {
 	void boulderPushThrough() {
 		boulder = Create.Boulder(1, 2);
 		sw = Create.Switch(1, 3);
+		Create.PostLoad();
 
 		assertFalse(sw.getActivated());
 		player.moveDown();
