@@ -30,20 +30,21 @@ public class DungeonController {
 	private Dungeon dungeon;
 
 	public final GenericEmitter restartEvent;
+	public final GenericEmitter playerDeadEvent;
 
 	public DungeonController(Dungeon dungeon, List<EntityImagePair> entities) {
 		this.dungeon = dungeon;
 		this.player = dungeon.getPlayer();
 		this.entities = new ArrayList<EntityImagePair>(entities);
 		this.restartEvent = new GenericEmitter();
+		this.playerDeadEvent = new GenericEmitter();
 
 		// When the player dies, call the restart event
 		this.player.alive().addListener((observable, oldValue, newValue) -> {
 			if (newValue == false) {
-				this.restart();
+				this.playerDeadEvent.emit();
 			}
 		});
-
 	}
 
 	@FXML
