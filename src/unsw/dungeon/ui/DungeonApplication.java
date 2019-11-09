@@ -7,6 +7,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class DungeonApplication extends Application {
@@ -53,6 +55,7 @@ public class DungeonApplication extends Application {
 		DungeonController controller = dungeonControllerLoader.loadController();
 		loader.setController(controller);
 
+		StackPane display = new StackPane();
 		Parent root = null;
 
 		try {
@@ -62,6 +65,9 @@ public class DungeonApplication extends Application {
 		}
 
 		Scene scene = new Scene(root);
+		VBox box = new VBox(root);
+		display.getChildren().addAll(box);
+		Scene scene = new Scene(display);
 		root.requestFocus();
 		primaryStage.setScene(scene);
 
