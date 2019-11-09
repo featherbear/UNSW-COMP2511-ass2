@@ -56,18 +56,30 @@ public class DungeonApplication extends Application {
 		loader.setController(controller);
 
 		StackPane display = new StackPane();
+
+		HUDController HUD = new HUDController();
+		FXMLLoader HUDloader = new FXMLLoader(getClass().getResource("HUD.fxml"));
+
+		HUDloader.setController(HUD);
+
 		Parent root = null;
+		Parent HUDnode = null;
 
 		try {
 			root = loader.load();
+			HUDnode = HUDloader.load();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		Scene scene = new Scene(root);
-		VBox box = new VBox(root);
+		HUD.attach(controller);
+
+		VBox box = new VBox(root, HUDnode);
+
 		display.getChildren().addAll(box);
+
 		Scene scene = new Scene(display);
+
 		root.requestFocus();
 		primaryStage.setScene(scene);
 
