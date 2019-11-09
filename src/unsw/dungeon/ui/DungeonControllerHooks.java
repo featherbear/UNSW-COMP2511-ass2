@@ -1,7 +1,12 @@
 package unsw.dungeon.ui;
 
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import unsw.dungeon.LoaderHook;
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
@@ -64,11 +69,19 @@ public class DungeonControllerHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Door door) {
-		ImageView view = new ImageView(images.doorClosedImage);
+
+		ImageView view = applyColourShift(new ImageView(images.doorClosedImage), door.getID());
 
 		// Register door opening graphical updates
 		door.opened().addListener((observer, oldValue, newValue) -> {
-			view.setImage(newValue ? images.doorOpenedImage : images.doorClosedImage);
+			Image newImage = newValue ? images.doorOpenedImage : images.doorClosedImage;
+			view.setImage(newImage);
+
+			ImageView clip = ((ImageView) view.getClip());
+			if (clip != null) {
+				clip.setImage(newImage);
+			}
+
 		});
 		loader.addEntity(door, view);
 	}
@@ -81,7 +94,7 @@ public class DungeonControllerHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Key key) {
-		ImageView view = new ImageView(images.keyImage);
+		ImageView view = applyColourShift(new ImageView(images.keyImage), key.getID());
 		loader.addEntity(key, view);
 	}
 
@@ -113,4 +126,33 @@ public class DungeonControllerHooks implements LoaderHook {
 		loader.addEntity(portal, view);
 	}
 
+	private ImageView applyColourShift(ImageView imageView, int i) {
+		// Don't apply for i = 1 ... because... because.
+		if (i == 1) {
+			return imageView;
+		}
+
+		ImageView view = new ImageView(imageView.getImage());
+
+		view.setClip(imageView);
+
+		// Effect code from https://stackoverflow.com/a/18124868
+		ColorAdjust monochromeBase = new ColorAdjust();
+		monochromeBase.setSaturation(-1.0);
+		Blend keyColour = new Blend(BlendMode.MULTIPLY, monochromeBase,
+				new ColorInput(0, 0, view.getImage().getWidth(), view.getImage().getHeight(), ColorFromID(i)));
+
+		view.setEffect(keyColour);
+
+		return view;
+	}
+
+	private Color ColorFromID(int id) {
+		// https://graphicdesign.stackexchange.com/a/3815
+		String[] hexCodes = { "#023FA5", "#7D87B9", "#BEC1D4", "#D6BCC0", "#BB7784", "#FFFFFF", "#4A6FE3", "#8595E1",
+				"#B5BBE3", "#E6AFB9", "#E07B91", "#D33F6A", "#11C638", "#8DD593", "#C6DEC7", "#EAD3C6", "#F0B98D",
+				"#EF9708", "#0FCFC0", "#9CDED6", "#D5EAE7", "#F3E1EB", "#F6C4E1", "#F79CD4" };
+
+		return Color.web(hexCodes[(id - 1 + hexCodes.length) % hexCodes.length]);
+	}
 }
