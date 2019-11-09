@@ -7,6 +7,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class DungeonApplication extends Application {
@@ -53,15 +55,31 @@ public class DungeonApplication extends Application {
 		DungeonController controller = dungeonControllerLoader.loadController();
 		loader.setController(controller);
 
+		StackPane display = new StackPane();
+
+		HUDController HUD = new HUDController();
+		FXMLLoader HUDloader = new FXMLLoader(getClass().getResource("HUD.fxml"));
+
+		HUDloader.setController(HUD);
+
 		Parent root = null;
+		Parent HUDnode = null;
 
 		try {
 			root = loader.load();
+			HUDnode = HUDloader.load();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		Scene scene = new Scene(root);
+		HUD.attach(controller);
+
+		VBox box = new VBox(root, HUDnode);
+
+		display.getChildren().addAll(box);
+
+		Scene scene = new Scene(display);
+
 		root.requestFocus();
 		primaryStage.setScene(scene);
 

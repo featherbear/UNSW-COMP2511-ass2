@@ -110,4 +110,7 @@ public class DungeonController {
 		return this.dungeon;
 	}
 
+	public List<EntityImagePair> getEntityImagePairs() {
+		return this.entities;
+	}
 }
