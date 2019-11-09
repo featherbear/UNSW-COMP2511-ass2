@@ -4,6 +4,7 @@ import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -112,16 +113,20 @@ public class DungeonControllerHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Portal portal) {
-		ImageView view = new ImageView(images.portalImage);
+		ImageView view = applyColourShift(new ImageView(images.portalImage), portal.getID());
+
+		Effect activatedEffect = view.getEffect();
 
 		// Register portal activation graphical effect
 		ColorAdjust disabledEffect = new ColorAdjust(0, -0.5, -0.8, -0.3);
+		disabledEffect.setInput(activatedEffect);
+
 		portal.activated().addListener((observable, oldValue, newValue) -> {
-			view.setEffect(newValue ? null : disabledEffect);
+			view.setEffect(newValue ? activatedEffect : disabledEffect);
 		});
 
 		// Set the effect now
-		view.setEffect(portal.getActivated() ? null : disabledEffect);
+		view.setEffect(portal.getActivated() ? activatedEffect : disabledEffect);
 
 		loader.addEntity(portal, view);
 	}
@@ -138,7 +143,7 @@ public class DungeonControllerHooks implements LoaderHook {
 
 		// Effect code from https://stackoverflow.com/a/18124868
 		ColorAdjust monochromeBase = new ColorAdjust();
-		monochromeBase.setSaturation(-1.0);
+		monochromeBase.setSaturation(-.8);
 		Blend keyColour = new Blend(BlendMode.MULTIPLY, monochromeBase,
 				new ColorInput(0, 0, view.getImage().getWidth(), view.getImage().getHeight(), ColorFromID(i)));
 
