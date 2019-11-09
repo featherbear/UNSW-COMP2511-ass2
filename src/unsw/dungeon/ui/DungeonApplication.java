@@ -96,6 +96,15 @@ public class DungeonApplication extends Application {
 			}
 		});
 
+		controller.playerDeadEvent.register(() -> {
+			try {
+				// Show the Lose Screen
+				FXMLLoader loseLoader = new FXMLLoader(getClass().getResource("LoseScreen.fxml"));
+				display.getChildren().add(loseLoader.load());
+			} catch (IOException e) {
+			}
+		});
+
 		return controller;
 	}
 
