@@ -35,8 +35,15 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Enemy enemy) {
 		Player p = this.dungeon.getPlayer();
 
-		p.moveEvent.register(enemy::playerMoveEventHandler);
-		p.moveIntent.register(enemy::playerMoveIntentHandler);
+		p.moveEvent.register(enemy.playerMoveEventHandler);
+		p.moveIntent.register(enemy.playerMoveIntentHandler);
+		enemy.alive().addListener((observer, oldValue, newValue) -> {
+			if (newValue == false) {
+				this.dungeon.removeEntity(enemy);
+				p.moveEvent.unregister(enemy.playerMoveEventHandler);
+				p.moveIntent.unregister(enemy.playerMoveIntentHandler);
+			}
+		});
 	}
 
 	@Override
