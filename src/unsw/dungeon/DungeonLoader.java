@@ -21,7 +21,8 @@ import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
-
+import unsw.dungeon.goals.Goal;
+import unsw.dungeon.goals.GoalFactory;
 
 /**
  * Loads a dungeon from a .json file.
@@ -51,12 +52,17 @@ public class DungeonLoader {
 
 		Dungeon dungeon = new Dungeon(width, height);
 
+		// Create goals
+		JSONObject jsonGoals = (JSONObject) json.get("goal-condition");
+		Goal goal = GoalFactory.create(dungeon, jsonGoals);
+		dungeon.setGoal(goal);
+
 		dungeon.setPlayer(new Player(dungeon, 0, 0));
 
 		JSONArray jsonEntities = json.getJSONArray("entities");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
-		loaders.addHook(new GameHooks());
+		loaders.addHook(new GameHooks(dungeon));
 
 		for (int i = 0; i < jsonEntities.length(); i++) {
 			try {
@@ -86,7 +92,7 @@ public class DungeonLoader {
 			player.y().set(y);
 			loaders.onLoad(player);
 			return player;
-			
+
 		case "enemy":
 			Enemy enemy = new Enemy(dungeon, x, y);
 			loaders.onLoad(enemy);
@@ -101,12 +107,12 @@ public class DungeonLoader {
 			Exit exit = new Exit(dungeon, x, y);
 			loaders.onLoad(exit);
 			return exit;
-			
+
 		case "switch":
 			Switch sw = new Switch(dungeon, x, y);
 			loaders.onLoad(sw);
 			return sw;
-			
+
 		case "boulder":
 			Boulder boulder = new Boulder(dungeon, x, y);
 			loaders.onLoad(boulder);
@@ -142,11 +148,14 @@ public class DungeonLoader {
 		case "portal":
 			Portal portal = new Portal(dungeon, x, y);
 			portal.setID(json.getInt("id"));
+
+			// Level defined portal activation status
 			if (json.optBoolean("activated", true)) {
 				portal.activate();
 			} else {
 				portal.deactivate();
 			}
+
 			loaders.onLoad(portal);
 			return portal;
 
@@ -157,7 +166,6 @@ public class DungeonLoader {
 	}
 };
 
-// TODO: change into array, a bit cluttered having to implement the same thing each time
 class LoaderComposite implements LoaderHook {
 	private ArrayList<LoaderHook> hooks;
 
@@ -195,7 +203,7 @@ class LoaderComposite implements LoaderHook {
 			hook.onLoad(exit);
 		}
 	}
-	
+
 	@Override
 	public void onLoad(Boulder boulder) {
 		for (LoaderHook hook : this.hooks) {
@@ -265,4 +273,5 @@ class LoaderComposite implements LoaderHook {
 			hook.postLoad(dungeon);
 		}
 	}
+
 }

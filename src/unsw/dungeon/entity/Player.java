@@ -37,18 +37,6 @@ public class Player extends MovableEntity<Player> implements Interactable {
 
 	}
 
-	private boolean isPositionBlocked(int x, int y) {
-		if (this.getDungeon().hasEntitiesAt(entityLevel.OBJECT, x, y)) {
-			if (this.getDungeon().getEntityAt(entityLevel.OBJECT, x, y) != null) {
-				Entity e = this.getDungeon().getEntityAt(entityLevel.OBJECT, x, y);
-				if (e instanceof Boulder) {
-					return false;
-				}
-			}
-		}
-		return this.getDungeon().hasEntitiesAt(EntityLevel.OBJECT, x, y);
-	}
-
 	private void move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
@@ -110,6 +98,16 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		}
 
 		this.inventory.add(item);
+
+		// Register Usable items
+		if (item instanceof Usable) {
+			((Usable) item).itemUsed().register((itemObj, evt) -> {
+				if (evt.newValue == 0) {
+					this.removeItem(item);
+				}
+			});
+		}
+
 		item.visibility().set(false);
 		return true;
 	}
