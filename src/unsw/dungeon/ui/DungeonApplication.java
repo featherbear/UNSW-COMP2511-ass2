@@ -96,7 +96,7 @@ public class DungeonApplication extends Application {
 			}
 		});
 
-		controller.playerDeadEvent.register(() -> {
+		controller.getDungeon().playerDeadEvent.register(() -> {
 			try {
 				// Show the Lose Screen
 				FXMLLoader loseLoader = new FXMLLoader(getClass().getResource("LoseScreen.fxml"));
