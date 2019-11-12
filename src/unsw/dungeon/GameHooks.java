@@ -15,6 +15,7 @@ import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.entity.meta.Entity;
+import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.util.emitter.GenericSAM;
 
 public class GameHooks implements LoaderHook {
@@ -43,6 +44,18 @@ public class GameHooks implements LoaderHook {
 				p.moveEvent.unregister(enemy.playerMoveEventHandler);
 				p.moveIntent.unregister(enemy.playerMoveIntentHandler);
 			}
+		});
+
+		p.itemPickedUpEvent.register((player, event) -> {
+			if (event.item instanceof InvincibilityPotion) {
+				enemy.setFlee();
+				((Usable) event.item).itemUsed().register((item, event2) -> {
+					if (event2.newValue == 0) {
+						enemy.setRoam();
+					}
+				});
+			}
+
 		});
 	}
 

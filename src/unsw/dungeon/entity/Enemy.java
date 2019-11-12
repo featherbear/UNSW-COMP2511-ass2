@@ -5,6 +5,9 @@ import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.entity.enemies.EnemyBehaviour;
+import unsw.dungeon.entity.enemies.FleeBehaviour;
+import unsw.dungeon.entity.enemies.RoamBehaviour;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
@@ -22,16 +25,15 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 	public final IntentSAM<Player, LocationChanged> playerMoveIntentHandler;
 	public final EventSAM<Player, LocationChanged> playerMoveEventHandler;
 
+	private EnemyBehaviour movementBehaviour;
+
 	public Enemy(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.isAlive = new SimpleBooleanProperty(true);
+		this.setRoam();
 
 		this.playerMoveEventHandler = (player, event) -> {
-			if (player.hasItemUsable(InvincibilityPotion.class)) {
-				flee(player);
-			} else {
-				roam(player);
-			}
+			move();
 		};
 
 		this.playerMoveIntentHandler = (player, event) -> {
@@ -41,7 +43,22 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
 			return player.interact(this);
 		};
+	}
 
+	public void setFlee() {
+		this.movementBehaviour = new FleeBehaviour();
+	}
+
+	public void setRoam() {
+		this.movementBehaviour = new RoamBehaviour();
+	}
+
+	public void setMovementBehaviour(EnemyBehaviour behaviour) {
+		this.movementBehaviour = behaviour;
+	}
+
+	public void move() {
+		this.movementBehaviour.move(this);
 	}
 
 	private boolean move(int xDirection, int yDirection) {
@@ -110,52 +127,6 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 	public void kill() {
 		this.isAlive.set(false);
 		this.hide();
-	}
-
-	public boolean roam(Player p) {
-		int X = p.getX() - this.getX();
-		int Y = p.getY() - this.getY();
-		boolean moveSuccess = false;
-		if (X > 0 && moveSuccess == false) {
-			moveSuccess = moveRight();
-		}
-
-		if (X < 0 && moveSuccess == false) {
-			moveSuccess = moveLeft();
-		}
-
-		if (Y > 0 && moveSuccess == false) {
-			moveSuccess = moveDown();
-		}
-
-		if (Y < 0 && moveSuccess == false) {
-			moveSuccess = moveUp();
-		}
-
-		return true;
-	}
-
-	public boolean flee(Player p) {
-		int X = p.getX() - this.getX();
-		int Y = p.getY() - this.getY();
-		boolean moveSuccess = false;
-		if (X > 0 && moveSuccess == false) {
-			moveSuccess = moveLeft();
-		}
-
-		if (X < 0 && moveSuccess == false) {
-			moveSuccess = moveRight();
-		}
-
-		if (Y > 0 && moveSuccess == false) {
-			moveSuccess = moveUp();
-		}
-
-		if (Y < 0 && moveSuccess == false) {
-			moveSuccess = moveDown();
-		}
-
-		return true;
 	}
 
 	@Override
