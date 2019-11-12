@@ -75,7 +75,13 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		}
 
 		if (isPositionBlocked(newX, newY)) {
-			return false;
+			Player p = this.getDungeon().getPlayer();
+
+			if (p.getX() == newX && p.getY() == newY) {
+				this.interact(p);
+			} else {
+				return false;
+			}
 		}
 
 		this.setXY(newX, newY);
