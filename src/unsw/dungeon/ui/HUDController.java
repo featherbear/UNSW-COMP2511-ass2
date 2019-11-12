@@ -18,7 +18,6 @@ import unsw.dungeon.events.ItemPickedUp;
 import unsw.dungeon.util.emitter.EventSAM;
 
 public class HUDController {
-	private DungeonController dungeonController;
 	private Dungeon dungeon;
 	private List<EntityImagePair> entityImagePairs;
 
@@ -56,10 +55,8 @@ public class HUDController {
 	}
 
 	public void attach(DungeonController dungeonController) {
-		this.dungeonController = dungeonController;
-		this.dungeon = this.dungeonController.getDungeon();
-
-		this.entityImagePairs = this.dungeonController.getEntityImagePairs();
+		this.dungeon = dungeonController.getDungeon();
+		this.entityImagePairs = dungeonController.getEntityImagePairs();
 
 		// Register item pickup events
 		this.dungeon.getPlayer().itemPickedUpEvent.register(this.itemPickedUpEvent);
@@ -185,7 +182,7 @@ class GridPaneHUD {
 	}
 
 	/**
-	 * Remove a Text nide
+	 * Remove a Text node
 	 */
 	private void removeItem(Text text) {
 		this.gridPane.getChildren().remove(text);
