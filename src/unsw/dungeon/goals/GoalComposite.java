@@ -12,10 +12,18 @@ public class GoalComposite extends Goal {
 		this.subGoals = new ArrayList<Goal>();
 	}
 
+	/**
+	 * Add a new subgoal to the Goal composite
+	 * 
+	 * @param subgoal
+	 */
 	public void addSubGoal(Goal e) {
 		this.subGoals.add(e);
 	}
 
+	/**
+	 * @return Subgoals for the Goal composite
+	 */
 	public ArrayList<Goal> getSubGoals() {
 		return this.subGoals;
 	}

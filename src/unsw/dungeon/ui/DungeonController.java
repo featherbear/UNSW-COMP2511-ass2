@@ -102,6 +102,9 @@ public class DungeonController {
 		return this.dungeon;
 	}
 
+	/**
+	 * @return Entity image pairs
+	 */
 	public List<EntityImagePair> getEntityImagePairs() {
 		return this.entities;
 	}
