@@ -2,6 +2,8 @@ package unsw.dungeon.entity;
 
 import java.util.List;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
@@ -12,9 +14,16 @@ import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.LocationChanged;
 
 public class Enemy extends MovableEntity<Enemy> implements Interactable {
-
+	
+	private BooleanProperty isAlive;
+	
 	public Enemy(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
+		this.isAlive = new SimpleBooleanProperty(true);
+	}
+	
+	private boolean isAlive() {
+		return this.isAlive.getValue();
 	}
 
 	private boolean move(int xDirection, int yDirection) {
@@ -73,8 +82,9 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 	}
 
 	public void kill() {
-		this.hide();
+		this.isAlive.set(false);
 		this.getDungeon().removeEntity(this);
+		this.hide();
 	}
 
 	public boolean roam(Player p) {
@@ -125,6 +135,7 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
 	@Override
 	public boolean interact(Entity entity) {
+		if (!isAlive.get()) return true;
 		if (entity instanceof Player) {
 			Player p = (Player) entity;
 
@@ -145,6 +156,7 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 	}
 
 	public void playerMoveEventHandler(Player player, LocationChanged event) {
+		if (!isAlive.get()) return;
 		if (player.hasItemUsable(InvincibilityPotion.class)) {
 			flee(player);
 		} else {
@@ -156,6 +168,7 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
+		
 		return player.interact(this);
 	}
 }

@@ -51,6 +51,7 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		}
 
 		if (isPositionBlocked(newX, newY)) {
+			System.out.println(isPositionBlocked(newX,newY));
 			return;
 		}
 
