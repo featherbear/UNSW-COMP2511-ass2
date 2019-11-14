@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -77,6 +78,8 @@ public class DungeonApplication extends Application {
 		StackPane gameScreen = new StackPane(root);
 
 		VBox box = new VBox(gameScreen, HUDnode);
+		box.setAlignment(Pos.CENTER);
+
 		container.getChildren().addAll(box);
 
 		Scene scene = new Scene(container);
