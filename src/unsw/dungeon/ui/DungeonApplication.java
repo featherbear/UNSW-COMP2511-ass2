@@ -21,7 +21,7 @@ public class DungeonApplication extends Application {
 	private Parent gameRoot;
 
 	@Override
-	public void start(Stage primaryStage) throws IOException {
+	public void start(Stage primaryStage) {
 
 		LevelSelectController levelSelectController = new LevelSelectController();
 		FXMLLoader levelSelectLoader = new FXMLLoader(getClass().getResource("LevelSelect.fxml"));
@@ -35,30 +35,23 @@ public class DungeonApplication extends Application {
 				this.dungeonControllerLoader = new DungeonControllerLoader(level);
 				setGame(primaryStage);
 
-				StackPane container = new StackPane((StackPane) primaryStage.getScene().getRoot());
+				FXMLLoader startScreenLoader = new FXMLLoader(getClass().getResource("StartScreen.fxml"));
+				StartScreenController startScreenController = new StartScreenController();
+				startScreenLoader.setController(startScreenController);
 
-				try {
-					FXMLLoader startScreen = new FXMLLoader(getClass().getResource("StartScreen.fxml"));
-					StartScreenController startScreenController = new StartScreenController();
-					startScreen.setController(startScreenController);
+				Parent startScreen = forceLoad(startScreenLoader);
+				StackPane gameContainer = new StackPane((StackPane) primaryStage.getScene().getRoot());
 
-					Parent node = startScreen.load();
+				startScreenController.onPlay(() -> {
+					unblurScreen(zoomAmount);
+					gameContainer.getChildren().remove(startScreen);
+					gameRoot.requestFocus();
+				});
 
-					startScreenController.onPlay(() -> {
-						container.getChildren().remove(node);
+				blurScreen(zoomAmount);
+				gameContainer.getChildren().add(startScreen);
 
-						unblurScreen(zoomAmount);
-						gameRoot.requestFocus();
-					});
-
-					blurScreen(zoomAmount);
-
-					container.getChildren().add(node);
-				} catch (IOException e) {
-					System.out.println(e);
-				}
-
-				primaryStage.setScene(new Scene(container));
+				primaryStage.setScene(new Scene(gameContainer));
 
 				primaryStage.setTitle("Dungeon");
 			} catch (FileNotFoundException e) {
@@ -66,9 +59,9 @@ public class DungeonApplication extends Application {
 			}
 		});
 
-		Parent root = levelSelectLoader.load();
-		Scene levelScene = new Scene(root);
-		root.requestFocus();
+		Parent levelSelector = forceLoad(levelSelectLoader);
+		Scene levelScene = new Scene(levelSelector);
+		levelSelector.requestFocus();
 		primaryStage.setScene(levelScene);
 
 		primaryStage.setTitle("Level Select | Dungeon");
@@ -98,6 +91,16 @@ public class DungeonApplication extends Application {
 		st.play();
 	}
 
+	static private Parent forceLoad(FXMLLoader loader) {
+		try {
+			return loader.load();
+		} catch (IOException e) {
+			System.out.println("Fatal error thrown " + e);
+			System.out.println("Eh.");
+			return null;
+		}
+	}
+
 	/**
 	 * Load the game
 	 * 
@@ -119,12 +122,8 @@ public class DungeonApplication extends Application {
 		gameRoot = null;
 		Parent HUDnode = null;
 
-		try {
-			gameRoot = loader.load();
-			HUDnode = HUDloader.load();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		gameRoot = forceLoad(loader);
+		HUDnode = forceLoad(HUDloader);
 
 		// Hook HUD onto the controller
 		HUD.attach(controller);
@@ -143,21 +142,13 @@ public class DungeonApplication extends Application {
 
 		// Register finish event
 		controller.getDungeon().finishEvent.register(() -> {
-			try {
-				// Show the Win Screen
-				FXMLLoader winLoader = new FXMLLoader(getClass().getResource("WinScreen.fxml"));
-				primaryStage.setScene(new Scene(winLoader.load()));
-			} catch (IOException e) {
-			}
+			FXMLLoader winLoader = new FXMLLoader(getClass().getResource("WinScreen.fxml"));
+			primaryStage.setScene(new Scene(forceLoad(winLoader)));
 		});
 
 		controller.getDungeon().playerDeadEvent.register(() -> {
-			try {
-				// Show the Lose Screen
-				FXMLLoader loseLoader = new FXMLLoader(getClass().getResource("LoseScreen.fxml"));
-				gameScreen.getChildren().add(loseLoader.load());
-			} catch (IOException e) {
-			}
+			FXMLLoader loseLoader = new FXMLLoader(getClass().getResource("LoseScreen.fxml"));
+			gameScreen.getChildren().add(forceLoad(loseLoader));
 		});
 
 		return controller;
