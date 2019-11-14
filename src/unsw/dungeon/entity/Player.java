@@ -42,6 +42,10 @@ public class Player extends MovableEntity<Player> implements Interactable {
 	}
 
 	private void move(int xDirection, int yDirection) {
+		if (!this.isAlive()) {
+			return;
+		}
+
 		int oldX = getX();
 		int oldY = getY();
 

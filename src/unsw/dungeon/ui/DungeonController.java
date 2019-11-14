@@ -36,14 +36,6 @@ public class DungeonController {
 		this.player = dungeon.getPlayer();
 		this.entities = new ArrayList<EntityImagePair>(entities);
 		this.restartEvent = new GenericEmitter();
-
-		// When the player dies, call the restart event
-		this.player.alive().addListener((observable, oldValue, newValue) -> {
-			if (newValue == false) {
-				this.restart();
-			}
-		});
-
 	}
 
 	@FXML
@@ -110,6 +102,9 @@ public class DungeonController {
 		return this.dungeon;
 	}
 
+	/**
+	 * @return Entity image pairs
+	 */
 	public List<EntityImagePair> getEntityImagePairs() {
 		return this.entities;
 	}

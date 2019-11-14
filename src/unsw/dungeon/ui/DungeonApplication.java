@@ -55,11 +55,10 @@ public class DungeonApplication extends Application {
 		DungeonController controller = dungeonControllerLoader.loadController();
 		loader.setController(controller);
 
-		StackPane display = new StackPane();
+		StackPane container = new StackPane();
 
 		HUDController HUD = new HUDController();
 		FXMLLoader HUDloader = new FXMLLoader(getClass().getResource("HUD.fxml"));
-
 		HUDloader.setController(HUD);
 
 		Parent root = null;
@@ -72,14 +71,15 @@ public class DungeonApplication extends Application {
 			e.printStackTrace();
 		}
 
+		// Hook HUD onto the controller
 		HUD.attach(controller);
 
-		VBox box = new VBox(root, HUDnode);
+		StackPane gameScreen = new StackPane(root);
 
-		display.getChildren().addAll(box);
+		VBox box = new VBox(gameScreen, HUDnode);
+		container.getChildren().addAll(box);
 
-		Scene scene = new Scene(display);
-
+		Scene scene = new Scene(container);
 		root.requestFocus();
 		primaryStage.setScene(scene);
 
@@ -92,6 +92,15 @@ public class DungeonApplication extends Application {
 				// Show the Win Screen
 				FXMLLoader winLoader = new FXMLLoader(getClass().getResource("WinScreen.fxml"));
 				primaryStage.setScene(new Scene(winLoader.load()));
+			} catch (IOException e) {
+			}
+		});
+
+		controller.getDungeon().playerDeadEvent.register(() -> {
+			try {
+				// Show the Lose Screen
+				FXMLLoader loseLoader = new FXMLLoader(getClass().getResource("LoseScreen.fxml"));
+				gameScreen.getChildren().add(loseLoader.load());
 			} catch (IOException e) {
 			}
 		});

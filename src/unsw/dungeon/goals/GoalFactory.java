@@ -4,6 +4,9 @@ import org.json.JSONObject;
 
 import unsw.dungeon.Dungeon;
 
+/**
+ * JSON to Goal factory
+ */
 public class GoalFactory {
 
 	private static final GoalStrategy GoalStrategyAND = new GoalStrategyAND();
@@ -13,6 +16,9 @@ public class GoalFactory {
 	private static final GoalStrategy GoalStrategyBoulder = new GoalStrategyBoulder();
 	private static final GoalStrategy GoalStrategyTreasure = new GoalStrategyTreasure();
 
+	/**
+	 * Get the associated GoalStrategy for a JSON goal string
+	 */
 	private static GoalStrategy stringToStrategy(String string) {
 		switch (string) {
 		case "exit":
@@ -33,6 +39,13 @@ public class GoalFactory {
 
 	}
 
+	/**
+	 * Convert a goal JSON into a Goal object
+	 * 
+	 * @param dungeon
+	 * @param JSON
+	 * @return Goal
+	 */
 	public static Goal create(Dungeon dungeon, JSONObject JSON) {
 		String strategyType = JSON.getString("goal");
 		GoalStrategy strategy = stringToStrategy(strategyType);
@@ -45,6 +58,7 @@ public class GoalFactory {
 			return new Goal(dungeon, strategy);
 		}
 
+		// Composite goals
 		GoalComposite node = new GoalComposite(dungeon, strategy);
 
 		for (Object subGoalJSON : JSON.getJSONArray("subgoals")) {
