@@ -146,6 +146,7 @@ public class DungeonApplication extends Application {
 			primaryStage.setScene(new Scene(forceLoad(winLoader)));
 		});
 
+		// Register lose event
 		controller.getDungeon().playerDeadEvent.register(() -> {
 			FXMLLoader loseLoader = new FXMLLoader(getClass().getResource("LoseScreen.fxml"));
 			gameScreen.getChildren().add(forceLoad(loseLoader));
