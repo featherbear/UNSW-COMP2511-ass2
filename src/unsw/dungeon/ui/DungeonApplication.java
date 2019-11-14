@@ -8,6 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -79,6 +85,8 @@ public class DungeonApplication extends Application {
 
 		VBox box = new VBox(gameScreen, HUDnode);
 		box.setAlignment(Pos.CENTER);
+		box.setBackground(new Background(new BackgroundImage(new Image("backgroundTile.png"), BackgroundRepeat.REPEAT,
+				BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 
 		container.getChildren().addAll(box);
 
