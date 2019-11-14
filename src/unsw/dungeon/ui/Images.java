@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 
 /**
  * Class to hold the images
- *
  */
 public class Images {
 	public final Image playerImage;

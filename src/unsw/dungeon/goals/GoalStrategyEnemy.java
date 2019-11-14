@@ -5,6 +5,9 @@ import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.meta.Entity;
 
 public class GoalStrategyEnemy implements GoalStrategy {
+	/**
+	 * All enemies must be defeated
+	 */
 	@Override
 	public boolean achieved(Goal g) {
 		Dungeon dungeon = g.getDungeon();

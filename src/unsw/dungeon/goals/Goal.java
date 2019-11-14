@@ -12,10 +12,16 @@ public class Goal {
 		this.strategy = strategy;
 	}
 
+	/**
+	 * @return Goal achieved status
+	 */
 	public boolean achieved() {
 		return this.strategy.achieved(this);
 	}
 
+	/**
+	 * @return Dungeon
+	 */
 	public Dungeon getDungeon() {
 		return this.dungeon;
 	}

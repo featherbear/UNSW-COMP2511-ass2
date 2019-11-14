@@ -2,6 +2,8 @@ package unsw.dungeon.entity;
 
 import java.util.List;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
@@ -10,11 +12,36 @@ import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
 import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.LocationChanged;
+import unsw.dungeon.util.emitter.EventSAM;
+import unsw.dungeon.util.emitter.IntentSAM;
 
 public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
+	private BooleanProperty isAlive;
+
+	public final IntentSAM<Player, LocationChanged> playerMoveIntentHandler;
+	public final EventSAM<Player, LocationChanged> playerMoveEventHandler;
+
 	public Enemy(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
+		this.isAlive = new SimpleBooleanProperty(true);
+
+		this.playerMoveEventHandler = (player, event) -> {
+			if (player.hasItemUsable(InvincibilityPotion.class)) {
+				flee(player);
+			} else {
+				roam(player);
+			}
+		};
+
+		this.playerMoveIntentHandler = (player, event) -> {
+			if (this.getX() != event.newX || this.getY() != event.newY) {
+				return true;
+			}
+
+			return player.interact(this);
+		};
+
 	}
 
 	private boolean move(int xDirection, int yDirection) {
@@ -72,9 +99,17 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		return move(1, 0);
 	}
 
+	public BooleanProperty alive() {
+		return this.isAlive;
+	}
+
+	public boolean isAlive() {
+		return alive().get();
+	}
+
 	public void kill() {
+		this.isAlive.set(false);
 		this.hide();
-		this.getDungeon().removeEntity(this);
 	}
 
 	public boolean roam(Player p) {
@@ -144,18 +179,4 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		return false;
 	}
 
-	public void playerMoveEventHandler(Player player, LocationChanged event) {
-		if (player.hasItemUsable(InvincibilityPotion.class)) {
-			flee(player);
-		} else {
-			roam(player);
-		}
-	}
-
-	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
-		if (this.getX() != event.newX || this.getY() != event.newY) {
-			return true;
-		}
-		return player.interact(this);
-	}
 }
