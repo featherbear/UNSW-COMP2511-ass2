@@ -127,7 +127,8 @@ public class GameHooks implements LoaderHook {
 	public void postLoad(Dungeon dungeon) {
 		Player p = this.dungeon.getPlayer();
 
-		p.moveEvent.register(dungeon::playerMoveEventHandler);
+		// Handle goal
+		p.moveEvent.register(dungeon::playerMoveEventGoalHandler);
 
 		for (GenericSAM func : this.postLoad) {
 			func.execute();
