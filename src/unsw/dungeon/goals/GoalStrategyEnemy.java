@@ -13,4 +13,9 @@ public class GoalStrategyEnemy implements GoalStrategy {
 		Dungeon dungeon = g.getDungeon();
 		return Entity.filter(dungeon.getEntities(), Enemy.class).size() == 0;
 	}
+
+	@Override
+	public String getInfoText() {
+		return "Defeat all enemies";
+	}
 }

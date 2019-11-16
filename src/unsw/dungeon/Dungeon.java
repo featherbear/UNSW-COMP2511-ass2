@@ -154,8 +154,6 @@ public class Dungeon {
 	}
 
 	/**
-	 * 
-	 * 
 	 * @return Goal for the dungeon
 	 */
 	public Goal getGoal() {
@@ -165,7 +163,7 @@ public class Dungeon {
 	public void playerMoveEventHandler(Player player, LocationChanged event) {
 		Goal goal = this.getGoal();
 
-		if (goal != null && goal.achieved()) {
+		if (goal != null && goal.check()) {
 			this.finishEvent.emit();
 		}
 	}
