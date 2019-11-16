@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Player;
@@ -159,6 +160,7 @@ class GridPaneHUD {
 		// Show usage
 		if (uses >= 2) {
 			Text usageText = new Text(String.valueOf(uses));
+			usageText.setFill(Color.WHITESMOKE);
 
 			// Remove text when the durability is 1
 			usableEntity.itemUsed().register((itemObj, evt) -> {
@@ -247,6 +249,7 @@ class EntryData {
 		}
 
 		Text countText = new Text();
+		countText.setFill(Color.WHITESMOKE);
 		this.count.addListener((observer, oldValue, newValue) -> {
 			countText.setText(String.valueOf(newValue));
 		});

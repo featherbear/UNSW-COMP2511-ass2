@@ -9,13 +9,23 @@ import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.VBox;
 
 public class LevelSelectController {
 
 	private final static String levelSuffix = ".json";
 	private String selectedLevel;
+
+	@FXML
+	private VBox container;
 
 	@FXML
 	private ListView<String> levels;
@@ -63,6 +73,10 @@ public class LevelSelectController {
 			btnPlay.setDisable(false);
 			this.selectedLevel = newValue;
 		});
+
+		container.setBackground(new Background(new BackgroundImage(new Image("backgroundTile.png"),
+				BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
+
 	}
 
 	@FXML

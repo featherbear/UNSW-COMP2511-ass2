@@ -37,6 +37,7 @@ public class GameHooks implements LoaderHook {
 
 		p.moveEvent.register(enemy.playerMoveEventHandler);
 		p.moveIntent.register(enemy.playerMoveIntentHandler);
+
 		enemy.alive().addListener((observer, oldValue, newValue) -> {
 			if (newValue == false) {
 				this.dungeon.removeEntity(enemy);
@@ -62,15 +63,14 @@ public class GameHooks implements LoaderHook {
 		Player p = this.dungeon.getPlayer();
 
 		p.moveIntent.register(boulder::playerMoveIntentHandler);
-
 	}
 
 	@Override
 	public void onLoad(Switch sw) {
 
 		this.postLoad.add(() -> {
-			for (Entity boulderObject : Entity.filter(this.dungeon.getEntities(), Boulder.class)) {
-				((Boulder) boulderObject).moveEvent.register(sw::boulderMoveEventHandler);
+			for (Boulder boulderObject : Entity.filter(this.dungeon.getEntities(), Boulder.class)) {
+				boulderObject.moveEvent.register(sw::boulderMoveEventHandler);
 			}
 
 			sw.checkBoulder();
@@ -82,7 +82,9 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Portal portal) {
 		Player p = this.dungeon.getPlayer();
 
-		p.moveIntent.register(portal::playerMoveIntentHandler);
+		this.postLoad.add(() -> {
+			p.moveIntent.register(portal::playerMoveIntentHandler);
+		});
 	}
 
 	@Override
@@ -127,8 +129,39 @@ public class GameHooks implements LoaderHook {
 	public void postLoad(Dungeon dungeon) {
 		Player p = this.dungeon.getPlayer();
 
-		p.moveEvent.register(dungeon::playerMoveEventHandler);
+		// Handle goal
+		p.moveEvent.register(dungeon::playerMoveEventGoalHandler);
 
+		// Extension: Switches can activate portals and doors
+		ArrayList<Entity> entities = dungeon.getEntities();
+		for (Switch switchEntity : Entity.filter(entities, Switch.class)) {
+
+			if (switchEntity.getID() == -1) {
+				continue;
+			}
+
+			for (Portal portalEntity : Entity.filter(entities, Portal.class)) {
+				if (portalEntity.getID() != switchEntity.getID()) {
+					continue;
+				}
+				switchEntity.switchEvent.register((obj, event) -> {
+					portalEntity.setActivated(switchActivated(portalEntity.getID()));
+				});
+			}
+
+			for (Door doorEntity : Entity.filter(entities, Door.class)) {
+				if (doorEntity.getID() != doorEntity.getID()) {
+					continue;
+				}
+				switchEntity.switchEvent.register((obj, event) -> {
+					doorEntity.setOpened(switchActivated(doorEntity.getID()));
+				});
+
+			}
+
+		}
+
+		// Execute post-load callbacks
 		for (GenericSAM func : this.postLoad) {
 			func.execute();
 		}
@@ -138,5 +171,19 @@ public class GameHooks implements LoaderHook {
 		});
 
 		System.out.println("Dungeon load complete");
+	}
+
+	/**
+	 * @param id
+	 * @return A switch for `id` is activated
+	 */
+	private boolean switchActivated(int id) {
+		for (Switch sw : Switch.filter(this.dungeon.getEntities(), id)) {
+			if (sw.getActivated()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

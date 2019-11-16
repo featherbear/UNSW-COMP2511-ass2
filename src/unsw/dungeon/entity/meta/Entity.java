@@ -119,12 +119,13 @@ public abstract class Entity {
 	 * @param EntityType
 	 * @return List of entities that match the given class
 	 */
-	public static ArrayList<Entity> filter(List<? extends Entity> entities, Class<? extends Entity> EntityType) {
+	@SuppressWarnings("unchecked")
+	public static <T extends Entity> ArrayList<T> filter(List<? extends Entity> entities, Class<T> EntityType) {
 
-		ArrayList<Entity> results = new ArrayList<Entity>();
+		ArrayList<T> results = new ArrayList<T>();
 		for (Entity entity : entities) {
 			if (EntityType.isInstance(entity)) {
-				results.add(entity);
+				results.add((T) entity);
 			}
 		}
 
