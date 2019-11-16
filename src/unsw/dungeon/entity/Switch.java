@@ -1,36 +1,53 @@
 package unsw.dungeon.entity;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.events.LocationChanged;
+import unsw.dungeon.events.SwitchToggled;
+import unsw.dungeon.util.emitter.EventEmitter;
 
 public class Switch extends Entity {
 
-	private BooleanProperty activated;
+	private boolean activated;
+	public final EventEmitter<Switch, SwitchToggled> switchEvent;
+	private int id;
 
 	public Switch(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.FLOOR, x, y);
-		this.activated = new SimpleBooleanProperty(false);
-	}
-
-	public BooleanProperty activated() {
-		return this.activated;
+		this.activated = false;
+		this.switchEvent = new EventEmitter<Switch, SwitchToggled>(this);
+		this.id = -1;
 	}
 
 	public boolean getActivated() {
-		return this.activated.get();
+		return this.activated;
 	}
 
 	public void activate() {
-		this.activated.set(true);
-
+		this.setActivated(true);
 	}
 
 	public void deactivate() {
-		this.activated.set(false);
+		this.setActivated(false);
+	}
+
+	private void setActivated(boolean activated) {
+		boolean notify = this.activated != activated;
+
+		this.activated = activated;
+
+		if (notify) {
+			this.switchEvent.emit(new SwitchToggled(this));
+		}
+	}
+
+	public void setID(int id) {
+		this.id = id;
+	}
+
+	public int getID() {
+		return this.id;
 	}
 
 	public void boulderMoveEventHandler(Boulder boulder, LocationChanged event) {
