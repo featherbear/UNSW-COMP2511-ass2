@@ -110,6 +110,9 @@ public class DungeonLoader {
 
 		case "switch":
 			Switch sw = new Switch(dungeon, x, y);
+
+			sw.setID(json.optInt("id", -1));
+
 			loaders.onLoad(sw);
 			return sw;
 

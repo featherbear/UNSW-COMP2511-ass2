@@ -87,13 +87,15 @@ public class Portal extends Entity implements Interactable {
 	}
 
 	public void activate() {
-		this.activated.set(true);
-
+		this.setActivated(true);
 	}
 
 	public void deactivate() {
-		this.activated.set(false);
+		this.setActivated(false);
+	}
 
+	public void setActivated(boolean activated) {
+		this.activated.set(activated);
 	}
 
 	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {

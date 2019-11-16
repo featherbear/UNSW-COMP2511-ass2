@@ -130,6 +130,35 @@ public class GameHooks implements LoaderHook {
 		// Handle goal
 		p.moveEvent.register(dungeon::playerMoveEventGoalHandler);
 
+		ArrayList<Entity> entities = dungeon.getEntities();
+		for (Switch switchEntity : Entity.filter(entities, Switch.class)) {
+
+			if (switchEntity.getID() == -1) {
+				continue;
+			}
+
+			for (Portal portalEntity : Entity.filter(entities, Portal.class)) {
+				if (portalEntity.getID() != switchEntity.getID()) {
+					continue;
+				}
+
+				switchEntity.switchEvent.register((obj, event) -> {
+					portalEntity.setActivated(event.switchObj.getActivated());
+				});
+			}
+
+			for (Door doorEntity : Entity.filter(entities, Door.class)) {
+				if (doorEntity.getID() == doorEntity.getID()) {
+					switchEntity.switchEvent.register((obj, event) -> {
+						doorEntity.setOpened(event.switchObj.getActivated());
+					});
+				}
+			}
+
+		}
+
+		// Execute post-load callbacks
+
 		for (GenericSAM func : this.postLoad) {
 			func.execute();
 		}
