@@ -129,6 +129,7 @@ public class DungeonApplication extends Application {
 		loader.setController(controller);
 
 		StackPane container = new StackPane();
+		container.setAlignment(Pos.CENTER);
 
 		HUDController HUD = new HUDController();
 		FXMLLoader HUDloader = new FXMLLoader(getClass().getResource("HUD.fxml"));
@@ -144,6 +145,7 @@ public class DungeonApplication extends Application {
 		HUD.attach(controller);
 
 		StackPane gameScreen = new StackPane(gameRoot);
+		gameScreen.setAlignment(Pos.CENTER);
 
 		VBox box = new VBox(gameScreen, HUDnode);
 		box.setAlignment(Pos.CENTER);
