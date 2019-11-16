@@ -69,8 +69,8 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Switch sw) {
 
 		this.postLoad.add(() -> {
-			for (Entity boulderObject : Entity.filter(this.dungeon.getEntities(), Boulder.class)) {
-				((Boulder) boulderObject).moveEvent.register(sw::boulderMoveEventHandler);
+			for (Boulder boulderObject : Entity.filter(this.dungeon.getEntities(), Boulder.class)) {
+				boulderObject.moveEvent.register(sw::boulderMoveEventHandler);
 			}
 
 			sw.checkBoulder();

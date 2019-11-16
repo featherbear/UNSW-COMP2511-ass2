@@ -12,8 +12,7 @@ public class GoalStrategyExit implements GoalStrategy {
 	public boolean achieved(Goal g) {
 		Dungeon dungeon = g.getDungeon();
 
-		for (Entity exitObject : Entity.filter(dungeon.getEntities(), Exit.class)) {
-			Exit exitEntity = (Exit) exitObject;
+		for (Exit exitEntity : Entity.filter(dungeon.getEntities(), Exit.class)) {
 			if (exitEntity.getActivated()) {
 				return true;
 			}
