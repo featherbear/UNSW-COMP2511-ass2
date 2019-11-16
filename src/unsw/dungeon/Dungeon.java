@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
+import unsw.dungeon.events.LocationChanged;
+import unsw.dungeon.goals.Goal;
 import unsw.dungeon.util.emitter.GenericEmitter;
 
 /**
@@ -22,18 +24,22 @@ import unsw.dungeon.util.emitter.GenericEmitter;
 public class Dungeon {
 
 	public final GenericEmitter finishEvent;
+	public final GenericEmitter playerDeadEvent;
 
 	private int width, height;
 	private ArrayList<Entity> entities;
 	private Player player;
+	private Goal goal;
 
 	public Dungeon(int width, int height) {
+		this.finishEvent = new GenericEmitter();
+		this.playerDeadEvent = new GenericEmitter();
+
 		this.width = width;
 		this.height = height;
 		this.entities = new ArrayList<>();
 		this.player = null;
-
-		this.finishEvent = new GenericEmitter();
+		this.goal = null;
 	}
 
 	/**
@@ -75,6 +81,11 @@ public class Dungeon {
 	 */
 	public void setPlayer(Player player) {
 		this.player = player;
+		this.player.alive().addListener((observable, oldValue, newValue) -> {
+			if (newValue == false) {
+				this.playerDeadEvent.emit();
+			}
+		});
 	}
 
 	/**
@@ -131,6 +142,30 @@ public class Dungeon {
 	 */
 	public boolean hasEntitiesAt(EntityLevel entityLevel, int x, int y) {
 		return this.getEntityAt(entityLevel, x, y) != null;
+	}
+
+	/**
+	 * Set the Goal object for the dungeon
+	 * 
+	 * @param goal
+	 */
+	public void setGoal(Goal goal) {
+		this.goal = goal;
+	}
+
+	/**
+	 * @return Goal for the dungeon
+	 */
+	public Goal getGoal() {
+		return this.goal;
+	}
+
+	public void playerMoveEventGoalHandler(Player player, LocationChanged event) {
+		Goal goal = this.getGoal();
+
+		if (goal != null && goal.check()) {
+			this.finishEvent.emit();
+		}
 	}
 
 }

@@ -7,8 +7,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Player;
@@ -36,30 +40,16 @@ public class DungeonController {
 		this.player = dungeon.getPlayer();
 		this.entities = new ArrayList<EntityImagePair>(entities);
 		this.restartEvent = new GenericEmitter();
-
-		// When the player dies, call the restart event
-		this.player.alive().addListener((observable, oldValue, newValue) -> {
-			if (newValue == false) {
-				this.restart();
-			}
-		});
-
 	}
 
 	@FXML
 	public void initialize() {
-		Image ground = new Image("/dirt_0_new.png");
-
-		// Add the ground first so it is below all other entities
-		for (int x = 0; x < dungeon.getWidth(); x++) {
-			for (int y = 0; y < dungeon.getHeight(); y++) {
-				squares.add(new ImageView(ground), x, y);
-			}
-		}
+		squares.setBackground(new Background(new BackgroundImage(new Image("dirt_0_new.png"), BackgroundRepeat.REPEAT,
+				BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 
 		// Sort entities by their EntityLevel order
-		ObservableList<Node> children = squares.getChildren();
 		entities.sort((e, f) -> f.entity.getEntityLevel().ordinal() - e.entity.getEntityLevel().ordinal());
+		ObservableList<Node> children = squares.getChildren();
 
 		// Add items to the GridPane
 		for (EntityImagePair entity : entities) {
@@ -110,4 +100,10 @@ public class DungeonController {
 		return this.dungeon;
 	}
 
+	/**
+	 * @return Entity image pairs
+	 */
+	public List<EntityImagePair> getEntityImagePairs() {
+		return this.entities;
+	}
 }

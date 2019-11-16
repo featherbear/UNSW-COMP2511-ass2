@@ -12,11 +12,14 @@ import unsw.dungeon.events.LocationChanged;
 public class Door extends Entity implements Interactable {
 
 	private BooleanProperty opened;
+	private boolean openedByKey;
+
 	private int id;
 
 	public Door(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.opened = new SimpleBooleanProperty(false);
+		this.openedByKey = false;
 		this.id = -1;
 
 		// Change entityLevel to FLOOR when opened, or OBJECT when closed
@@ -43,14 +46,22 @@ public class Door extends Entity implements Interactable {
 	 * Open/unlock the door
 	 */
 	public void open() {
-		this.opened.set(true);
+		this.setOpened(true);
 	}
 
 	/**
 	 * Close/lock the door
 	 */
 	public void close() {
-		this.opened.set(false);
+		this.setOpened(false);
+	}
+
+	public void setOpened(boolean opened) {
+		if (!opened && this.openedByKey) {
+			// Don't close if already opened by key
+			return;
+		}
+		this.opened.set(opened);
 	}
 
 	/**
@@ -98,6 +109,7 @@ public class Door extends Entity implements Interactable {
 		}
 
 		this.open();
+		this.openedByKey = true;
 		return true;
 	}
 
@@ -110,12 +122,6 @@ public class Door extends Entity implements Interactable {
 		if (entity instanceof Key) {
 			return interact((Key) entity);
 		}
-
-//		if (entity instanceof Switch) {
-//			// If activated by a Switch, then toggle state
-//			open.set((Switch) entity.getPressed());
-//			return true;
-//		}
 
 		return false;
 

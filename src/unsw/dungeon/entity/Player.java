@@ -11,7 +11,9 @@ import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
 import unsw.dungeon.entity.meta.Usable;
+import unsw.dungeon.events.ItemPickedUp;
 import unsw.dungeon.events.LocationChanged;
+import unsw.dungeon.util.emitter.EventEmitter;
 
 /**
  * The player entity
@@ -24,6 +26,8 @@ public class Player extends MovableEntity<Player> implements Interactable {
 	private ArrayList<ItemEntity> inventory;
 	private BooleanProperty isAlive;
 
+	public final EventEmitter<Player, ItemPickedUp> itemPickedUpEvent;
+
 	/**
 	 * Create a player positioned in square (x,y)
 	 * 
@@ -34,10 +38,14 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.inventory = new ArrayList<ItemEntity>();
 		this.isAlive = new SimpleBooleanProperty(true);
-
+		this.itemPickedUpEvent = new EventEmitter<Player, ItemPickedUp>(this);
 	}
 
 	private void move(int xDirection, int yDirection) {
+		if (!this.isAlive()) {
+			return;
+		}
+
 		int oldX = getX();
 		int oldY = getY();
 
@@ -109,6 +117,7 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		}
 
 		item.visibility().set(false);
+		this.itemPickedUpEvent.emit(new ItemPickedUp(item));
 		return true;
 	}
 

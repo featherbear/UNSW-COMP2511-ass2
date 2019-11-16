@@ -119,12 +119,13 @@ public abstract class Entity {
 	 * @param EntityType
 	 * @return List of entities that match the given class
 	 */
-	public static ArrayList<Entity> filter(List<Entity> entities, Class<? extends Entity> EntityType) {
+	@SuppressWarnings("unchecked")
+	public static <T extends Entity> ArrayList<T> filter(List<? extends Entity> entities, Class<T> EntityType) {
 
-		ArrayList<Entity> results = new ArrayList<Entity>();
+		ArrayList<T> results = new ArrayList<T>();
 		for (Entity entity : entities) {
 			if (EntityType.isInstance(entity)) {
-				results.add(entity);
+				results.add((T) entity);
 			}
 		}
 
@@ -139,7 +140,7 @@ public abstract class Entity {
 	 * @param y
 	 * @return List of entities that match the given position
 	 */
-	public static ArrayList<Entity> filter(List<Entity> entities, int x, int y) {
+	public static ArrayList<Entity> filter(List<? extends Entity> entities, int x, int y) {
 
 		ArrayList<Entity> results = new ArrayList<Entity>();
 		for (Entity entity : entities) {
@@ -158,7 +159,7 @@ public abstract class Entity {
 	 * @param entityLevel
 	 * @return List of entities that match the given EntityLevel
 	 */
-	public static ArrayList<Entity> filter(List<Entity> entities, EntityLevel entityLevel) {
+	public static ArrayList<Entity> filter(List<? extends Entity> entities, EntityLevel entityLevel) {
 		ArrayList<Entity> results = new ArrayList<Entity>();
 		for (Entity entity : entities) {
 			if (entity.getEntityLevel() == entityLevel) {

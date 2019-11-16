@@ -2,7 +2,6 @@ package unsw.dungeon.tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +22,6 @@ class US7Test {
 		dungeon.addEntity((player = new Player(dungeon, 1, 1)));
 		dungeon.setPlayer(player);
 		Create = new TestUtils(dungeon);
-	}
-
-	@Test
-	void goalUpdate() {
-		// TODO: Goals
-		fail();
 	}
 
 	@Test
