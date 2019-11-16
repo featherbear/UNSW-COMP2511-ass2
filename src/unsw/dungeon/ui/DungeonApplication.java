@@ -7,6 +7,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,10 +20,12 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import unsw.dungeon.goals.GoalComposite;
+import unsw.dungeon.goals.Goal;
+import unsw.dungeon.goals.TextTree;
 
 public class DungeonApplication extends Application {
 
@@ -43,12 +46,14 @@ public class DungeonApplication extends Application {
 			try {
 				this.dungeonControllerLoader = new DungeonControllerLoader(level);
 				setGame(primaryStage);
+				primaryStage.setResizable(false);
 
 				FXMLLoader startScreenLoader = new FXMLLoader(getClass().getResource("StartScreen.fxml"));
 				StartScreenController startScreenController = new StartScreenController();
 				startScreenLoader.setController(startScreenController);
 
 				Parent startScreen = forceLoad(startScreenLoader);
+
 				StackPane gameContainer = new StackPane((StackPane) primaryStage.getScene().getRoot());
 
 				startScreenController.onPlay(() -> {
@@ -117,6 +122,7 @@ public class DungeonApplication extends Application {
 	 * @return DungeonController instance
 	 */
 	private DungeonController setGame(Stage primaryStage) {
+
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("DungeonView.fxml"));
 
 		DungeonController controller = dungeonControllerLoader.loadController();
@@ -146,10 +152,6 @@ public class DungeonApplication extends Application {
 
 		container.getChildren().addAll(box);
 
-		Scene scene = new Scene(container);
-		gameRoot.requestFocus();
-		primaryStage.setScene(scene);
-
 		// Register restart event
 		controller.restartEvent.register(() -> setGame(primaryStage));
 
@@ -165,11 +167,32 @@ public class DungeonApplication extends Application {
 			gameScreen.getChildren().add(forceLoad(loseLoader));
 		});
 
-		Text GoalText = new Text();
-		gameScreen.getChildren().add(GoalText);
-		controller.getDungeon().getPlayer().moveEvent.register((p, e) -> {
-			GoalText.setText(((GoalComposite) (controller.getDungeon().getGoal())).getRemainingGoals().toString());
-		});
+		{
+			// Add Goals information
+
+			Goal goal = controller.getDungeon().getGoal();
+
+			// Get first updates
+			goal.check();
+			Text goalText = new Text(TextTree.createTextTree(goal));
+			goalText.setFill(Color.WHITE);
+
+			// Register updates
+			controller.getDungeon().getPlayer().moveEvent.register((p, e) -> {
+				goalText.setText(TextTree.createTextTree(goal));
+			});
+
+			// Wrap in an alignment box (VBox in this case)
+			VBox goalContainer = new VBox(goalText);
+			goalContainer.setAlignment(Pos.TOP_LEFT);
+			goalContainer.setPadding(new Insets(10, 0, 0, 10));
+
+			gameScreen.getChildren().add(goalContainer);
+		}
+
+		Scene scene = new Scene(container);
+		gameRoot.requestFocus();
+		primaryStage.setScene(scene);
 
 		return controller;
 	}
