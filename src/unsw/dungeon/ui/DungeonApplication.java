@@ -19,8 +19,10 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import unsw.dungeon.goals.GoalComposite;
 
 public class DungeonApplication extends Application {
 
@@ -161,6 +163,12 @@ public class DungeonApplication extends Application {
 		controller.getDungeon().playerDeadEvent.register(() -> {
 			FXMLLoader loseLoader = new FXMLLoader(getClass().getResource("LoseScreen.fxml"));
 			gameScreen.getChildren().add(forceLoad(loseLoader));
+		});
+
+		Text GoalText = new Text();
+		gameScreen.getChildren().add(GoalText);
+		controller.getDungeon().getPlayer().moveEvent.register((p, e) -> {
+			GoalText.setText(((GoalComposite) (controller.getDungeon().getGoal())).getRemainingGoals().toString());
 		});
 
 		return controller;
