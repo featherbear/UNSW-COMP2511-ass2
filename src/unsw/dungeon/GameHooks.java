@@ -82,7 +82,9 @@ public class GameHooks implements LoaderHook {
 	public void onLoad(Portal portal) {
 		Player p = this.dungeon.getPlayer();
 
-		p.moveIntent.register(portal::playerMoveIntentHandler);
+		this.postLoad.add(() -> {
+			p.moveIntent.register(portal::playerMoveIntentHandler);
+		});
 	}
 
 	@Override
