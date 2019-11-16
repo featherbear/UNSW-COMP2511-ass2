@@ -5,15 +5,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fill="WHITE" layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, Adventurer.&#10;------------------------------&#10;&#10;W / UP - Move Up&#10;S / DOWN - Move Down&#10;A / LEFT - Move Left&#10;D / RIGHT - Move Right&#10;R - Restart">
+      <Text fill="#ffffffff" layoutX="23.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, Adventurer.&#10;------------------------------&#10;&#10;W / UP - Move Up&#10;S / DOWN - Move Down&#10;A / LEFT - Move Left&#10;D / RIGHT - Move Right&#10;R - Restart">
          <font>
             <Font size="27.0" />
          </font>
       </Text>
-      <Button fx:id="btnPlay" layoutX="204.0" layoutY="318.0" mnemonicParsing="false" onAction="#play" text="Play!">
+      <Button fx:id="btnPlay" layoutX="136.0" layoutY="318.0" mnemonicParsing="false" onAction="#play" text="Play!">
          <font>
             <Font size="24.0" />
          </font>
