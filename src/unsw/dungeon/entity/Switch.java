@@ -1,5 +1,7 @@
 package unsw.dungeon.entity;
 
+import java.util.ArrayList;
+
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
@@ -56,11 +58,18 @@ public class Switch extends Entity {
 
 	public void checkBoulder() {
 		Entity e = this.getDungeon().getEntityAt(EntityLevel.OBJECT, this.getX(), this.getY());
+		this.setActivated(e instanceof Boulder);
+	}
 
-		if (e instanceof Boulder) {
-			activate();
-		} else {
-			deactivate();
+	public static ArrayList<Switch> filter(ArrayList<Entity> entities, int id) {
+		ArrayList<Switch> result = new ArrayList<Switch>();
+		for (Switch switchEntity : Entity.filter(entities, Switch.class)) {
+			if (switchEntity.getID() == id) {
+				result.add(switchEntity);
+
+			}
 		}
+
+		return result;
 	}
 }

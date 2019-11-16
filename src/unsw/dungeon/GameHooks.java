@@ -130,6 +130,7 @@ public class GameHooks implements LoaderHook {
 		// Handle goal
 		p.moveEvent.register(dungeon::playerMoveEventGoalHandler);
 
+		// Extension: Switches can activate portals and doors
 		ArrayList<Entity> entities = dungeon.getEntities();
 		for (Switch switchEntity : Entity.filter(entities, Switch.class)) {
 
@@ -141,24 +142,24 @@ public class GameHooks implements LoaderHook {
 				if (portalEntity.getID() != switchEntity.getID()) {
 					continue;
 				}
-
 				switchEntity.switchEvent.register((obj, event) -> {
-					portalEntity.setActivated(event.switchObj.getActivated());
+					portalEntity.setActivated(switchActivated(portalEntity.getID()));
 				});
 			}
 
 			for (Door doorEntity : Entity.filter(entities, Door.class)) {
-				if (doorEntity.getID() == doorEntity.getID()) {
-					switchEntity.switchEvent.register((obj, event) -> {
-						doorEntity.setOpened(event.switchObj.getActivated());
-					});
+				if (doorEntity.getID() != doorEntity.getID()) {
+					continue;
 				}
+				switchEntity.switchEvent.register((obj, event) -> {
+					doorEntity.setOpened(switchActivated(doorEntity.getID()));
+				});
+
 			}
 
 		}
 
 		// Execute post-load callbacks
-
 		for (GenericSAM func : this.postLoad) {
 			func.execute();
 		}
@@ -168,5 +169,19 @@ public class GameHooks implements LoaderHook {
 		});
 
 		System.out.println("Dungeon load complete");
+	}
+
+	/**
+	 * @param id
+	 * @return A switch for `id` is activated
+	 */
+	private boolean switchActivated(int id) {
+		for (Switch sw : Switch.filter(this.dungeon.getEntities(), id)) {
+			if (sw.getActivated()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
