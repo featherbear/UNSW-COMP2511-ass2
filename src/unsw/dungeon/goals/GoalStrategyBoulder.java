@@ -20,4 +20,9 @@ public class GoalStrategyBoulder implements GoalStrategy {
 
 		return true;
 	}
+
+	@Override
+	public String getInfoText() {
+		return "Activate all switches";
+	}
 }

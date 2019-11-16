@@ -21,4 +21,9 @@ public class GoalStrategyTreasure implements GoalStrategy {
 
 		return playerTreasure.size() == dungeonTreasure.size();
 	}
+
+	@Override
+	public String getInfoText() {
+		return "Collect all treasure";
+	}
 }

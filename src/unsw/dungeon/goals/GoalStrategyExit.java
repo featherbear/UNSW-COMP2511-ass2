@@ -21,4 +21,9 @@ public class GoalStrategyExit implements GoalStrategy {
 
 		return false;
 	}
+
+	@Override
+	public String getInfoText() {
+		return "Reach an exit";
+	}
 }
