@@ -37,6 +37,7 @@ public class GameHooks implements LoaderHook {
 
 		p.moveEvent.register(enemy.playerMoveEventHandler);
 		p.moveIntent.register(enemy.playerMoveIntentHandler);
+
 		enemy.alive().addListener((observer, oldValue, newValue) -> {
 			if (newValue == false) {
 				this.dungeon.removeEntity(enemy);
@@ -62,7 +63,6 @@ public class GameHooks implements LoaderHook {
 		Player p = this.dungeon.getPlayer();
 
 		p.moveIntent.register(boulder::playerMoveIntentHandler);
-
 	}
 
 	@Override

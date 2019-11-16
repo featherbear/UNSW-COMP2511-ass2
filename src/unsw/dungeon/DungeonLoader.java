@@ -153,11 +153,7 @@ public class DungeonLoader {
 			portal.setID(json.getInt("id"));
 
 			// Level defined portal activation status
-			if (json.optBoolean("activated", true)) {
-				portal.activate();
-			} else {
-				portal.deactivate();
-			}
+			portal.setActivated(json.optBoolean("activated", true));
 
 			loaders.onLoad(portal);
 			return portal;
