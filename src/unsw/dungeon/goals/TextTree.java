@@ -1,5 +1,7 @@
 package unsw.dungeon.goals;
 
+import java.util.ArrayList;
+
 public class TextTree {
 	public static String createTextTree(Goal g) {
 		return createTextTree(g, 0);
@@ -28,18 +30,20 @@ public class TextTree {
 			}
 
 			result += name + "\n";
-			for (Goal s : ((GoalComposite) g).getRemainingGoals()) {
-				result += indent + prefix + " " + createTextTree(s, n_indent + 1);
-			}
 
+			ArrayList<Goal> remainingGoals = gs.getRemainingGoals();
+			if (remainingGoals.size() == 1) {
+				return createTextTree(remainingGoals.get(0), n_indent);
+			} else {
+				for (Goal s : remainingGoals) {
+					result += indent + prefix + " " + createTextTree(s, n_indent + 1);
+				}
+			}
 			return result;
 
-		}
-
-		else {
+		} else {
 			return g.toString() + "\n";
 		}
-
 	}
 
 }
