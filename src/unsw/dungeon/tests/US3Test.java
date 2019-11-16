@@ -49,9 +49,9 @@ public class US3Test {
 		Goal goal = new Goal(dungeon, new GoalStrategyBoulder());
 		dungeon.setGoal(goal);
 
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		sw.activate();
-		assertTrue(goal.achieved());
+		assertTrue(goal.check());
 	}
 
 	@Test
@@ -62,11 +62,11 @@ public class US3Test {
 		Goal goal = new Goal(dungeon, new GoalStrategyEnemy());
 		dungeon.setGoal(goal);
 
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		enemy1.kill();
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		enemy2.kill();
-		assertTrue(goal.achieved());
+		assertTrue(goal.check());
 	}
 
 	@Test
@@ -76,9 +76,9 @@ public class US3Test {
 		Goal goal = new Goal(dungeon, new GoalStrategyExit());
 		dungeon.setGoal(goal);
 
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		exit.activate();
-		assertTrue(goal.achieved());
+		assertTrue(goal.check());
 	}
 
 	@Test
@@ -89,11 +89,11 @@ public class US3Test {
 		dungeon.setGoal(goal);
 		Create.PostLoad();
 
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		player.moveRight();
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		player.moveDown();
-		assertTrue(goal.achieved());
+		assertTrue(goal.check());
 	}
 
 	@Test
@@ -104,11 +104,11 @@ public class US3Test {
 		Goal goal = new Goal(dungeon, new GoalStrategyTreasure());
 		dungeon.setGoal(goal);
 
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		player.moveRight();
-		assertFalse(goal.achieved());
+		assertFalse(goal.check());
 		player.moveDown();
-		assertTrue(goal.achieved());
+		assertTrue(goal.check());
 	}
 
 	@Test
@@ -134,24 +134,24 @@ public class US3Test {
 		goals.addSubGoal(goal2);
 		dungeon.setGoal(goals);
 
-		assertFalse(goals.achieved());
+		assertFalse(goals.check());
 
 		sw.activate();
-		assertTrue(goal1.achieved());
-		assertTrue(goals.achieved());
+		assertTrue(goal1.check());
+		assertTrue(goals.check());
 
 		sw.deactivate();
-		assertFalse(goals.achieved());
+		assertFalse(goals.check());
 
-		assertFalse(goal2.achieved());
+		assertFalse(goal2.check());
 		player.moveDown();
-		assertTrue(goal2.achieved());
-		assertTrue(goals.achieved());
+		assertTrue(goal2.check());
+		assertTrue(goals.check());
 
 		sw.activate();
-		assertTrue(goal1.achieved());
-		assertTrue(goal2.achieved());
-		assertTrue(goals.achieved());
+		assertTrue(goal1.check());
+		assertTrue(goal2.check());
+		assertTrue(goals.check());
 	}
 
 	@Test
@@ -167,18 +167,18 @@ public class US3Test {
 		Switch sw = Create.Switch(2, 2);
 		Enemy enemy = Create.Enemy(1, 5);
 
-		assertFalse(goals.achieved());
+		assertFalse(goals.check());
 
-		assertFalse(goal1.achieved());
+		assertFalse(goal1.check());
 		sw.activate();
-		assertTrue(goal1.achieved());
+		assertTrue(goal1.check());
 
-		assertFalse(goals.achieved());
+		assertFalse(goals.check());
 
-		assertFalse(goal2.achieved());
+		assertFalse(goal2.check());
 		enemy.kill();
-		assertTrue(goal2.achieved());
+		assertTrue(goal2.check());
 
-		assertTrue(goals.achieved());
+		assertTrue(goals.check());
 	}
 }
