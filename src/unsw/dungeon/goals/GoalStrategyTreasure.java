@@ -16,8 +16,8 @@ public class GoalStrategyTreasure implements GoalStrategy {
 		Dungeon dungeon = g.getDungeon();
 		Player player = dungeon.getPlayer();
 
-		ArrayList<Entity> playerTreasure = Entity.filter(player.getInventory(), Treasure.class);
-		ArrayList<Entity> dungeonTreasure = Entity.filter(dungeon.getEntities(), Treasure.class);
+		ArrayList<Treasure> playerTreasure = Entity.filter(player.getInventory(), Treasure.class);
+		ArrayList<Treasure> dungeonTreasure = Entity.filter(dungeon.getEntities(), Treasure.class);
 
 		return playerTreasure.size() == dungeonTreasure.size();
 	}

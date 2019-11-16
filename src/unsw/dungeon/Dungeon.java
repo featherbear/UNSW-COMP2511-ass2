@@ -160,7 +160,7 @@ public class Dungeon {
 		return this.goal;
 	}
 
-	public void playerMoveEventHandler(Player player, LocationChanged event) {
+	public void playerMoveEventGoalHandler(Player player, LocationChanged event) {
 		Goal goal = this.getGoal();
 
 		if (goal != null && goal.check()) {

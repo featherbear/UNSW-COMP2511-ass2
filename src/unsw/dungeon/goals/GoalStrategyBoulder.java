@@ -11,8 +11,7 @@ public class GoalStrategyBoulder implements GoalStrategy {
 	@Override
 	public boolean achieved(Goal g) {
 		Dungeon dungeon = g.getDungeon();
-		for (Entity switchObject : Entity.filter(dungeon.getEntities(), Switch.class)) {
-			Switch switchEntity = (Switch) switchObject;
+		for (Switch switchEntity : Entity.filter(dungeon.getEntities(), Switch.class)) {
 			if (!(switchEntity.getActivated())) {
 				return false;
 			}

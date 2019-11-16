@@ -64,7 +64,7 @@ public class DungeonControllerHooks implements LoaderHook {
 
 	@Override
 	public void onLoad(Switch sw) {
-		ImageView view = new ImageView(images.switchImage);
+		ImageView view = applyColourShift(new ImageView(images.switchImage), sw.getID());
 		loader.addEntity(sw, view);
 	}
 

@@ -33,11 +33,10 @@ public class Portal extends Entity implements Interactable {
 
 		Player player = (Player) entity;
 
-		ArrayList<Entity> portals = Entity.filter(this.getDungeon().getEntities(), Portal.class);
-
+		ArrayList<Portal> portals = Entity.filter(this.getDungeon().getEntities(), Portal.class);
 		ArrayList<Portal> matchingPortals = new ArrayList<Portal>();
-		for (Entity obj : portals) {
-			Portal portal = (Portal) obj;
+
+		for (Portal portal : portals) {
 			if (portal == this) {
 				continue;
 			}
@@ -88,13 +87,15 @@ public class Portal extends Entity implements Interactable {
 	}
 
 	public void activate() {
-		this.activated.set(true);
-
+		this.setActivated(true);
 	}
 
 	public void deactivate() {
-		this.activated.set(false);
+		this.setActivated(false);
+	}
 
+	public void setActivated(boolean activated) {
+		this.activated.set(activated);
 	}
 
 	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
