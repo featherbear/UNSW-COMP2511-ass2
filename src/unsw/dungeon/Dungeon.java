@@ -24,6 +24,7 @@ import unsw.dungeon.util.emitter.GenericEmitter;
 public class Dungeon {
 
 	public final GenericEmitter finishEvent;
+	public final GenericEmitter playerDeadEvent;
 
 	private int width, height;
 	private ArrayList<Entity> entities;
@@ -32,6 +33,7 @@ public class Dungeon {
 
 	public Dungeon(int width, int height) {
 		this.finishEvent = new GenericEmitter();
+		this.playerDeadEvent = new GenericEmitter();
 
 		this.width = width;
 		this.height = height;
@@ -79,6 +81,11 @@ public class Dungeon {
 	 */
 	public void setPlayer(Player player) {
 		this.player = player;
+		this.player.alive().addListener((observable, oldValue, newValue) -> {
+			if (newValue == false) {
+				this.playerDeadEvent.emit();
+			}
+		});
 	}
 
 	/**
@@ -147,16 +154,16 @@ public class Dungeon {
 	}
 
 	/**
-	 * 
-	 * 
 	 * @return Goal for the dungeon
 	 */
 	public Goal getGoal() {
 		return this.goal;
 	}
 
-	public void playerMoveEventHandler(Player player, LocationChanged event) {
-		if (this.getGoal().achieved()) {
+	public void playerMoveEventGoalHandler(Player player, LocationChanged event) {
+		Goal goal = this.getGoal();
+
+		if (goal != null && goal.check()) {
 			this.finishEvent.emit();
 		}
 	}

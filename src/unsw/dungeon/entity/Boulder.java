@@ -51,58 +51,6 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 	}
 
 	/**
-	 * Set the X and Y positions of the Boulder
-	 * 
-	 * @param newX
-	 * @param newY
-	 */
-	public void setXY(int newX, int newY) {
-		int oldX = getX();
-		int oldY = getY();
-		if (!this.getDungeon().positionIsValid(newX, newY)) {
-			return;
-		}
-
-		if (oldX != newX) {
-			x().set(newX);
-		}
-		if (oldY != newY) {
-			y().set(newY);
-		}
-
-		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
-
-	}
-
-	/**
-	 * Move the boulder up
-	 */
-	public void moveUp() {
-		move(0, -1);
-	}
-
-	/**
-	 * Move the boulder down
-	 */
-	public void moveDown() {
-		move(0, 1);
-	}
-
-	/**
-	 * Move the boulder left
-	 */
-	public void moveLeft() {
-		move(-1, 0);
-	}
-
-	/**
-	 * Move the boulder right
-	 */
-	public void moveRight() {
-		move(1, 0);
-	}
-
-	/**
 	 * Interact with the Player
 	 */
 	@Override
@@ -111,7 +59,7 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 			return false;
 		}
 
-		return move(this.getX() - ((Player) entity).getX(), this.getY() - ((Player) entity).getY());
+		return move(this.getX() - entity.getX(), this.getY() - entity.getY());
 	}
 
 	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {

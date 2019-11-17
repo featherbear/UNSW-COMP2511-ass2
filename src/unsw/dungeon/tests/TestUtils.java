@@ -9,6 +9,7 @@ import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Saw;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
@@ -20,7 +21,7 @@ public class TestUtils {
 
 	public TestUtils(Dungeon dungeon) {
 		this.dungeon = dungeon;
-		this.gameHooks = new GameHooks();
+		this.gameHooks = new GameHooks(dungeon);
 	}
 
 	Boulder Boulder(int x, int y) {
@@ -120,5 +121,16 @@ public class TestUtils {
 		dungeon.addEntity(invincibilityPotion);
 
 		return invincibilityPotion;
+	}
+	
+	Saw saw(int x, int y, String orientation) {
+		Saw saw = new Saw(this.dungeon, x, y, orientation);
+		this.gameHooks.onLoad(saw);
+		dungeon.addEntity(saw);
+		return saw;
+	}
+
+	void PostLoad() {
+		this.gameHooks.postLoad(this.dungeon);
 	}
 }

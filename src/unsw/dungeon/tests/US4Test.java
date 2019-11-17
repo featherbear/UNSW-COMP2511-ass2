@@ -1,6 +1,7 @@
 package unsw.dungeon.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,25 +17,57 @@ public class US4Test {
 	private Player player;
 	private Dungeon dungeon;
 	private Switch sw;
-	private TestUtils create;
-	
+	private TestUtils Create;
+
 	@BeforeEach
 	void init() {
 		dungeon = new Dungeon(10, 10);
 		dungeon.addEntity((player = new Player(dungeon, 1, 1)));
-		create = new TestUtils(dungeon);
 		dungeon.setPlayer(player);
+		Create = new TestUtils(dungeon);
 	}
-	
+
 	@Test
-	void simpleSwitch() {
-		boulder = create.Boulder(1, 2);
-		sw = create.Switch(1, 3); 
-		assertEquals(false, sw.getActivated());
+	void boulderActivate() {
+		boulder = Create.Boulder(1, 2);
+		sw = Create.Switch(1, 3);
+		Create.PostLoad();
+
+		assertFalse(sw.getActivated());
 		player.moveDown();
-		assertEquals(3, boulder.getY());
-		assertEquals(true, sw.getActivated());
+		assertTrue(sw.getActivated());
+	}
+
+	@Test
+	void boulderDeactivate() {
+		boulder = Create.Boulder(1, 2);
+		sw = Create.Switch(1, 2);
+		Create.PostLoad();
+
+		assertTrue(sw.getActivated());
 		player.moveDown();
-		assertEquals(false, sw.getActivated());
+		assertFalse(sw.getActivated());
+	}
+
+	@Test
+	void boulderPushThrough() {
+		boulder = Create.Boulder(1, 2);
+		sw = Create.Switch(1, 3);
+		Create.PostLoad();
+
+		assertFalse(sw.getActivated());
+		player.moveDown();
+		assertTrue(sw.getActivated());
+		player.moveDown();
+		assertFalse(sw.getActivated());
+
+	}
+
+	@Test
+	void otherEntityFail() {
+		sw = Create.Switch(1, 2);
+		assertFalse(sw.getActivated());
+		player.moveDown();
+		assertFalse(sw.getActivated());
 	}
 }

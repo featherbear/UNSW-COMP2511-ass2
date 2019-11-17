@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 
 /**
  * Class to hold the images
- *
  */
 public class Images {
 	public final Image playerImage;
@@ -20,6 +19,7 @@ public class Images {
 	public final Image switchImage;
 	public final Image boulderImage;
 	public final Image enemyImage;
+	public final Image sawImage;
 
 	public Images() {
 		this.playerImage = new Image("/human_new.png");
@@ -35,5 +35,6 @@ public class Images {
 		this.portalImage = new Image("/portal.png");
 		this.switchImage = new Image("/pressure_plate.png");
 		this.boulderImage = new Image("/boulder.png");
+		this.sawImage = new Image("/saw_blade.png");
 	}
 }

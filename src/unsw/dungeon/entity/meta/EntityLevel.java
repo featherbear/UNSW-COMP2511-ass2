@@ -9,5 +9,5 @@ package unsw.dungeon.entity.meta;
  *
  */
 public enum EntityLevel {
-	OBJECT, ITEM, FLOOR, GOAL
+	OBJECT, ITEM, FLOOR
 }

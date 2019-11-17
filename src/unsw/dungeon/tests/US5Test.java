@@ -3,7 +3,6 @@ package unsw.dungeon.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,6 +52,7 @@ class US5Test {
 	void boulderPushSwitch() {
 		Boulder boulder = Create.Boulder(2, 1);
 		Switch switchEntity = Create.Switch(3, 1);
+		Create.PostLoad();
 
 		assertEquals(boulder.getX(), 2);
 		assertEquals(boulder.getY(), 1);
@@ -64,8 +64,7 @@ class US5Test {
 		assertEquals(switchEntity.getX(), 3);
 		assertEquals(switchEntity.getY(), 1);
 
-		// TODO Switch event
-		fail();
+		assertTrue(switchEntity.getActivated());
 	}
 
 	@Test
@@ -178,6 +177,7 @@ class US5Test {
 	@Test
 	void boulderPushBoulder() {
 		Boulder boulder1 = Create.Boulder(2, 1);
+		Boulder boulder2 = Create.Boulder(4, 1);
 
 		assertEquals(boulder1.getX(), 2);
 		assertEquals(boulder1.getY(), 1);
@@ -189,7 +189,6 @@ class US5Test {
 		assertEquals(boulder1.getX(), 3);
 		assertEquals(boulder1.getY(), 1);
 
-		Boulder boulder2 = Create.Boulder(4, 1);
 		player.moveRight();
 		assertEquals(player.getX(), 2);
 		assertEquals(player.getY(), 1);

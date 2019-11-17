@@ -12,125 +12,82 @@ import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
 import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.LocationChanged;
+import unsw.dungeon.util.emitter.EventSAM;
+import unsw.dungeon.util.emitter.IntentSAM;
 
 public class Enemy extends MovableEntity<Enemy> implements Interactable {
-	
+
 	private BooleanProperty isAlive;
+	private EnemyMovementBehaviour roam;
+	private EnemyMovementBehaviour flee;
 	
+	private EnemyMovementBehaviour state;
+
+	public final IntentSAM<Player, LocationChanged> playerMoveIntentHandler;
+	public final EventSAM<Player, LocationChanged> playerMoveEventHandler;
+
 	public Enemy(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.isAlive = new SimpleBooleanProperty(true);
-	}
-	
-	private boolean isAlive() {
-		return this.isAlive.getValue();
-	}
+		
+		roam = new RoamBehaviour(this);
+		flee = new FleeBehaviour(this);
+		state = roam;
 
-	private boolean move(int xDirection, int yDirection) {
-		int oldX = getX();
-		int oldY = getY();
+		this.playerMoveEventHandler = (player, event) -> {
+			if (player.hasItemUsable(InvincibilityPotion.class)) {
+				setState(flee);
+			} else {
+				setState(roam);
+			}
+			state.move(player);
+		};
 
-		int newX = oldX + xDirection;
-		int newY = oldY + yDirection;
+		this.playerMoveIntentHandler = (player, event) -> {
+			if (this.getX() != event.newX || this.getY() != event.newY) {
+				return true;
+			}
 
-		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
-
-		if (!this.moveIntent.emit(e)) {
-			return false;
-		}
-
-		if (isPositionBlocked(newX, newY)) {
-			return false;
-		}
-
-		this.setXY(newX, newY);
-		return true;
-	}
-
-	public void setXY(int newX, int newY) {
-		int oldX = getX();
-		int oldY = getY();
-		if (!this.getDungeon().positionIsValid(newX, newY)) {
-			return;
-		}
-
-		if (oldX != newX) {
-			x().set(newX);
-		}
-		if (oldY != newY) {
-			y().set(newY);
-		}
-
-		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
+			return player.interact(this);
+		};
 
 	}
 
-	public boolean moveUp() {
-		return move(0, -1);
+	public BooleanProperty alive() {
+		return this.isAlive;
 	}
 
-	public boolean moveDown() {
-		return move(0, 1);
-	}
-
-	public boolean moveLeft() {
-		return move(-1, 0);
-	}
-
-	public boolean moveRight() {
-		return move(1, 0);
+	public boolean isAlive() {
+		return alive().get();
 	}
 
 	public void kill() {
 		this.isAlive.set(false);
-		this.getDungeon().removeEntity(this);
 		this.hide();
 	}
 
-	public boolean roam(Player p) {
-		int X = p.getX() - this.getX();
-		int Y = p.getY() - this.getY();
-		boolean moveSuccess = false;
-		if (X > 0 && moveSuccess == false) {
-			moveSuccess = moveRight();
-		}
-
-		if (X < 0 && moveSuccess == false) {
-			moveSuccess = moveLeft();
-		}
-
-		if (Y > 0 && moveSuccess == false) {
-			moveSuccess = moveDown();
-		}
-
-		if (Y < 0 && moveSuccess == false) {
-			moveSuccess = moveUp();
-		}
-
-		return true;
+	public void roam(Player p) {
+		state.move(p);
 	}
-
-	public boolean flee(Player p) {
-		int X = p.getX() - this.getX();
-		int Y = p.getY() - this.getY();
-		boolean moveSuccess = false;
-		if (X > 0 && moveSuccess == false) {
-			moveSuccess = moveLeft();
-		}
-
-		if (X < 0 && moveSuccess == false) {
-			moveSuccess = moveRight();
-		}
-
-		if (Y > 0 && moveSuccess == false) {
-			moveSuccess = moveUp();
-		}
-
-		if (Y < 0 && moveSuccess == false) {
-			moveSuccess = moveDown();
-		}
-
-		return true;
+	
+	public void flee(Player p) {
+		state.move(p);
+	}
+	
+	public void setState(EnemyMovementBehaviour s) {
+		this.state = s;
+	}
+	
+	public EnemyMovementBehaviour getRoamState() {
+		return roam;
+	}
+	
+	public EnemyMovementBehaviour getfleeState() {
+		return flee;
+	}
+	
+	public EnemyMovementBehaviour getState() {
+		return state;
 	}
 
 	@Override
@@ -155,20 +112,4 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		return false;
 	}
 
-	public void playerMoveEventHandler(Player player, LocationChanged event) {
-		if (!isAlive.get()) return;
-		if (player.hasItemUsable(InvincibilityPotion.class)) {
-			flee(player);
-		} else {
-			roam(player);
-		}
-	}
-
-	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
-		if (this.getX() != event.newX || this.getY() != event.newY) {
-			return true;
-		}
-		
-		return player.interact(this);
-	}
 }

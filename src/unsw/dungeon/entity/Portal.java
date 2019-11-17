@@ -1,6 +1,7 @@
 package unsw.dungeon.entity;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -32,27 +33,47 @@ public class Portal extends Entity implements Interactable {
 
 		Player player = (Player) entity;
 
-		ArrayList<Entity> portals = Entity.filter(this.getDungeon().getEntities(), Portal.class);
+		ArrayList<Portal> portals = Entity.filter(this.getDungeon().getEntities(), Portal.class);
+		ArrayList<Portal> matchingPortals = new ArrayList<Portal>();
 
-		Portal matchingPortal = null;
-
-		for (Entity obj : portals) {
-			Portal portal = (Portal) obj;
-			if (portal.id == this.id && portal != this) {
-				matchingPortal = portal;
-				break;
+		for (Portal portal : portals) {
+			if (portal == this) {
+				continue;
+			}
+			if (portal.id == this.id) {
+				matchingPortals.add(portal);
 			}
 		}
 
-		if (matchingPortal == null) {
+		if (matchingPortals.size() == 0) {
 			System.out.println(String.format("No other portals with ID %d exist!", this.id));
 			return false;
 		}
 
-		// Teleport the player to the destination portal
-		int newX = matchingPortal.getX();
-		int newY = matchingPortal.getY();
+		boolean teleportClear = false;
+		Portal destination = null;
 
+		// Check for clear destinations
+		while (!teleportClear) {
+			if (matchingPortals.size() == 0) {
+				// All portals are blocked
+				return false;
+			}
+
+			destination = matchingPortals.get(new Random().nextInt(matchingPortals.size()));
+
+			if ((teleportClear = checkTeleportDestination(destination.getX(), destination.getY()))) {
+				matchingPortals.remove(destination);
+			}
+		}
+
+		// Teleport the player to the destination portal
+		player.setXY(destination.getX(), destination.getY());
+
+		return true;
+	}
+
+	private boolean checkTeleportDestination(int newX, int newY) {
 		Entity obstruction = this.getDungeon().getEntityAt(EntityLevel.OBJECT, newX, newY);
 		if (obstruction != null) {
 			if (obstruction instanceof Enemy) {
@@ -61,8 +82,6 @@ public class Portal extends Entity implements Interactable {
 				return false;
 			}
 		}
-
-		player.setXY(newX, newY);
 
 		return true;
 	}
@@ -84,13 +103,15 @@ public class Portal extends Entity implements Interactable {
 	}
 
 	public void activate() {
-		this.activated.set(true);
-
+		this.setActivated(true);
 	}
 
 	public void deactivate() {
-		this.activated.set(false);
+		this.setActivated(false);
+	}
 
+	public void setActivated(boolean activated) {
+		this.activated.set(activated);
 	}
 
 	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {

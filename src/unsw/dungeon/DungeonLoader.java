@@ -16,6 +16,7 @@ import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Saw;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
@@ -62,7 +63,7 @@ public class DungeonLoader {
 		JSONArray jsonEntities = json.getJSONArray("entities");
 
 		LoaderComposite loaders = new LoaderComposite(hooks);
-		loaders.addHook(new GameHooks());
+		loaders.addHook(new GameHooks(dungeon));
 
 		for (int i = 0; i < jsonEntities.length(); i++) {
 			try {
@@ -110,6 +111,9 @@ public class DungeonLoader {
 
 		case "switch":
 			Switch sw = new Switch(dungeon, x, y);
+
+			sw.setID(json.optInt("id", -1));
+
 			loaders.onLoad(sw);
 			return sw;
 
@@ -150,15 +154,15 @@ public class DungeonLoader {
 			portal.setID(json.getInt("id"));
 
 			// Level defined portal activation status
-			if (json.optBoolean("activated", true)) {
-				portal.activate();
-			} else {
-				portal.deactivate();
-			}
+			portal.setActivated(json.optBoolean("activated", true));
 
 			loaders.onLoad(portal);
 			return portal;
-
+		case "saw":
+			Saw saw = new Saw(dungeon, x,y, json.getString("orientation"));
+			loaders.onLoad(saw);
+			return saw;
+			
 		default:
 			throw new Error("Could not load JSON for object type " + type);
 		}
@@ -264,6 +268,13 @@ class LoaderComposite implements LoaderHook {
 	public void onLoad(Portal portal) {
 		for (LoaderHook hook : this.hooks) {
 			hook.onLoad(portal);
+		}
+	}
+	
+	@Override
+	public void onLoad(Saw saw) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(saw);
 		}
 	}
 
