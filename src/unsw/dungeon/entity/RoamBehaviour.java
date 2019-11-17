@@ -1,24 +1,15 @@
-package unsw.dungeon.entity.enemy;
+package unsw.dungeon.entity;
 
-import unsw.dungeon.entity.InvincibilityPotion;
-import unsw.dungeon.entity.Player;
-
-public class roamState implements State {
+public class RoamBehaviour implements EnemyMovementBehaviour {
 
 	Enemy enemy;
 	
-	public roamState(Enemy enemy) {
+	public RoamBehaviour(Enemy enemy) {
 		this.enemy = enemy;
 	}
 	
 	@Override
 	public void move(Player p) {
-		if (p.hasItemUsable(InvincibilityPotion.class)) {
-			enemy.setState(enemy.getfleeState());
-			enemy.getState().move(p);
-			return;
-		}
-		
 		int X = p.getX() - enemy.getX();
 		int Y = p.getY() - enemy.getY();
 		boolean moveSuccess = false;

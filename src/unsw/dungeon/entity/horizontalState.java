@@ -1,9 +1,5 @@
-package unsw.dungeon.entity.saw;
+package unsw.dungeon.entity;
 
-import unsw.dungeon.entity.Player;
-import unsw.dungeon.entity.enemy.Enemy;
-import unsw.dungeon.entity.meta.Entity;
-import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.events.LocationChanged;
 
 public class horizontalState implements SawState{

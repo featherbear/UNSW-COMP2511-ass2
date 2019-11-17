@@ -1,9 +1,6 @@
-package unsw.dungeon.entity.saw;
+package unsw.dungeon.entity;
 
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.entity.InvincibilityPotion;
-import unsw.dungeon.entity.Player;
-import unsw.dungeon.entity.enemy.Enemy;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
@@ -27,6 +24,56 @@ public class Saw extends MovableEntity<Saw> implements Interactable {
 			state = vertical;
 		} 
 		
+	}
+	
+	private boolean move(int xDirection, int yDirection) {
+		int oldX = getX();
+		int oldY = getY();
+
+		int newX = oldX + xDirection;
+		int newY = oldY + yDirection;
+
+		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
+
+		if (!this.moveIntent.emit(e)) {
+			return false;
+		}
+
+		if (isPositionBlocked(newX, newY)) {
+			Entity obstruction = getDungeon().getEntityAt(EntityLevel.OBJECT, newX, newY);
+			if (obstruction instanceof Enemy) {
+				((Enemy) obstruction).kill();
+				this.setXY(newX, newY);
+				return true;
+			} else if (obstruction instanceof Player) {
+				((Player) obstruction).interact(this);
+				this.setXY(newX, newY);
+				return true;
+			} else if (obstruction instanceof Saw) {
+				this.setXY(newX, newY);
+				return true;
+			}
+			return false;
+		}
+		
+		this.setXY(newX, newY);
+		return true;
+	}
+	
+	public boolean moveUp() {
+		return move(0, -1);
+	}
+
+	public boolean moveDown() {
+		return move(0, 1);
+	}
+
+	public boolean moveLeft() {
+		return move(-1, 0);
+	}
+
+	public boolean moveRight() {
+		return move(1, 0);
 	}
 
 	@Override

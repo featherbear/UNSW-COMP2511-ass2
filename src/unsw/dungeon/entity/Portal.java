@@ -6,7 +6,6 @@ import java.util.Random;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.entity.enemy.Enemy;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;

@@ -1,9 +1,9 @@
 package unsw.dungeon.entity.meta;
 
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Player;
-import unsw.dungeon.entity.enemy.Enemy;
-import unsw.dungeon.entity.saw.Saw;
+import unsw.dungeon.entity.Saw;
 import unsw.dungeon.events.LocationChanged;
 import unsw.dungeon.util.emitter.EventEmitter;
 import unsw.dungeon.util.emitter.IntentEmitter;
@@ -48,22 +48,6 @@ public abstract class MovableEntity<T> extends Entity {
 		}
 
 		if (isPositionBlocked(newX, newY)) {
-			if (this instanceof Saw) {
-				Entity obstruction = getDungeon().getEntityAt(EntityLevel.OBJECT, newX, newY);
-				if (obstruction instanceof Enemy) {
-					((Enemy) obstruction).kill();
-					this.setXY(newX, newY);
-					return true;
-				} else if (obstruction instanceof Player) {
-					((Player) obstruction).interact(this);
-					this.setXY(newX, newY);
-					return true;
-				} else if (obstruction instanceof Saw) {
-					this.setXY(newX, newY);
-					return true;
-				}
-				
-			}
 			return false;
 		}
 		

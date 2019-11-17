@@ -1,12 +1,10 @@
-package unsw.dungeon.entity.enemy;
+package unsw.dungeon.entity;
 
 import java.util.List;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.entity.InvincibilityPotion;
-import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
@@ -20,10 +18,10 @@ import unsw.dungeon.util.emitter.IntentSAM;
 public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
 	private BooleanProperty isAlive;
-	private State roam;
-	private State flee;
+	private EnemyMovementBehaviour roam;
+	private EnemyMovementBehaviour flee;
 	
-	private State state;
+	private EnemyMovementBehaviour state;
 
 	public final IntentSAM<Player, LocationChanged> playerMoveIntentHandler;
 	public final EventSAM<Player, LocationChanged> playerMoveEventHandler;
@@ -32,11 +30,16 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.isAlive = new SimpleBooleanProperty(true);
 		
-		roam = new roamState(this);
-		flee = new fleeState(this);
+		roam = new RoamBehaviour(this);
+		flee = new FleeBehaviour(this);
 		state = roam;
 
 		this.playerMoveEventHandler = (player, event) -> {
+			if (player.hasItemUsable(InvincibilityPotion.class)) {
+				setState(flee);
+			} else {
+				setState(roam);
+			}
 			state.move(player);
 		};
 
@@ -71,19 +74,19 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		state.move(p);
 	}
 	
-	public void setState(State s) {
+	public void setState(EnemyMovementBehaviour s) {
 		this.state = s;
 	}
 	
-	public State getRoamState() {
+	public EnemyMovementBehaviour getRoamState() {
 		return roam;
 	}
 	
-	public State getfleeState() {
+	public EnemyMovementBehaviour getfleeState() {
 		return flee;
 	}
 	
-	public State getState() {
+	public EnemyMovementBehaviour getState() {
 		return state;
 	}
 

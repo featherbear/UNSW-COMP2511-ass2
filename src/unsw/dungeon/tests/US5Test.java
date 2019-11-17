@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test;
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
+import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Wall;
-import unsw.dungeon.entity.enemy.Enemy;
 
 class US5Test {
 

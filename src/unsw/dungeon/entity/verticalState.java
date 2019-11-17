@@ -1,4 +1,4 @@
-package unsw.dungeon.entity.saw;
+package unsw.dungeon.entity;
 
 import unsw.dungeon.events.LocationChanged;
 
