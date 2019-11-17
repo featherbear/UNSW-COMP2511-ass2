@@ -17,6 +17,7 @@ import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Saw;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
@@ -109,6 +110,12 @@ public class DungeonControllerHooks implements LoaderHook {
 	public void onLoad(InvincibilityPotion potion) {
 		ImageView view = new ImageView(images.invincibilityPotionImage);
 		loader.addEntity(potion, view);
+	}
+	
+	@Override
+	public void onLoad(Saw saw) {
+		ImageView view = new ImageView(images.sawImage);
+		loader.addEntity(saw, view);
 	}
 
 	@Override
