@@ -1,4 +1,4 @@
-package unsw.dungeon.enemy;
+package unsw.dungeon.entity.enemy;
 
 import unsw.dungeon.entity.Player;
 

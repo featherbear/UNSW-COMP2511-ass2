@@ -8,11 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Treasure;
+import unsw.dungeon.entity.enemy.Enemy;
 import unsw.dungeon.goals.Goal;
 import unsw.dungeon.goals.GoalComposite;
 import unsw.dungeon.goals.GoalStrategyAND;

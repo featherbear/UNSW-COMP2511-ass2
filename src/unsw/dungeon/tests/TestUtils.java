@@ -2,7 +2,6 @@ package unsw.dungeon.tests;
 
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.GameHooks;
-import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
@@ -13,6 +12,7 @@ import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
+import unsw.dungeon.entity.enemy.Enemy;
 
 public class TestUtils {
 	private Dungeon dungeon;

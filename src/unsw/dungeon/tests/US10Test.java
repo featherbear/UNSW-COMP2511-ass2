@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.enemy.Enemy;
 
 class US10Test {
 

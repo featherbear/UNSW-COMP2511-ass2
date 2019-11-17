@@ -41,63 +41,6 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		this.itemPickedUpEvent = new EventEmitter<Player, ItemPickedUp>(this);
 	}
 
-	private void move(int xDirection, int yDirection) {
-		if (!this.isAlive()) {
-			return;
-		}
-
-		int oldX = getX();
-		int oldY = getY();
-
-		int newX = oldX + xDirection;
-		int newY = oldY + yDirection;
-
-		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
-
-		if (!this.moveIntent.emit(e)) {
-			return;
-		}
-
-		if (isPositionBlocked(newX, newY)) {
-			return;
-		}
-
-		this.setXY(newX, newY);
-	}
-
-	public void setXY(int newX, int newY) {
-		int oldX = getX();
-		int oldY = getY();
-		if (!this.getDungeon().positionIsValid(newX, newY)) {
-			return;
-		}
-
-		if (oldX != newX) {
-			x().set(newX);
-		}
-		if (oldY != newY) {
-			y().set(newY);
-		}
-
-		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
-
-	}
-
-	public void moveUp() {
-		move(0, -1);
-	}
-
-	public void moveDown() {
-		move(0, 1);
-	}
-
-	public void moveLeft() {
-		move(-1, 0);
-	}
-
-	public void moveRight() {
-		move(1, 0);
-	}
 
 	public boolean pickUp(ItemEntity item) {
 		// Check if the player can pickup the item

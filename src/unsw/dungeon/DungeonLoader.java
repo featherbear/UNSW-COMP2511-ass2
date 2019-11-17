@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
@@ -21,6 +20,7 @@ import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
+import unsw.dungeon.entity.enemy.Enemy;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.goals.Goal;
 import unsw.dungeon.goals.GoalFactory;

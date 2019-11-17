@@ -1,6 +1,5 @@
 package unsw.dungeon;
 
-import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
 import unsw.dungeon.entity.Exit;
@@ -8,11 +7,12 @@ import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
-import unsw.dungeon.entity.Saw;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
+import unsw.dungeon.entity.enemy.Enemy;
+import unsw.dungeon.entity.saw.Saw;
 
 public interface LoaderHook {
 	public void onLoad(Player player);
