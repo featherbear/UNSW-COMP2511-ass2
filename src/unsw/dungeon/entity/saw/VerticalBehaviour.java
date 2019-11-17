@@ -1,12 +1,13 @@
-package unsw.dungeon.entity;
+package unsw.dungeon.entity.saw;
 
+import unsw.dungeon.entity.Saw;
 import unsw.dungeon.events.LocationChanged;
 
-public class verticalState implements SawState{
+public class VerticalBehaviour implements SawMovementBehaviour{
 	private Saw saw;
 	private boolean directionSwitched = false;
 	
-	public verticalState(Saw saw) {
+	public VerticalBehaviour(Saw saw) {
 		this.saw = saw;
 	}
 	

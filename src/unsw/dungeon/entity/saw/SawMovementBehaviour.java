@@ -1,7 +1,7 @@
-package unsw.dungeon.entity;
+package unsw.dungeon.entity.saw;
 
 import unsw.dungeon.events.LocationChanged;
 
-public interface SawState {
+public interface SawMovementBehaviour {
 	public void move(LocationChanged event);
 }
