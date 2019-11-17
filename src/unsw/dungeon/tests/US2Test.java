@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.entity.Enemy;
+import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Wall;
 import unsw.dungeon.ui.DungeonController;

@@ -1,6 +1,7 @@
 package unsw.dungeon.entity;
 
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;

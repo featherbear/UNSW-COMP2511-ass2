@@ -2,9 +2,9 @@ package unsw.dungeon.tests;
 
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.GameHooks;
+import unsw.dungeon.enemy.Enemy;
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
-import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
