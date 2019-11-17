@@ -12,7 +12,6 @@ import unsw.dungeon.entity.meta.ItemEntity;
 import unsw.dungeon.entity.meta.MovableEntity;
 import unsw.dungeon.entity.meta.Usable;
 import unsw.dungeon.events.ItemPickedUp;
-import unsw.dungeon.events.LocationChanged;
 import unsw.dungeon.util.emitter.EventEmitter;
 
 /**
@@ -41,6 +40,14 @@ public class Player extends MovableEntity<Player> implements Interactable {
 		this.itemPickedUpEvent = new EventEmitter<Player, ItemPickedUp>(this);
 	}
 
+	@Override
+	public boolean move(int xDirection, int yDirection) {
+		if (!this.isAlive()) {
+			return false;
+		}
+
+		return super.move(xDirection, yDirection);
+	}
 
 	public boolean pickUp(ItemEntity item) {
 		// Check if the player can pickup the item

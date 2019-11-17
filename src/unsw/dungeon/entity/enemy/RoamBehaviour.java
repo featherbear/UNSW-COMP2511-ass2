@@ -5,12 +5,12 @@ import unsw.dungeon.entity.Player;
 
 public class RoamBehaviour implements EnemyMovementBehaviour {
 
-	Enemy enemy;
-	
+	private Enemy enemy;
+
 	public RoamBehaviour(Enemy enemy) {
 		this.enemy = enemy;
 	}
-	
+
 	@Override
 	public void move(Player p) {
 		int X = p.getX() - enemy.getX();

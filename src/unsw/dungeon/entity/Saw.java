@@ -29,7 +29,8 @@ public class Saw extends MovableEntity<Saw> implements Interactable {
 
 	}
 
-	private boolean move(int xDirection, int yDirection) {
+	@Override
+	public boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
 
@@ -64,26 +65,6 @@ public class Saw extends MovableEntity<Saw> implements Interactable {
 	}
 
 	@Override
-	public boolean moveUp() {
-		return move(0, -1);
-	}
-
-	@Override
-	public boolean moveDown() {
-		return move(0, 1);
-	}
-
-	@Override
-	public boolean moveLeft() {
-		return move(-1, 0);
-	}
-
-	@Override
-	public boolean moveRight() {
-		return move(1, 0);
-	}
-
-	@Override
 	public boolean interact(Entity entity) {
 		if (entity instanceof Player) {
 			if (!((Player) entity).hasItemUsable(InvincibilityPotion.class)) {
@@ -105,7 +86,7 @@ public class Saw extends MovableEntity<Saw> implements Interactable {
 	}
 
 	public void playerMoveEventHandler(Player player, LocationChanged event) {
-		state.move(event);
+		this.state.move();
 	}
 
 }

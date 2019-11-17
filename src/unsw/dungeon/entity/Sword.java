@@ -22,7 +22,7 @@ public class Sword extends ItemEntity implements Usable {
 
 	@Override
 	public boolean use(Interactable entity) {
-		
+
 		if (getUses() <= 0) {
 			return false;
 
@@ -33,7 +33,6 @@ public class Sword extends ItemEntity implements Usable {
 		}
 
 		itemUsed().emit(new ItemUsed(this.durability, --this.durability));
-		System.out.println(this.durability);
 		return true;
 
 	}
@@ -55,11 +54,6 @@ public class Sword extends ItemEntity implements Usable {
 	@Override
 	public EventEmitter<Sword, ItemUsed> itemUsed() {
 		return this.itemUsed;
-	}
-
-	public int getDurability() {
-		// TODO Auto-generated method stub
-		return this.durability;
 	}
 
 }

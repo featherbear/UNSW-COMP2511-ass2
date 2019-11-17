@@ -1,9 +1,6 @@
 package unsw.dungeon.entity.meta;
 
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.entity.Enemy;
-import unsw.dungeon.entity.Player;
-import unsw.dungeon.entity.Saw;
 import unsw.dungeon.events.LocationChanged;
 import unsw.dungeon.util.emitter.EventEmitter;
 import unsw.dungeon.util.emitter.IntentEmitter;
@@ -34,7 +31,7 @@ public abstract class MovableEntity<T> extends Entity {
 		this.moveEvent = new EventEmitter<T, LocationChanged>((T) this);
 	}
 
-	private boolean move(int xDirection, int yDirection) {
+	protected boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
 
@@ -50,7 +47,7 @@ public abstract class MovableEntity<T> extends Entity {
 		if (isPositionBlocked(newX, newY)) {
 			return false;
 		}
-		
+
 		this.setXY(newX, newY);
 		return true;
 

@@ -3,9 +3,9 @@ package unsw.dungeon.entity.enemy;
 import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Player;
 
-public class FleeBehaviour implements EnemyMovementBehaviour{
-	Enemy enemy;
-	
+public class FleeBehaviour implements EnemyMovementBehaviour {
+	private Enemy enemy;
+
 	public FleeBehaviour(Enemy enemy) {
 		this.enemy = enemy;
 	}
@@ -13,7 +13,6 @@ public class FleeBehaviour implements EnemyMovementBehaviour{
 	@Override
 	public void move(Player p) {
 
-		
 		int X = p.getX() - enemy.getX();
 		int Y = p.getY() - enemy.getY();
 		boolean moveSuccess = false;

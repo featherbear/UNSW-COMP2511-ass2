@@ -20,7 +20,8 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 	 * @param yDirection
 	 * @return result
 	 */
-	private boolean move(int xDirection, int yDirection) {
+	@Override
+	protected boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
 

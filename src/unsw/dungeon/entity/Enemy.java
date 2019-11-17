@@ -64,12 +64,36 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		this.hide();
 	}
 
-	public void move(Player p) {
-		this.strategy.move(p);
+	@Override
+	protected boolean move(int xDirection, int yDirection) {
+		int oldX = getX();
+		int oldY = getY();
+
+		int newX = oldX + xDirection;
+		int newY = oldY + yDirection;
+
+		LocationChanged e = new LocationChanged(oldX, oldY, newX, newY);
+
+		if (!this.moveIntent.emit(e)) {
+			return false;
+		}
+
+		if (isPositionBlocked(newX, newY)) {
+			Player p = this.getDungeon().getPlayer();
+
+			if (p.getX() == newX && p.getY() == newY) {
+				this.interact(p);
+			} else {
+				return false;
+			}
+		}
+
+		this.setXY(newX, newY);
+		return true;
 	}
 
-	public void setState(EnemyMovementBehaviour s) {
-		this.strategy = s;
+	public void setState(EnemyMovementBehaviour behaviour) {
+		this.strategy = behaviour;
 	}
 
 	public void setRoam() {
@@ -86,8 +110,6 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 
 	@Override
 	public boolean interact(Entity entity) {
-		if (!isAlive.get())
-			return true;
 		if (entity instanceof Player) {
 			Player p = (Player) entity;
 
