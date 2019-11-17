@@ -5,6 +5,9 @@ import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import unsw.dungeon.Dungeon;
+import unsw.dungeon.entity.enemy.EnemyMovementBehaviour;
+import unsw.dungeon.entity.enemy.FleeBehaviour;
+import unsw.dungeon.entity.enemy.RoamBehaviour;
 import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
@@ -20,8 +23,8 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 	private BooleanProperty isAlive;
 	private EnemyMovementBehaviour roam;
 	private EnemyMovementBehaviour flee;
-	
-	private EnemyMovementBehaviour state;
+
+	private EnemyMovementBehaviour strategy;
 
 	public final IntentSAM<Player, LocationChanged> playerMoveIntentHandler;
 	public final EventSAM<Player, LocationChanged> playerMoveEventHandler;
@@ -29,18 +32,13 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 	public Enemy(Dungeon dungeon, int x, int y) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
 		this.isAlive = new SimpleBooleanProperty(true);
-		
-		roam = new RoamBehaviour(this);
-		flee = new FleeBehaviour(this);
-		state = roam;
+
+		this.roam = new RoamBehaviour(this);
+		this.flee = new FleeBehaviour(this);
+		this.strategy = roam;
 
 		this.playerMoveEventHandler = (player, event) -> {
-			if (player.hasItemUsable(InvincibilityPotion.class)) {
-				setState(flee);
-			} else {
-				setState(roam);
-			}
-			state.move(player);
+			this.strategy.move(player);
 		};
 
 		this.playerMoveIntentHandler = (player, event) -> {
@@ -66,33 +64,30 @@ public class Enemy extends MovableEntity<Enemy> implements Interactable {
 		this.hide();
 	}
 
-	public void roam(Player p) {
-		state.move(p);
+	public void move(Player p) {
+		this.strategy.move(p);
 	}
-	
-	public void flee(Player p) {
-		state.move(p);
-	}
-	
+
 	public void setState(EnemyMovementBehaviour s) {
-		this.state = s;
+		this.strategy = s;
 	}
-	
-	public EnemyMovementBehaviour getRoamState() {
-		return roam;
+
+	public void setRoam() {
+		this.strategy = this.roam;
 	}
-	
-	public EnemyMovementBehaviour getfleeState() {
-		return flee;
+
+	public void setFlee() {
+		this.strategy = this.flee;
 	}
-	
-	public EnemyMovementBehaviour getState() {
-		return state;
+
+	public EnemyMovementBehaviour getBehaviour() {
+		return strategy;
 	}
 
 	@Override
 	public boolean interact(Entity entity) {
-		if (!isAlive.get()) return true;
+		if (!isAlive.get())
+			return true;
 		if (entity instanceof Player) {
 			Player p = (Player) entity;
 

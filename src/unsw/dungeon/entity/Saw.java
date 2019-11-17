@@ -5,27 +5,30 @@ import unsw.dungeon.entity.meta.Entity;
 import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.entity.meta.Interactable;
 import unsw.dungeon.entity.meta.MovableEntity;
+import unsw.dungeon.entity.saw.HorizontalBehaviour;
+import unsw.dungeon.entity.saw.SawMovementBehaviour;
+import unsw.dungeon.entity.saw.VerticalBehaviour;
 import unsw.dungeon.events.LocationChanged;
 
 public class Saw extends MovableEntity<Saw> implements Interactable {
 
-	private SawState state;
-	private SawState horizontal;
-	private SawState vertical;
-	
-	
+	private SawMovementBehaviour state;
+	private SawMovementBehaviour horizontal;
+	private SawMovementBehaviour vertical;
+
 	public Saw(Dungeon dungeon, int x, int y, String orientation) {
 		super(dungeon, EntityLevel.OBJECT, x, y);
-		horizontal = new horizontalState(this);
-		vertical = new verticalState(this);
+		this.horizontal = new HorizontalBehaviour(this);
+		this.vertical = new VerticalBehaviour(this);
+
 		if (orientation.equals("H")) {
-			state = horizontal;
+			this.state = horizontal;
 		} else if (orientation.equals("V")) {
-			state = vertical;
-		} 
-		
+			this.state = vertical;
+		}
+
 	}
-	
+
 	private boolean move(int xDirection, int yDirection) {
 		int oldX = getX();
 		int oldY = getY();
@@ -55,23 +58,27 @@ public class Saw extends MovableEntity<Saw> implements Interactable {
 			}
 			return false;
 		}
-		
+
 		this.setXY(newX, newY);
 		return true;
 	}
-	
+
+	@Override
 	public boolean moveUp() {
 		return move(0, -1);
 	}
 
+	@Override
 	public boolean moveDown() {
 		return move(0, 1);
 	}
 
+	@Override
 	public boolean moveLeft() {
 		return move(-1, 0);
 	}
 
+	@Override
 	public boolean moveRight() {
 		return move(1, 0);
 	}
@@ -89,14 +96,14 @@ public class Saw extends MovableEntity<Saw> implements Interactable {
 		}
 		return false;
 	}
-	
+
 	public boolean playerMoveIntentHandler(Player player, LocationChanged event) {
 		if (this.getX() != event.newX || this.getY() != event.newY) {
 			return true;
 		}
 		return player.interact(this);
 	}
-	
+
 	public void playerMoveEventHandler(Player player, LocationChanged event) {
 		state.move(event);
 	}
