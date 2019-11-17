@@ -1,7 +1,7 @@
 package unsw.dungeon.goals;
 
 import unsw.dungeon.Dungeon;
-import unsw.dungeon.entity.Enemy;
+import unsw.dungeon.entity.enemy.Enemy;
 import unsw.dungeon.entity.meta.Entity;
 
 public class GoalStrategyEnemy implements GoalStrategy {

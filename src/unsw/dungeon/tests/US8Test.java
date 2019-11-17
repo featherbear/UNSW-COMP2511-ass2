@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import unsw.dungeon.Dungeon;
 import unsw.dungeon.entity.Door;
-import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Player;
+import unsw.dungeon.entity.enemy.Enemy;
 
 class US8Test {
 

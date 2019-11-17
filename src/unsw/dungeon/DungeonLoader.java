@@ -10,7 +10,6 @@ import org.json.JSONTokener;
 
 import unsw.dungeon.entity.Boulder;
 import unsw.dungeon.entity.Door;
-import unsw.dungeon.entity.Enemy;
 import unsw.dungeon.entity.Exit;
 import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
@@ -20,7 +19,9 @@ import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
 import unsw.dungeon.entity.Wall;
+import unsw.dungeon.entity.enemy.Enemy;
 import unsw.dungeon.entity.meta.Entity;
+import unsw.dungeon.entity.saw.Saw;
 import unsw.dungeon.goals.Goal;
 import unsw.dungeon.goals.GoalFactory;
 
@@ -157,7 +158,11 @@ public class DungeonLoader {
 
 			loaders.onLoad(portal);
 			return portal;
-
+		case "saw":
+			Saw saw = new Saw(dungeon, x,y, json.getString("orientation"));
+			loaders.onLoad(saw);
+			return saw;
+			
 		default:
 			throw new Error("Could not load JSON for object type " + type);
 		}
@@ -263,6 +268,13 @@ class LoaderComposite implements LoaderHook {
 	public void onLoad(Portal portal) {
 		for (LoaderHook hook : this.hooks) {
 			hook.onLoad(portal);
+		}
+	}
+	
+	@Override
+	public void onLoad(Saw saw) {
+		for (LoaderHook hook : this.hooks) {
+			hook.onLoad(saw);
 		}
 	}
 
