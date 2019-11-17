@@ -13,7 +13,7 @@ public class fleeState implements State{
 	@Override
 	public void move(Player p) {
 		if (!p.hasItemUsable(InvincibilityPotion.class)) {
-			enemy.setState(enemy.getState());
+			enemy.setState(enemy.getRoamState());
 			enemy.getState().move(p);
 			return;
 		}

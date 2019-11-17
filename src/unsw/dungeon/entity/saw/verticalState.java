@@ -1,28 +1,24 @@
 package unsw.dungeon.entity.saw;
 
-import unsw.dungeon.entity.Player;
-import unsw.dungeon.entity.enemy.Enemy;
-import unsw.dungeon.entity.meta.Entity;
-import unsw.dungeon.entity.meta.EntityLevel;
 import unsw.dungeon.events.LocationChanged;
 
-public class horizontalState implements SawState{
+public class verticalState implements SawState{
 	private Saw saw;
 	private boolean directionSwitched = false;
 	
-	public horizontalState(Saw saw) {
+	public verticalState(Saw saw) {
 		this.saw = saw;
 	}
 	
 	@Override
 	public void move(LocationChanged event) {
 		boolean moveSuccess = false;	
-		if (!directionSwitched && saw.moveLeft()) {
+		if (!directionSwitched && saw.moveUp()) {
 			moveSuccess = true;
-		} else if (!moveSuccess && saw.moveRight()) {
+		} else if (!moveSuccess && saw.moveDown()) {
 			moveSuccess = true;
 			directionSwitched = true;
-		} else if (!moveSuccess && saw.moveLeft()) {
+		} else if (!moveSuccess && saw.moveUp()) {
 			directionSwitched = false;
 			moveSuccess = true;
 		}
