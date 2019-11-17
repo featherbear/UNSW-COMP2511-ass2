@@ -8,6 +8,7 @@ import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Saw;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
@@ -38,7 +39,11 @@ public interface LoaderHook {
 
 	public void onLoad(Enemy enemy);
 
+	public void onLoad(Saw saw);
+	
 	default public void postLoad(Dungeon dungeon) {
 	}
+
+	
 
 }

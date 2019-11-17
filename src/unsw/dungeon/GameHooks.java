@@ -10,6 +10,7 @@ import unsw.dungeon.entity.InvincibilityPotion;
 import unsw.dungeon.entity.Key;
 import unsw.dungeon.entity.Player;
 import unsw.dungeon.entity.Portal;
+import unsw.dungeon.entity.Saw;
 import unsw.dungeon.entity.Switch;
 import unsw.dungeon.entity.Sword;
 import unsw.dungeon.entity.Treasure;
@@ -123,6 +124,14 @@ public class GameHooks implements LoaderHook {
 		potion.pickupEvent.register(() -> {
 			p.moveEvent.register(potion.playerMoveEventHandler);
 		});
+	}
+	
+	@Override
+	public void onLoad(Saw saw) {
+		Player p = this.dungeon.getPlayer();
+		p.moveIntent.register(saw::playerMoveIntentHandler);
+		p.moveEvent.register(saw::playerMoveEventHandler);
+		
 	}
 
 	@Override

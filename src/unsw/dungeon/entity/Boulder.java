@@ -46,30 +46,7 @@ public class Boulder extends MovableEntity<Boulder> implements Interactable {
 			}
 		}
 
-		return this.setXY(newX, newY);
-	}
-
-	/**
-	 * Set the X and Y positions of the Boulder
-	 * 
-	 * @param newX
-	 * @param newY
-	 */
-	public boolean setXY(int newX, int newY) {
-		int oldX = getX();
-		int oldY = getY();
-		if (!this.getDungeon().positionIsValid(newX, newY)) {
-			return false;
-		}
-
-		if (oldX != newX) {
-			x().set(newX);
-		}
-		if (oldY != newY) {
-			y().set(newY);
-		}
-
-		this.moveEvent.emit(new LocationChanged(oldX, oldY, newX, newY));
+		this.setXY(newX, newY);
 		return true;
 	}
 
