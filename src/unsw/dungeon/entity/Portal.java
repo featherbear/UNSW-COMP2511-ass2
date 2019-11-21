@@ -62,7 +62,7 @@ public class Portal extends Entity implements Interactable {
 
 			destination = matchingPortals.get(new Random().nextInt(matchingPortals.size()));
 
-			if ((teleportClear = checkTeleportDestination(destination.getX(), destination.getY()))) {
+			if (!(teleportClear = checkTeleportDestination(destination.getX(), destination.getY()))) {
 				matchingPortals.remove(destination);
 			}
 		}
